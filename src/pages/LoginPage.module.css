@@ -1,0 +1,132 @@
+/* 전체 화면 스타일 */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: white;
+}
+  
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .logoSection {
+    text-align: center;
+  }
+  
+  .group-info {
+    display: flex;
+    justify-content: center; /* 가로 중앙 정렬 */
+    margin-left: -180px; /* 왼쪽으로 20px 이동 */
+    gap: 10px;  
+    margin-top: 50px; /* 왼쪽으로 220px 이동 */
+
+  }
+
+  /* 두 번째 경우에 대한 추가 스타일 */
+.group-login {
+    display: flex;
+    justify-content: center; /* 가로 중앙 정렬 */
+    margin-left: -220px; /* 왼쪽으로 20px 이동 */
+    gap: 30px;  
+    margin-left: 0px; /* 왼쪽으로 50px 이동 */
+  }
+
+ 
+  
+  .loginBox {
+    background-color: #73B3E3;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    margin-bottom: 100px; /* 왼쪽으로 220px 이동 */
+
+  }
+  
+  h1 {
+    font-size: 1.3rem;
+    color: #000000;
+    margin-bottom: -150px;
+  }
+  
+  .welcomeBox {
+    background-color: white;
+    border-radius: 10px;
+    padding: 5px;
+    margin-bottom: 20px;
+  }
+  
+  
+  .inputGroup {
+    margin-bottom: 15px;
+  }
+  
+  input {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 5px;
+  }
+  
+  .loginButton {
+    background-color: #0056a0;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    width: 40%;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .loginButton:hover {
+    background-color: #004080;
+  }
+  
+  .footerLinks {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  
+  .footerLinks a {
+    color: #0056a0;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  .footerLinks a:hover {
+    text-decoration: underline;
+  }
+
+  /* INFO 텍스트 */
+h2 {
+    font-size: 2.7rem;
+    color: #0056A0;
+    margin-bottom: 30px;
+    
+  }
+  
+
+  /* 로고 이미지 크기 조절 */
+.app-telecom_logo {
+    height: 100px;
+    margin-bottom: -3px;
+}
+
+.app-back_logo {
+    height: 90px;
+    margin-bottom: 40px;
+    margin-right: -20px;
+}
