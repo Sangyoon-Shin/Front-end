@@ -46,18 +46,12 @@
 
 /* 텍스트 스타일 (아래로 살짝 내림) */
 .title-text {
-  font-size: 1.3rem !important;
+  font-size: 1.5rem;
   color: #000000;
   margin-top: 50px;  /* 텍스트를 위로 살짝 내림 */
   /*margin-top: 50px;  /* 텍스트를 아래로 살짝 내림 */
 }
 
-/* 큰 텍스트 */
-h1 {
-  font-size: 1rem;
-  margin-bottom: 10px;
-  font-family: 'Arial', sans-serif;
-}
 
 /* INFO 텍스트 */
 h2 {
