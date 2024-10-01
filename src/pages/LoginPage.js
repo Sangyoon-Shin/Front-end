@@ -4,7 +4,6 @@ import styles from './LoginPage.module.css';
 import telecom_logo from '../images/정보통신공학과 횃불이.png';  // 로고 이미지 불러오기
 import back_logo from '../images/뒷모습 횃불이.png';  // 로고 이미지 불러오기
 
-
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -24,8 +23,8 @@ const LoginPage = () => {
                         <h2>INFO!</h2>
                     </div>
                 </div>
-                <h1>로그인</h1>
             </header>
+            <h1>로그인</h1>
 
             <div className={styles.loginBox}>
                 <div className={styles.welcomeBox}>
@@ -66,7 +65,9 @@ const LoginPage = () => {
 
 
                 <div className={styles.footerLinks}>
-                    <a href="#">회원가입</a>
+                    <a href="#"><br />졸업생/관계자용 회원가입</a>
+                </div>
+                <div className={styles.footerLinks}>
                     <a href="#">아이디 찾기</a>
                     <a href="#">비밀번호 찾기</a>
                 </div>

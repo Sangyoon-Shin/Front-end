@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'; // 라우팅 �
 import StartPage from './pages/StartPage'
 import _ from './pages/_'
 import LoginPage from './pages/LoginPage'
+import FindIDPage from './pages/FindIDPage'
+import _save from './pages/_save'
+
 
 
 
@@ -13,6 +16,9 @@ function App() {
             <Route path="/" element={<StartPage/>} />
             <Route path="/_" element={<_ />} />  {/* 두 번째 페이지 라우팅 */}
             <Route path="/LoginPage" element={<LoginPage />} />
+            <Route path="/FindIDPage" element={<FindIDPage />} />
+            <Route path="_save" element={<_save />} />
+
     </Routes>
     </BrowserRouter>
   );

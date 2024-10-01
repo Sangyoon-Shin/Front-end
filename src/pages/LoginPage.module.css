@@ -22,10 +22,9 @@
   .group-info {
     display: flex;
     justify-content: center; /* 가로 중앙 정렬 */
-    margin-left: -180px; /* 왼쪽으로 20px 이동 */
+    margin-left: -270px; /* 왼쪽으로 20px 이동 */
     gap: 10px;  
-    margin-top: 50px; /* 왼쪽으로 220px 이동 */
-
+    margin-top: -100px; 
   }
 
   /* 두 번째 경우에 대한 추가 스타일 */
@@ -35,6 +34,7 @@
     margin-left: -220px; /* 왼쪽으로 20px 이동 */
     gap: 30px;  
     margin-left: 0px; /* 왼쪽으로 50px 이동 */
+    margin-top: 20px;
   }
 
  
@@ -47,16 +47,22 @@
     text-align: center;
     width: 90%;
     max-width: 400px;
-    margin-bottom: 100px; /* 왼쪽으로 220px 이동 */
+    margin-bottom: -20px; /* 왼쪽으로 220px 이동 */
 
   }
   
   h1 {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     color: #000000;
-    margin-bottom: -150px;
+    margin-bottom: 15px;
   }
   
+  h3 {
+    font-size: 1.2rem;
+    color: #000000;
+    margin-bottom: px;
+  }
+
   .welcomeBox {
     background-color: white;
     border-radius: 10px;
@@ -121,12 +127,12 @@ h2 {
 
   /* 로고 이미지 크기 조절 */
 .app-telecom_logo {
-    height: 100px;
-    margin-bottom: -3px;
+    height: 125px;
+    margin-bottom: 0px;
 }
 
 .app-back_logo {
     height: 90px;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     margin-right: -20px;
 }
