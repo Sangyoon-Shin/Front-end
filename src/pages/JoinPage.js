@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import styles from './FindIDPage.module.css';
+import styles from './JoinPage.module.css';
 import { useNavigate } from 'react-router-dom'; // useNavigate 훅 가져오기
 
 import back_logo from '../images/뒷모습 횃불이.png';  // 로고 이미지 불러오기
 
-const FindIDPage = () => {
+const JoinPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -33,7 +33,7 @@ const FindIDPage = () => {
                     </div>
                 </div>
             </header>
-            <h1>아이디 찾기</h1>
+            <h1>회원가입</h1>
 
             <div className={styles.loginBox}>
                 {/* 아이디 찾기 폼 */}
@@ -44,7 +44,28 @@ const FindIDPage = () => {
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label htmlFor="email"><br />이메일</label>
+                        <label htmlFor="email"><br />아이디</label>
+                        <div className={styles.inputWrapper}>
+                            <input type="email" id="email" placeholder="아이디" />
+                            <button className={styles.inputBtn_}>아이디 확인</button>
+                        </div>
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label htmlFor="name">비밀번호</label>
+                        <input type="text" id="name" placeholder="이름" />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label htmlFor="email"><br />비밀번호 확인</label>
+                        <div className={styles.inputWrapper}>
+                            <input type="email" id="email" placeholder="이메일" />
+                            <button className={styles.inputBtn}>비밀번호 확인</button>
+                        </div>
+                    </div>
+                    
+                    <div className={styles.formGroup}>
+                        <label htmlFor="email">이메일</label>
                         <div className={styles.inputWrapper}>
                             <input type="email" id="email" placeholder="이메일" />
                             <button className={styles.inputBtn}>인증번호 받기</button>
@@ -59,11 +80,11 @@ const FindIDPage = () => {
                     </div>
                 </div>
                 <button type="submit" className={styles.loginButton} onClick={handleClose}>
-                    닫기
+                    완료
                 </button>
             </div>
         </div>
     );
 };
 
-export default FindIDPage;
+export default JoinPage;

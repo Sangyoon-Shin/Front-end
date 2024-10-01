@@ -22,9 +22,9 @@
   .group-info {
     display: flex;
     justify-content: center; /* 가로 중앙 정렬 */
-    margin-left: -270px; /* 왼쪽으로 20px 이동 */
+    margin-left: -100px; /* 왼쪽으로 20px 이동 */
     gap: 10px;  
-    margin-top: -100px; 
+    margin-top: -181px; 
   }
 
   /* 두 번째 경우에 대한 추가 스타일 */
@@ -47,14 +47,14 @@
     text-align: center;
     width: 90%;
     max-width: 400px;
-    margin-bottom: -20px; /* 왼쪽으로 220px 이동 */
+    margin-bottom: -50px; /* 왼쪽으로 220px 이동 */
 
   }
   
   h1 {
-    font-size: 1.5rem;
+    font-size: 2rem;
     color: #000000;
-    margin-bottom: 15px;
+    margin-top: 25px;
   }
   
   h3 {
@@ -121,7 +121,7 @@ h2 {
     font-size: 2.7rem;
     color: #0056A0;
     margin-bottom: 30px;
-    
+    margin-right: 100px;
   }
   
 
@@ -134,5 +134,19 @@ h2 {
 .app-back_logo {
     height: 90px;
     margin-bottom: 10px;
-    margin-right: -20px;
+    margin-right: -120px;
+}
+
+.app-Q_logo {
+  height: 50px;
+  margin-top: 25px;
+  margin-right: -100px;
+}
+
+.footer-text {
+  font-size: 0.7rem;
+  color: gray;
+  margin-top: 30px;
+  font-family: 'Arial', sans-serif;
+  margin-right: 0px;
 }

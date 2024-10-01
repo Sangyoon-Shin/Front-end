@@ -12,7 +12,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
 .logoSection {
@@ -22,15 +22,15 @@
 .group-info {
   display: flex;
   justify-content: center; /* 가로 중앙 정렬 */
-  margin-left: -250px; /* 왼쪽으로 20px 이동 */
+  margin-left: -200px; /* 왼쪽으로 20px 이동 */
   gap: 10px;  
-  margin-top: -130px; /* 왼쪽으로 220px 이동 */
+  margin-top: -180px; /* 왼쪽으로 220px 이동 */
 }
 
 h1 {
   font-size: 1.5rem;
   color: #000000;
-  margin-bottom: 25px;
+  margin-bottom: px;
 }
 
 
@@ -45,7 +45,10 @@ h1 {
     display: flex;           /* 부모 요소에 flexbox 적용 */
   flex-direction: column;  /* 수직 정렬 */
   align-items: center;     /* 자식 요소(버튼)를 가로 중앙 정렬 */
+  margin-bottom: 25px;
+
 }
+
 
 
 .loginButton {
@@ -85,12 +88,13 @@ h2 {
   font-size: 2.7rem;
   color: #0056A0;
   margin-bottom: 30px;
+  margin-right: 100px;
 }
 
 .app-back_logo {
   height: 90px;
   margin-bottom: 80px;
-  margin-right: -20px;
+  margin-right: -120px;
 }
 
 
