@@ -139,6 +139,9 @@
     border-radius: 5px;
     cursor: pointer;
   }
+  .inputBtn_:hover {
+    background-color: #004080;
+  }
   
   .inputBtn {
     position: relative; /* 원래 위치에서 10px 아래로 이동 */
