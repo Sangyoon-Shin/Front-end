@@ -25,6 +25,8 @@ function App() {
             <Route path="/JoinPage" element={<JoinPage />} />
 
             <Route path="_save" element={<_save />} />
+            <Route path="_save" element={<_save />} />
+
 
     </Routes>
     </BrowserRouter>
