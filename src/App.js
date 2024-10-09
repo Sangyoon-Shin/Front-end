@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'; // 라우팅 �
 import StartPage from './pages/StartPage'
 import _ from './pages/_'
 import LoginPage from './pages/LoginPage'
+import NoticeBoard from './pages/NoticeBoard';
+import WritePage from './pages/WritePage';
 
 
 
@@ -13,6 +15,9 @@ function App() {
             <Route path="/" element={<StartPage/>} />
             <Route path="/_" element={<_ />} />  {/* 두 번째 페이지 라우팅 */}
             <Route path="/LoginPage" element={<LoginPage />} />
+            <Route path="/Notice" element={<NoticeBoard />} />
+            <Route path="/Write" element={<WritePage />} />
+
     </Routes>
     </BrowserRouter>
   );
