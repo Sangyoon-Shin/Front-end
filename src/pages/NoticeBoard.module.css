@@ -66,16 +66,16 @@
 
 
 /* 텍스트 스타일 (아래로 살짝 내림) */
-.title-text {
-  font-size: 0.9rem;
+.title-text { /*공지사항*/
+  font-size: 0.9rem !important;
   color: #000000;
   margin-bottom: 20px;
   /* 텍스트를 아래로 살짝 내림 */
   /*margin-top: 50px;  /* 텍스트를 아래로 살짝 내림 */
 }
 
-.title-text2 {
-  font-size: 1.5rem;
+.title-text2 { /*게시판*/
+  font-size: 1.5rem !important;
   color: #000000;
   margin-bottom: 30px;
   /* 텍스트를 아래로 살짝 내림 */
@@ -83,16 +83,16 @@
   /* 텍스트를 아래로 살짝 내림 */
 }
 
-.title-text3 {
-  font-size: 1.2rem;
+.title-text3 { /*게시판 제목*/
+  font-size: 1.3rem !important;
   color: #000000;
   margin-bottom: 0px;
   /* 텍스트를 아래로 살짝 내림 */
   margin-right: 300px;
 }
 
-.title-text4 {
-  font-size: 1.0rem;
+.title-text4 { /*작성일*/
+  font-size: 1.0rem !important;
   color: #000000;
   margin-bottom: 0px;
   /* 텍스트를 아래로 살짝 내림 */

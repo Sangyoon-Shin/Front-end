@@ -103,7 +103,7 @@ const NoticeBoard = () => {
   };
 
   return (
-    <div className={styles.app}>
+    <div>
       <header className={styles["app-header"]}>
         <div className={styles["title-group"]}>
           <img src={main_mascot} className={styles["app-main_mascot"]} alt="main_mascot" />
@@ -127,12 +127,10 @@ const NoticeBoard = () => {
 
         <h2 className={styles["title-text4"]}>작성일: {formattedDate}</h2>
 
-        {/* 신고하기 버튼 */}
         <button onClick={togglePopup} className={styles["report-button"]}>
           신고하기
         </button>
 
-        {/* 팝업 창 */}
         {isPopupOpen && (
           <div className={styles["popup"]}>
             <div className={styles["popup-inner"]}>
@@ -141,9 +139,8 @@ const NoticeBoard = () => {
 
               <textarea className={styles["popup-textarea"]} />
 
-              {/* 버튼들을 감싸는 컨테이너 */}
               <div className={styles["popup-button-container"]}>
-              <button onClick={togglePopup} className={styles["popup-close"]}>닫기</button>
+                <button onClick={togglePopup} className={styles["popup-close"]}>닫기</button>
                 <button onClick={togglePopup} className={styles["popup-receive"]}>제출</button>
               </div>
             </div>
@@ -192,19 +189,17 @@ const NoticeBoard = () => {
             <div key={index} className={styles["comment-item"]}>
               <strong>{comment.nickname}:</strong> {comment.content}
 
-              {/* 대댓글 입력 UI */}
               <div className={styles["reply-container"]}>
                 <button className={styles["toggle-reply-button"]} onClick={() => handleToggleReply(index)}>
                   {replyVisible[index] ? '대댓글 숨기기' : '대댓글 달기'}
                 </button>
               </div>
 
-              {/* 대댓글 입력창 */}
               {replyVisible[index] && (
                 <div className={styles["reply-input"]}>
                   <textarea
                     className={styles["textarea_reply"]}
-                    value={replyContents[index] || ''} // 해당 인덱스의 대댓글 내용
+                    value={replyContents[index] || ''}
                     onChange={(e) => handleReplyChange(index, e)}
                     placeholder="대댓글을 입력하세요."
                   />
@@ -212,7 +207,6 @@ const NoticeBoard = () => {
                 </div>
               )}
 
-              {/* 대댓글 표시 */}
               {comment.replies.length > 0 && (
                 <div className={styles["replies-section"]}>
                   {comment.replies.map((reply, replyIndex) => (
