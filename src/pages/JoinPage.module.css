@@ -162,3 +162,118 @@
   .inputBtn:hover {
     background-color: #004080;
   }
+
+
+  .popup {
+    display: flex;
+    
+    flex-direction: column;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    border-radius: 10px;
+  
+  }
+  
+  .authTitle {
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: center; /* 중앙 정렬 */
+  }
+  
+  .popupRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  
+  }
+  
+  .formGroup {
+    margin-bottom: 20px;
+    position: relative;
+  }
+  
+  .inputField {
+    position: relative; /* 버튼의 절대 위치를 설정할 기준 */
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+  
+  .inputBtn {
+    position: absolute; /*이걸로 입력 칸 안에 버튼 들어가게 하기*/
+    padding: 8px;
+    background-color: #0056A0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-top:9px;
+    width: 35%;
+    margin-left: -109px; /*-109*/
+    height: 70%; /* 버튼 높이를 입력 필드와 유사하게 조정 */
+  
+  }
+  
+  .inputBtn:hover {
+    background-color: #004080;
+  }
+  
+  .closeButton {
+    background-color: #0056a0;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    width: 40%;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: 90px;
+  }
+  
+  .closeButton:hover {
+    background-color: #004080;
+  }
+  
+  h4 {
+    font-size: 2.3rem;
+    color: #0056A0;
+    margin-bottom: 30px;
+    text-align: center;
+    margin-left: 50px;
+  }
+  
+  
+  .changeBtn {
+    position: absolute; /*이걸로 입력 칸 안에 버튼 들어가게 하기*/
+    padding: 8px;
+    background-color: #0056A0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-top:63px;
+    width: 30%;
+    margin-left: 187px; /*-109*/
+    height: 9.3%; /* 버튼 높이를 입력 필드와 유사하게 조정 */
+  
+  }
+  
+  .changeBtn:hover {
+    background-color: #004080;
+  }
