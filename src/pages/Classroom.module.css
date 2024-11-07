@@ -80,7 +80,7 @@
     margin-bottom: 30px;
     /* 텍스트를 아래로 살짝 내림 */
     margin-top: -38px;
-    margin-left: 170px;
+    margin-left: 110px;
     /* 텍스트를 아래로 살짝 내림 */
   }
   
@@ -156,9 +156,9 @@
   }
   
   .app-bar {
-    height: 2px;
+    height: 2.5px;
     margin-bottom: 20px;
-    margin-left: 50px;
+    margin-left: 5px;
   }
   
  /* 입력 필드 */

@@ -1,18 +1,28 @@
-전체 화면 스타일 .app {
+/* 전체 화면 스타일 */
+.app {
   text-align: center;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #f5f5f5;
+  background-color: #ffffff;
+  
 }
 
-/* 헤더 스타일 */
-.app-header {
+/* body 스타일 설정 */
+body {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center;     /* 수직 중앙 정렬 */
+  min-height: 70vh;       /* 화면 전체 높이를 차지 */
+  margin: 0;
+}
+
+/* 컨테이너 스타일 설정 */
+.container {
+  width: 80%;  /* 컨테이너 너비 조정 */
+  max-width: 1200px;  /* 최대 너비 설정 */
+  text-align: center; /* 텍스트 중앙 정렬 */
 }
 
 .title-group {
@@ -20,7 +30,7 @@
   justify-content: center;
   /* 가로 중앙 정렬 */
   gap: 10px;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
   margin-top: 10px;
 }
 
@@ -28,7 +38,7 @@
   display: flex;
   align-items: center;
   /* 가로로 나란히 정렬 */
-  margin-top: 25px;
+  margin-top: 50px;
   /* 아래로 30px 만큼 내림 (값은 조절 가능) */
   gap: 10px;
   /* 아이콘 사이의 간격 */
@@ -77,46 +87,51 @@
 .title-text2 { /*게시판*/
   font-size: 1.6rem !important;
   color: #000000;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   /* 텍스트를 아래로 살짝 내림 */
-  margin-top: -42px;
+  margin-top: -38px;
+  margin-left: 200px;
   /* 텍스트를 아래로 살짝 내림 */
 }
 
 .title-text3 { /*게시판 제목*/
   font-size: 1.3rem !important;
   color: #000000;
-  margin-bottom: 0px;
+  margin-bottom: -82px;
   /* 텍스트를 아래로 살짝 내림 */
-  margin-right: 300px;
+  margin-left: 60px;
+  margin-top : -10px;
 }
 
 .title-text4 { /*작성일*/
   font-size: 1.0rem !important;
   color: #000000;
-  margin-bottom: 0px;
+  margin-bottom: -25px;
   /* 텍스트를 아래로 살짝 내림 */
-  margin-right: 260px;
+  margin-top: 20px;
+  margin-left: 50px;
 }
 
 .title-text5 {
   font-size: 0.7rem;
   color: red;
-  margin-top: -20px;
+  margin-top: 20px;
   /* 텍스트를 아래로 살짝 내림 */
   margin-left: 330px;
 }
 
+/* 쪽지 */
 .app-main_message2 {
   height: 25px;
-  margin-top: -25px;
-  margin-left: 300px;
+  margin-bottom: 0px;
+  margin-left: 350px;
 }
 
+/* 스크랩 */
 .app-main_message3 {
   height: 35px;
-  margin-top: -29px;
-  margin-left: 355px;
+  margin-top: 5px; /* margin-top을 적은 값으로 설정 */
+  margin-left: 10px;
 }
 
 .app-camera {
@@ -128,7 +143,7 @@
 .app-heart {
   height: 35px;
   margin-top: 15px;
-  margin-left: 320px;
+  margin-left: 400px;
 }
 
 /* 커서가 카메라 이미지 위로 올라갔을 때 */
@@ -149,9 +164,15 @@ h2 {
 
 }
 
+.right-section {
+  display: flex;
+  align-items: center; /* 세로 가운데 정렬 */
+  gap: 0px; /* 간격 조정 */
+}
+
 .app-arrow {
   height: 35px;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   margin-right: 380px;
   cursor: pointer;
   /* 커서를 손 모양으로 변경 */
@@ -174,9 +195,9 @@ h2 {
 }
 
 .app-bar {
-  height: 2px;
-  margin-bottom: 10px;
-  margin-right: 10px;
+  height: 2.5px;
+  margin-bottom: 20px;
+  margin-left: 5px;
 }
 
 /* 텍스트 입력 필드 스타일 */
@@ -191,7 +212,7 @@ h2 {
   border-radius: 5px;
   resize: none;
   /* 사용자가 크기 조정하지 못하게 */
-  margin-left: 0;
+  margin-left: 20px;
   /* 왼쪽에 배치 */
 }
 
@@ -202,6 +223,7 @@ h2 {
   justify-content: flex-start;
   /* 왼쪽 정렬 */
   margin-top: 20px;
+  margin-left: 30px;
 }
 
 .textarea2 {
@@ -225,13 +247,14 @@ h2 {
   display: flex;
   justify-content: flex-start;
   /* 왼쪽 정렬 */
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-left: 48px;
 }
 
 /* 버튼 스타일 */
 button {
   margin-top: 10px;
-  margin-left: 264px;
+  margin-left: 348px;
   padding: 5px 10px;
   font-size: 1rem;
   color: white;
@@ -332,8 +355,8 @@ button:hover {
   padding: 4px 5px;
   border: none;
   cursor: pointer;
-  margin-top: -10px;
-  margin-left: 300px;
+  margin-top: -0px;
+  margin-left: 360px;
 }
 /* 마우스를 올렸을 때 색상 변경 */
 .popup-close:hover {

@@ -5,6 +5,7 @@ import _ from './pages/_'
 import LoginPage from './pages/LoginPage'
 import NoticeBoard from './pages/NoticeBoard';
 import WritePage from './pages/WritePage';
+import Classroom from './pages/Classroom';
 
 
 
@@ -17,6 +18,8 @@ function App() {
             <Route path="/LoginPage" element={<LoginPage />} />
             <Route path="/Notice" element={<NoticeBoard />} />
             <Route path="/Write" element={<WritePage />} />
+            <Route path="/Classroom" element={<Classroom />} />
+            
 
     </Routes>
     </BrowserRouter>
