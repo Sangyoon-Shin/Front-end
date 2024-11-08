@@ -21,6 +21,8 @@ const JoinPage = () => {
     const [passwordMatch, setPasswordMatch] = useState(null);
     const [tempToken, setTempToken] = useState('');
     const [error, setError] = useState(''); // 에러 메시지 상태
+    const [popupEmail, setPopupEmail] = useState('');
+
 
 
     const navigate = useNavigate();
@@ -44,7 +46,8 @@ const JoinPage = () => {
                 params: { email, code: enteredCode }
             });
             alert(response.data);
-            setIsCodeVerified(true);
+            setPasswordPopup(true); // 비밀번호 변경 팝업 열기
+            setPopupEmail('');
         } catch (error) {
             console.error('Verification failed:', error);
             alert('인증번호가 올바르지 않습니다.');

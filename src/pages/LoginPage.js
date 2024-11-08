@@ -161,7 +161,6 @@ const LoginPage = () => {
       setAuthPopup(false); // 인증 팝업 닫기
       setPasswordPopup(true); // 비밀번호 변경 팝업 열기
       setVerificationCode('');
-      setPopupEmail('');
     } catch (error) {
       if (error.response && error.response.status === 400) {
         alert("인증 코드가 유효하지 않습니다.");
