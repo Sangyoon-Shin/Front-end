@@ -1,12 +1,23 @@
 /* 전체 화면 스타일 */
 .app {
-  text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   background-color: #ffffff;
-  
+}
+
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* 페이지 상단에 표시 */
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+  padding-top: 60px; /* 헤더의 높이만큼 여백 추가 (필요에 따라 조정) */
 }
 
 /* body 스타일 설정 */
@@ -20,19 +31,12 @@ body {
 
 /* 컨테이너 스타일 설정 */
 .container {
-  width: 80%;  /* 컨테이너 너비 조정 */
-  max-width: 1200px;  /* 최대 너비 설정 */
-  text-align: center; /* 텍스트 중앙 정렬 */
+  width: 100%;
+  max-width: 1200px;
+  text-align: center;
+  margin-top: 80px; /* fixed-header 아래로 콘텐츠 배치 */
 }
 
-.title-group {
-  display: flex;
-  justify-content: center;
-  /* 가로 중앙 정렬 */
-  gap: 10px;
-  margin-bottom: 40px;
-  margin-top: 10px;
-}
 
 .right-section {
   display: flex;
@@ -44,35 +48,7 @@ body {
   /* 아이콘 사이의 간격 */
 }
 
-.mascot-logo {
-  width: 0px;
-  margin-right: 40px;
-  /* 로고와 문구 사이의 간격 */
-}
 
-/* 로고 이미지 크기 조절 */
-.app-main_mascot {
-  height: 80px;
-  margin-bottom: 10px;
-}
-
-.app-main_bell {
-  height: 40px;
-  margin-bottom: 10px;
-}
-
-.app-main_message {
-  height: 35px;
-  margin-bottom: 10px;
-}
-
-
-.app-main_my {
-  height: 35px;
-  margin-bottom: 10px;
-  margin-left: 6px;
-
-}
 
 
 /* 텍스트 스타일 (아래로 살짝 내림) */
@@ -218,12 +194,12 @@ h2 {
 
 /* 텍스트 입력 필드 컨테이너 */
 .content-input {
-  width: 80%;
+  width: 90%;
   display: flex;
   justify-content: flex-start;
   /* 왼쪽 정렬 */
   margin-top: 20px;
-  margin-left: 30px;
+  margin-left: 10px;
 }
 
 .textarea2 {
@@ -243,12 +219,12 @@ h2 {
 
 /* 텍스트 입력 필드 컨테이너 */
 .content-input2 {
-  width: 80%;
+  width: 90%;
   display: flex;
   justify-content: flex-start;
   /* 왼쪽 정렬 */
   margin-top: 10px;
-  margin-left: 48px;
+  margin-left: 28px;
 }
 
 /* 버튼 스타일 */

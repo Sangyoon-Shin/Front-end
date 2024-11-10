@@ -296,7 +296,10 @@ const NoticeBoard = () => {
 
   return (
     <div>
-      <Header />
+      <Header className={styles["fixed-header"]} />
+      <div className={styles["content"]}>
+
+      
       <div class='app'>
         <img src={arrow} className={styles["app-arrow"]} alt="back_arrow" onClick={() => navigate(-1)} />
         <h1 className={styles["title-text2"]}>게시판</h1>
@@ -315,6 +318,7 @@ const NoticeBoard = () => {
         <button onClick={togglePopup} className={styles["report-button"]}>
           신고하기
         </button>
+      </div>
       </div>
       {isPopupOpen && (
         <div className={styles["popup"]}>
