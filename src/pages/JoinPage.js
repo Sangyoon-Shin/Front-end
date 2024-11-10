@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import back_logo from '../images/뒷모습 횃불이.png';
 
-const BASE_URL = "https://04c3-117-16-196-170.ngrok-free.app";
+const BASE_URL = "https://97c2-2001-2d8-e249-5492-f0c0-56ec-6533-774b.ngrok-free.app";
 
 const JoinPage = () => {
     const [name, setName] = useState('');
@@ -21,9 +21,7 @@ const JoinPage = () => {
     const [passwordMatch, setPasswordMatch] = useState(null);
     const [tempToken, setTempToken] = useState('');
     const [error, setError] = useState(''); // 에러 메시지 상태
-    const [popupEmail, setPopupEmail] = useState('');
-
-
+    const [isStudent, setIsStudent] = useState(true); // 재학생 상태 추가
 
     const navigate = useNavigate();
 
@@ -45,12 +43,24 @@ const JoinPage = () => {
             const response = await axios.post(`${BASE_URL}/api/auth/verify-code`, null, {
                 params: { email, code: enteredCode }
             });
-            alert(response.data);
+
+            // 응답 데이터와 헤더를 콘솔에 출력하여 토큰의 위치를 확인
+            console.log('Response Data:', response.data);
+            console.log('Response Headers:', response.headers);
+
+            alert(response.data.message || '인증에 성공했습니다.');
+            setIsCodeVerified(true);
             setPasswordPopup(true); // 비밀번호 변경 팝업 열기
-            setPopupEmail('');
 
-            setTempToken(response.data.token); // 임시 토큰을 tempToken 상태에 저장
-
+            // 토큰을 응답 헤더에서 추출 (예: 'Authorization' 헤더)
+            const tokenFromHeader = response.headers['authorization'] || response.headers['Authorization'];
+            if (tokenFromHeader && tokenFromHeader.startsWith('Bearer ')) {
+                setTempToken(tokenFromHeader.substring(7)); // 'Bearer ' 접두사 제거
+                console.log('Extracted Token:', tokenFromHeader.substring(7));
+            } else {
+                console.error('Token not found in response headers');
+                alert('토큰을 응답에서 찾을 수 없습니다. 백엔드 팀에 문의하세요.');
+            }
         } catch (error) {
             console.error('Verification failed:', error);
             alert('인증번호가 올바르지 않습니다.');
@@ -90,20 +100,38 @@ const JoinPage = () => {
             return;
         }
 
+        // studentId가 정확히 9자리인지 검증
+        if (studentId.length !== 9) {
+            alert("학번은 정확히 9자리여야 합니다.");
+            return;
+        }
+
         try {
-            await axios.post(`${BASE_URL}/api/auth/change-password`, new URLSearchParams({
-                newPassword
-            }), {
+            // URLSearchParams를 사용하여 데이터를 URL 인코딩 형식으로 변환
+            const params = new URLSearchParams();
+            params.append('username', studentId); // 'username'을 'studentId'로 설정
+            params.append('password', newPassword); // 'password' 필드 추가
+            params.append('email', email);
+            params.append('name', name);
+            params.append('role', isStudent ? 'STUDENT' : 'GRADUATE');
+
+            // 사용자 정보와 비밀번호를 한 번에 전송
+            const response = await axios.post(`${BASE_URL}/join`, params, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': `Bearer ${tempToken}` // JWT 토큰을 Authorization 헤더에 추가
+                    'Authorization': tempToken ? `Bearer ${tempToken}` : '' // tempToken이 있을 때만 설정
                 }
             });
 
-            alert("비밀번호가 성공적으로 변경되었습니다.");
+            alert("비밀번호가 성공적으로 설정되었습니다.");
             setPasswordPopup(false);
             setNewPassword('');
             setConfirmPassword('');
+            setIsCodeSent(false);
+            setIsCodeVerified(false);
+            setEnteredCode('');
+            setTempToken('');
+            navigate('/LoginPage'); // 비밀번호 변경 후 로그인 페이지로 이동
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 alert("비밀번호 유효성 검사 실패 또는 인증 코드가 유효하지 않습니다.");
@@ -112,10 +140,13 @@ const JoinPage = () => {
             } else {
                 alert("비밀번호 변경 실패: 다시 시도해 주세요.");
             }
+            console.error('비밀번호 변경 실패:', error);
         }
     };
 
-
+    const handleSubmit = async () => {
+        // 현재 흐름에서는 필요하지 않을 수 있습니다.
+    };
 
     return (
         <div className={styles.container}>
@@ -147,10 +178,38 @@ const JoinPage = () => {
                         <input
                             type="text"
                             id="studentId"
-                            placeholder="학번 입력"
+                            placeholder="학번 입력 (9자리)"
                             value={studentId}
                             onChange={(e) => setStudentId(e.target.value)}
                         />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label className={styles.mainLabel}>재학생 / 졸업생 선택</label>
+                        <div className={styles.radioContainer}>
+                            <div className={styles.radioOption}>
+                                <label htmlFor="student">재학생</label>
+                                <input
+                                    type="radio"
+                                    id="student"
+                                    name="status"
+                                    value="student"
+                                    checked={isStudent}
+                                    onChange={() => setIsStudent(true)}
+                                />
+                            </div>
+                            <div className={styles.radioOption}>
+                                <label htmlFor="graduate">졸업생</label>
+                                <input
+                                    type="radio"
+                                    id="graduate"
+                                    name="status"
+                                    value="graduate"
+                                    checked={!isStudent}
+                                    onChange={() => setIsStudent(false)}
+                                />
+                            </div>
+                        </div>
                     </div>
 
                     <div className={styles.formGroup}>
@@ -159,7 +218,7 @@ const JoinPage = () => {
                             <input
                                 type="email"
                                 id="email"
-                                placeholder="이메일 입력"
+                                placeholder="이메일 입력 (@inu.ac.kr)"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
