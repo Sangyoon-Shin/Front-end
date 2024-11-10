@@ -125,31 +125,13 @@
   
   }
   
-  .inputBtn_ {
-    position: relative; /* 원래 위치에서 10px 아래로 이동 */
-   
-    /*position: absolute; /* 버튼을 절대 위치로 설정 */
-    right: -218px; /* 오른쪽으로 10px 간격 */
-    top: 50%; /* 수직 중앙으로 설정 */
-    transform: translateY(-109%); /* 수직 중앙 정렬 보정 */
-    padding: 8px;
-    background-color: #0056A0;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .inputBtn_:hover {
-    background-color: #004080;
-  }
 
   .inputBtn {
     position: relative; /* 원래 위치에서 10px 아래로 이동 */
    
     /*position: absolute; /* 버튼을 절대 위치로 설정 */
-    right: -205px; /* 오른쪽으로 10px 간격 */
-    top: 50%; /* 수직 중앙으로 설정 */
+    right: -95px; /* 오른쪽으로 10px 간격 */
+    top: 75%; /* 수직 중앙으로 설정 */
     transform: translateY(-109%); /* 수직 중앙 정렬 보정 */
     padding: 8px;
     background-color: #0056A0;
@@ -170,14 +152,14 @@
     flex-direction: column;
     justify-content: center;
     position: fixed;
-    top: 50%;
+    top: 58.5%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 20px;
+    padding: 43px;
     background-color: white;
     border: 1px solid #ddd;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 350px;
     border-radius: 10px;
   
   }
@@ -220,11 +202,11 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 10px;
     margin-top:9px;
     width: 35%;
-    margin-left: -109px; /*-109*/
-    height: 70%; /* 버튼 높이를 입력 필드와 유사하게 조정 */
+    margin-left: -108px; /*-109*/
+    height: 68%; /* 버튼 높이를 입력 필드와 유사하게 조정 */
   
   }
   
@@ -252,9 +234,9 @@
   h4 {
     font-size: 2.3rem;
     color: #0056A0;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     text-align: center;
-    margin-left: 50px;
+    margin-left: -1px;
   }
   
   
@@ -267,11 +249,11 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 13px;
-    margin-top:63px;
-    width: 30%;
-    margin-left: 187px; /*-109*/
-    height: 9.3%; /* 버튼 높이를 입력 필드와 유사하게 조정 */
-  
+    margin-top:73px;
+    width: 25%;
+    margin-left: 238px; /*-109*/
+    height: 8%; /* 버튼 높이를 입력 필드와 유사하게 조정 */
+
   }
   
   .changeBtn:hover {

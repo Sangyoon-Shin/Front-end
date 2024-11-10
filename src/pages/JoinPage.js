@@ -48,6 +48,9 @@ const JoinPage = () => {
             alert(response.data);
             setPasswordPopup(true); // 비밀번호 변경 팝업 열기
             setPopupEmail('');
+
+            setTempToken(response.data.token); // 임시 토큰을 tempToken 상태에 저장
+
         } catch (error) {
             console.error('Verification failed:', error);
             alert('인증번호가 올바르지 않습니다.');
@@ -93,7 +96,7 @@ const JoinPage = () => {
             }), {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': `Bearer ${tempToken}`
+                    'Authorization': `Bearer ${tempToken}` // JWT 토큰을 Authorization 헤더에 추가
                 }
             });
 
@@ -203,7 +206,7 @@ const JoinPage = () => {
             {/* 비밀번호 변경 팝업 */}
             {passwordPopup && (
                 <div className={styles.popup}>
-                    <h4>비밀번호 변경</h4>
+                    <h4>비밀번호 설정</h4>
                     <input
                         type="password"
                         placeholder="새 비밀번호"
@@ -223,7 +226,7 @@ const JoinPage = () => {
                         className={styles.changeBtn}
                         onClick={changePassword}
                     >
-                        비밀번호 변경
+                        비밀번호 설정
                     </button>
 
                     {(!newPassword || !confirmPassword) && (

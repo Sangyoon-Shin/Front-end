@@ -33,7 +33,7 @@ const FindIDPage = () => {
                     </div>
                 </div>
             </header>
-            <h1>아이디 찾기</h1>
+            <h1>학번 찾기</h1>
 
             <div className={styles.loginBox}>
                 {/* 아이디 찾기 폼 */}

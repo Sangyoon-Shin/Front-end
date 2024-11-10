@@ -5,71 +5,113 @@ import axios from 'axios';
 
 import back_logo from '../images/뒷모습 횃불이.png';
 
-
+const BASE_URL = "https://04c3-117-16-196-170.ngrok-free.app";
 
 const FindPWPage = () => {
     const [name, setName] = useState('');
     const [studentId, setStudentId] = useState('');
     const [email, setEmail] = useState('');
-    const [verificationCode, setVerificationCode] = useState('');
-    const [serverVerificationCode, setServerVerificationCode] = useState('');
-    const [popupMessage, setPopupMessage] = useState('');
+    const [enteredCode, setEnteredCode] = useState('');
+    const [isCodeSent, setIsCodeSent] = useState(false);
+    const [isCodeVerified, setIsCodeVerified] = useState(false);
+
+    const [passwordPopup, setPasswordPopup] = useState(false);
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordMatch, setPasswordMatch] = useState(null);
+    const [tempToken, setTempToken] = useState('');
+    const [error, setError] = useState(''); // 에러 메시지 상태
+    const [popupEmail, setPopupEmail] = useState('');
+
+
 
     const navigate = useNavigate();
 
-    // 임의의 데이터 지정
-    const expectedStudentId = "202";
-    const expectedEmail = "asz1218@inu.ac.kr";
-    const expectedVerificationCode = "1234";
-
-    // 이름 보내기 함수
-    const sendNameToServer = async () => {
+    const handleSendVerificationCode = async () => {
         try {
-            await axios.post('/api/send-name', { name });
-            setPopupMessage("이름이 성공적으로 전송되었습니다.");
+            const response = await axios.post(`${BASE_URL}/api/auth/send-email`, null, {
+                params: { email }
+            });
+            alert(response.data);
+            setIsCodeSent(true);
         } catch (error) {
-            setPopupMessage("이름 전송에 실패했습니다.");
+            console.error('Failed to send verification code:', error);
+            alert('인증번호 전송에 실패했습니다.');
         }
     };
 
-    // 아이디 확인 함수
-    const checkStudentId = async () => {
+    const handleVerifyCode = async () => {
         try {
-            const response = await axios.post('/api/check-id', { studentId });
-            if (response.data.exists) {
-                setPopupMessage("아이디가 확인되었습니다.");
+            const response = await axios.post(`${BASE_URL}/api/auth/verify-code`, null, {
+                params: { email, code: enteredCode }
+            });
+            alert(response.data);
+            setPasswordPopup(true); // 비밀번호 변경 팝업 열기
+            setPopupEmail('');
+        } catch (error) {
+            console.error('Verification failed:', error);
+            alert('인증번호가 올바르지 않습니다.');
+        }
+    };
+
+    const handlePasswordChange = (e) => {
+        setNewPassword(e.target.value);
+        checkPasswordMatch(e.target.value, confirmPassword);
+    };
+
+    const handleConfirmPasswordChange = (e) => {
+        setConfirmPassword(e.target.value);
+        checkPasswordMatch(newPassword, e.target.value);
+    };
+
+    const checkPasswordMatch = (password1, password2) => {
+        setPasswordMatch(password1 === password2);
+    };
+
+    // 비밀번호 변경 함수
+    const changePassword = async () => {
+        if (!newPassword || !confirmPassword) {
+            setError("모든 필드를 입력해 주세요.");
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            alert("비밀번호가 일치하지 않습니다.");
+            return;
+        }
+
+        // 비밀번호 규칙 검증
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+        if (!passwordRegex.test(newPassword)) {
+            alert("비밀번호는 최소 8자 이상, 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.");
+            return;
+        }
+
+        try {
+            await axios.post(`${BASE_URL}/api/auth/change-password`, new URLSearchParams({
+                newPassword
+            }), {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': `Bearer ${tempToken}`
+                }
+            });
+
+            alert("비밀번호가 성공적으로 변경되었습니다.");
+            setPasswordPopup(false);
+            setNewPassword('');
+            setConfirmPassword('');
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                alert("비밀번호 유효성 검사 실패 또는 인증 코드가 유효하지 않습니다.");
+            } else if (error.response && error.response.status === 401) {
+                alert("인증되지 않은 요청입니다.");
             } else {
-                setPopupMessage("아이디가 존재하지 않습니다.");
+                alert("비밀번호 변경 실패: 다시 시도해 주세요.");
             }
-        } catch (error) {
-            setPopupMessage("아이디 확인에 실패했습니다.");
         }
     };
 
-    // 이메일로 인증번호 요청 함수
-    const requestVerificationCode = async () => {
-        try {
-            const response = await axios.post('/api/request-verification-code', { email });
-            setServerVerificationCode(response.data.verificationCode);
-            setPopupMessage("인증번호가 이메일로 발송되었습니다.");
-        } catch (error) {
-            setPopupMessage("인증번호 발송에 실패했습니다.");
-        }
-    };
-
-    // 인증번호 확인 함수
-    const verifyCode = () => {
-        if (verificationCode === serverVerificationCode) {
-            setPopupMessage("인증번호가 확인되었습니다.");
-        } else {
-            setPopupMessage("인증번호가 일치하지 않습니다.");
-        }
-    };
-
-    // 닫기 버튼 클릭 시
-    const handleClose = () => {
-        navigate('/LoginPage');
-    };
 
 
     return (
@@ -86,65 +128,124 @@ const FindPWPage = () => {
 
             <div className={styles.loginBox}>
                 <div className={styles.formContainer}>
-
-                    {/* 아이디 입력 및 확인 */}
                     <div className={styles.formGroup}>
-                        <label htmlFor="studentId"><br />아이디</label>
-                        <div className={styles.inputWrapper}>
-                            <input
-                                type="text"
-                                id="studentId"
-                                placeholder="아이디 입력"
-                                value={studentId}
-                                onChange={(e) => setStudentId(e.target.value)}
-                            />
-                            <button className={styles.inputBtn_} onClick={checkStudentId}>아이디 확인</button>
-                        </div>
+                        <label htmlFor="name">이름</label>
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="이름 입력"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
                     </div>
 
-                    {/* 이메일 입력 및 인증번호 요청 */}
                     <div className={styles.formGroup}>
-                        <label htmlFor="email">인천대 이메일</label>
+                        <label htmlFor="studentId">학번</label>
+                        <input
+                            type="text"
+                            id="studentId"
+                            placeholder="학번 입력"
+                            value={studentId}
+                            onChange={(e) => setStudentId(e.target.value)}
+                        />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label htmlFor="email">이메일</label>
                         <div className={styles.inputWrapper}>
                             <input
                                 type="email"
                                 id="email"
-                                placeholder="인천대 이메일 입력"
+                                placeholder="이메일 입력"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
-                            <button className={styles.inputBtn} onClick={requestVerificationCode}>인증번호 받기</button>
+                            <button
+                                className={styles.inputBtn}
+                                onClick={handleSendVerificationCode}
+                                disabled={isCodeSent}
+                            >
+                                인증번호 받기
+                            </button>
                         </div>
                     </div>
 
-                    {/* 인증번호 입력 및 확인 */}
-                    <div className={styles.formGroup}>
-                        <label htmlFor="verificationCode">인증번호 확인</label>
-                        <div className={styles.inputWrapper}>
-                            <input
-                                type="text"
-                                id="verificationCode"
-                                placeholder="인증번호 입력"
-                                value={verificationCode}
-                                onChange={(e) => setVerificationCode(e.target.value)}
-                            />
-                            <button className={styles.inputBtn} onClick={verifyCode}>인증번호 확인</button>
+                    {isCodeSent && (
+                        <div className={styles.formGroup}>
+                            <label htmlFor="verificationCode">인증번호 확인</label>
+                            <div className={styles.inputWrapper}>
+                                <input
+                                    type="text"
+                                    id="verificationCode"
+                                    placeholder="인증번호 입력"
+                                    value={enteredCode}
+                                    onChange={(e) => setEnteredCode(e.target.value)}
+                                />
+                                <button
+                                    className={styles.inputBtn}
+                                    onClick={handleVerifyCode}
+                                    disabled={isCodeVerified}
+                                >
+                                    인증번호 확인
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
-
-                {/* 닫기 버튼 */}
-                <button type="button" className={styles.loginButton} onClick={handleClose}>
+                <button
+                    type="button"
+                    className={styles.loginButton}
+                    onClick={() => navigate('/LoginPage')}
+                >
                     닫기
                 </button>
-
-                {/* 팝업 메시지 */}
-                {popupMessage && (
-                    <div style={{ marginTop: '20px', color: 'blue' }}>
-                        <p>{popupMessage}</p>
-                    </div>
-                )}
             </div>
+            {/* 비밀번호 변경 팝업 */}
+            {passwordPopup && (
+                <div className={styles.popup}>
+                    <h4>비밀번호 설정</h4>
+                    <input
+                        type="password"
+                        placeholder="새 비밀번호"
+                        value={newPassword}
+                        onChange={handlePasswordChange}
+                        className={styles.inputField}
+                    />
+                    <input
+                        type="password"
+                        placeholder="비밀번호 확인"
+                        value={confirmPassword}
+                        onChange={handleConfirmPasswordChange}
+                        className={styles.inputField}
+                    />
+                    <button
+                        type="button"
+                        className={styles.changeBtn}
+                        onClick={changePassword}
+                    >
+                        비밀번호 설정
+                    </button>
+
+                    {(!newPassword || !confirmPassword) && (
+                        <p style={{ color: 'red' }}>비밀번호를 입력해 주세요.</p>
+                    )}
+                    {newPassword && confirmPassword && passwordMatch === false && (
+                        <p style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</p>
+                    )}
+                    {newPassword && confirmPassword && passwordMatch && (
+                        <p style={{ color: 'green' }}>비밀번호가 일치합니다.</p>
+                    )}
+                    <div className={styles.popupRow}>
+                        <button
+                            type="button"
+                            className={styles.closeButton}
+                            onClick={() => setPasswordPopup(false)}
+                        >
+                            닫기
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

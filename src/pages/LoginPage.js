@@ -282,7 +282,7 @@ const LoginPage = () => {
 
         <div className={styles.footerLinks}>
           <Link to="/JoinPage">회원가입</Link>/
-          <Link to="/FindIDPage">아이디 찾기</Link> /
+          <Link to="/FindIDPage">학번 찾기</Link> /
           <Link to="/FindPWPage">비밀번호 찾기</Link>
         </div>
       </div>

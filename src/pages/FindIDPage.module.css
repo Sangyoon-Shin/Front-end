@@ -132,7 +132,7 @@ h2 {
   position: relative; /* 원래 위치에서 10px 아래로 이동 */
  
   /*position: absolute; /* 버튼을 절대 위치로 설정 */
-  right: -205px; /* 오른쪽으로 10px 간격 */
+  right: -200px; /* 오른쪽으로 10px 간격 */
   top: 50%; /* 수직 중앙으로 설정 */
   transform: translateY(-109%); /* 수직 중앙 정렬 보정 */
   padding: 8px;
