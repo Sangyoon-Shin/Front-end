@@ -20,13 +20,13 @@
     display: flex;
     justify-content: center; /* 가로 중앙 정렬 */
     gap: 10px;  
-    margin-bottom: 770px;
+    margin-bottom: 550px;
   }
 
   .right-section {
     display: flex;
     align-items: center; /* 가로로 나란히 정렬 */
-    margin-top: 25px; /* 아래로 30px 만큼 내림 (값은 조절 가능) */
+    margin-top: 40px; /* 아래로 30px 만큼 내림 (값은 조절 가능) */
     gap: 10px; /* 아이콘 사이의 간격 */
   }
   

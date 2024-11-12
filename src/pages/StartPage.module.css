@@ -1,77 +1,77 @@
 /* 전체 화면 스타일 */
 .app {
-  text-align: center;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-    background-color: white;
-}
-
-/* 헤더 스타일 */
-.app-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.title-group{
-  display: flex;
-  justify-content: center; /* 가로 중앙 정렬 */
-  gap: 20px;  
-}
-
-.empty-space {
-  width: 50px; /* 여백의 너비 */
-  height:0px; /* 여백의 높이 */
-  /*background-color: white; 여백 배경색 (선택 사항) */
-}
-
-/* 로고 이미지 크기 조절 */
-.app-ese_logo {
-  height: 230px;
-  margin-bottom: 2px;
-}
-
-.app-computer_logo {
-  height: 90px;
-  margin-bottom: 0px;
-}
-
-.app-computer_logo_ {
-  height: 90px;
-  margin-bottom: 0px;
-}
-
-/* 텍스트 스타일 (아래로 살짝 내림) */
-.title-text {
-  font-size: 1.5rem;
-  color: #000000;
-  margin-top: 50px;  /* 텍스트를 위로 살짝 내림 */
-  /*margin-top: 50px;  /* 텍스트를 아래로 살짝 내림 */
-}
-
-
-/* INFO 텍스트 */
-h2 {
-  font-size: 2rem;
-  color: #0056A0;
-  margin-bottom: 20px;
-}
-
-/* 서브텍스트 */
-.subtext {
-  font-size: 1.5rem;
-  color: #f29c19;
-  margin-bottom: 0px;
-  margin-top: 30px;
-}
-
-/* 하단 설명 텍스트 */
-.footer-text {
-  font-size: 0.9rem;
-  color: gray;
-  margin-top: 20px;
-  font-family: 'Arial', sans-serif;
-}
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+      background-color: white;
+  }
+  
+  /* 헤더 스타일 */
+  .app-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .title-group{
+    display: flex;
+    justify-content: center; /* 가로 중앙 정렬 */
+    gap: 20px;  
+  }
+  
+  .empty-space {
+    width: 50px; /* 여백의 너비 */
+    height:0px; /* 여백의 높이 */
+    /*background-color: white; 여백 배경색 (선택 사항) */
+  }
+  
+  /* 로고 이미지 크기 조절 */
+  .app-ese_logo {
+    height: 230px;
+    margin-bottom: 2px;
+  }
+  
+  .app-computer_logo {
+    height: 90px;
+    margin-bottom: 0px;
+  }
+  
+  .app-computer_logo_ {
+    height: 90px;
+    margin-bottom: 0px;
+  }
+  
+  /* 텍스트 스타일 (아래로 살짝 내림) */
+  .title-text {
+    font-size: 1.5rem;
+    color: #000000;
+    margin-top: 50px;  /* 텍스트를 위로 살짝 내림 */
+    /*margin-top: 50px;  /* 텍스트를 아래로 살짝 내림 */
+  }
+  
+  
+  /* INFO 텍스트 */
+  h2 {
+    font-size: 2rem;
+    color: #0056A0;
+    margin-bottom: 20px;
+  }
+  
+  /* 서브텍스트 */
+  .subtext {
+    font-size: 1.5rem;
+    color: #f29c19;
+    margin-bottom: 0px;
+    margin-top: 30px;
+  }
+  
+  /* 하단 설명 텍스트 */
+  .footer-text {
+    font-size: 0.9rem;
+    color: gray;
+    margin-top: 20px;
+    font-family: 'Arial', sans-serif;
+  }
