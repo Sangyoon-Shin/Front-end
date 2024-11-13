@@ -7,7 +7,7 @@
   justify-content: center;
   align-items: center;
     background-color: white;
-    margin: -10vw; /* 화면 너비의 10% */
+    margin: -5vw; /* 화면 너비의 10% */
     width: 120%; /* 부모 요소의 50% */
 }
 
@@ -29,7 +29,7 @@
 .title-group{
   display: flex;
   justify-content: center; /* 가로 중앙 정렬 */
-  gap: 0px; 
+  gap: 10px; 
   margin-top: 150px;
 }
 
@@ -42,28 +42,28 @@
 /* 로고 이미지 크기 조절 */
 .app-ese_logo {
   height: 230px;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 .app-computer_logo {
   height: 90px;
   margin-bottom: 0px;
-  margin-left: -80px;
+  margin-left: px;
 
 }
 
 .app-computer_logo_ {
   height: 90px;
-  margin-bottom: 0px;
-  margin-left: 20px;
+  margin-bottom: 20px;
+  margin-left: 0px;
 }
 
 /* 텍스트 스타일 (아래로 살짝 내림) */
 .title-text {
-  font-size: 1.3rem !important;
+  font-size: 1.3rem;
   color: #000000;
   margin-top: 50px;  /* 텍스트를 위로 살짝 내림 */
-  margin-left: 20px;  /* 텍스트를 아래로 살짝 내림 */
+  margin-left: 0px;  /* 텍스트를 아래로 살짝 내림 */
 }
 
 /* 큰 텍스트 */
@@ -79,7 +79,7 @@ h2 {
   font-size: 2rem;
   color: #0056A0;
   margin-bottom: 20px;
-  margin-left: 100px;
+  margin-left: 0px;
 }
 
 /* 서브텍스트 */
@@ -95,5 +95,6 @@ h2 {
   font-size: 0.9rem;
   color: gray;
   margin-top: 20px;
+  margin-BOTTOM: 100px;
   font-family: 'Arial', sans-serif;
 }

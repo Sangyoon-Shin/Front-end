@@ -40,7 +40,7 @@
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
+    width: 140%;
     max-width: 400px;
     margin-bottom: 100px; /* 왼쪽으로 220px 이동 */
       display: flex;           /* 부모 요소에 flexbox 적용 */
@@ -59,6 +59,7 @@
     font-size: 16px;
     cursor: pointer;
     margin-top: 20px;
+    margin-left: 0px;
   }
   
   .loginButton:hover {
