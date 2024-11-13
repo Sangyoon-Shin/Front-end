@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const BASE_URL = "https://97c2-2001-2d8-e249-5492-f0c0-56ec-6533-774b.ngrok-free.app"; 
+  const BASE_URL = "https://8d48-117-16-196-138.ngrok-free.app"; 
 
   // 페이지 이동을 위한 navigate 선언
   const navigate = useNavigate();
