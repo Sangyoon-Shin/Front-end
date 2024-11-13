@@ -85,7 +85,7 @@ body {
   margin-bottom: -25px;
   /* 텍스트를 아래로 살짝 내림 */
   margin-top: 20px;
-  margin-left: 50px;
+  margin-left: 30px;
 }
 
 .title-text5 {
@@ -162,6 +162,7 @@ h2 {
   cursor: pointer;
   /* 커서를 손 모양으로 변경 */
   transition: transform 0.3s ease;
+  margin-right:30px;
   /* 부드러운 확대 효과 추가 */
 }
 
@@ -213,7 +214,7 @@ h2 {
   border-radius: 5px;
   resize: none;
   /* 사용자가 크기 조정하지 못하게 */
-  margin-left: 0;
+  margin-left: 0px;
   /* 왼쪽에 배치 */
 }
 
@@ -230,7 +231,7 @@ h2 {
 /* 버튼 스타일 */
 button {
   margin-top: 10px;
-  margin-left: 348px;
+  margin-left: 323px;
   padding: 5px 10px;
   font-size: 1rem;
   color: white;

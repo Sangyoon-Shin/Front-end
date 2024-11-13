@@ -1,5 +1,5 @@
    /* 텍스트 스타일 (아래로 살짝 내림) */
-  .title-text {
+   .title-text {
     font-size: 0.9rem !important;
     color: #000000;
     margin-bottom: 20px;
@@ -13,7 +13,7 @@
     margin-bottom: 30px;
     /* 텍스트를 아래로 살짝 내림 */
     margin-top: -38px;
-    margin-left: 170px;
+    margin-left: 147px;
     /* 텍스트를 아래로 살짝 내림 */
   }
   
@@ -118,7 +118,7 @@
 /* 작성 버튼 스타일 */
 .submit-group {
   margin-top: 10px;
-  margin-left: 15px;
+  margin-left: 14px;
   display: flex;
   justify-content: center;
 }

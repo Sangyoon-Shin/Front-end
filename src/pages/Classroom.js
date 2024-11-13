@@ -4,7 +4,8 @@ import styles from './Classroom.module.css';
 import Header from './_.js'; // 상단바 컴포넌트
 import arrow from '../images/arrow.png';
 import bar from '../images/bar.png';
-import mainMascot from '../images/대학 심볼 횃불이.png';
+import mainMascot from '../images/횃불이_빈강의.png';
+import emptytime from '../images/횃불이_빈.png';
 
 const Footer = () => {
     return (
@@ -126,42 +127,7 @@ const Classroom = () => {
                     ))}
                 </div>
 
-                {/* 팝업 컴포넌트 */}
-                {isPopupOpen && (
-                    <div className={styles.popupOverlay}>
-                        <div className={styles.popup}>
-                            <h2>예약 정보 입력</h2>
-                            <label>
-                                예약 날짜:
-                                <input
-                                    type="date"
-                                    value={reservationDetails.date}
-                                    onChange={e => setReservationDetails({ ...reservationDetails, date: e.target.value })}
-                                />
-                            </label>
-                            <label>
-                                예약 인원:
-                                <input
-                                    type="number"
-                                    value={reservationDetails.people}
-                                    onChange={e => setReservationDetails({ ...reservationDetails, people: e.target.value })}
-                                />
-                            </label>
-                            <label>
-                                예약 시간:
-                                <input
-                                    type="time"
-                                    value={reservationDetails.time}
-                                    onChange={e => setReservationDetails({ ...reservationDetails, time: e.target.value })}
-                                />
-                            </label>
-                            <div className={styles.popupFooter}>
-                                <button onClick={handleReservationSubmit}>예약 완료</button>
-                                <button onClick={handleCancel}>취소</button> {/* 취소 버튼 처리 */}
-                            </div>
-                        </div>
-                    </div>
-                )}
+                
             </div>
         </div>
     );

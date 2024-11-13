@@ -6,6 +6,9 @@ import LoginPage from './pages/LoginPage'
 import NoticeBoard from './pages/NoticeBoard';
 import WritePage from './pages/WritePage';
 import Classroom from './pages/Classroom';
+import BootCamp from './pages/BootCamp';
+import Industry from './pages/Industry';
+import Study from './pages/Study';
 
 
 
@@ -19,6 +22,9 @@ function App() {
             <Route path="/Notice" element={<NoticeBoard />} />
             <Route path="/Write" element={<WritePage />} />
             <Route path="/Classroom" element={<Classroom />} />
+            <Route path="/Bootcamp" element={<BootCamp />} />
+            <Route path="/Industry" element={<Industry />} />
+            <Route path="/Study" element={<Study />} />
             
 
     </Routes>
