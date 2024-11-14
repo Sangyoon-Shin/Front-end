@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from "./NoticeBoard.module.css";
+import styles from "./NoticeBoot.module.css";
 import main_mascot from '../images/대학 심볼 횃불이.png';
 import main_bell from '../images/bell.png';
 import main_message from '../images/message.png';
@@ -13,7 +13,7 @@ import bar from '../images/bar.png';
 import Header from './_.js';  // 상단바 컴포넌트
 // import Header from './Header'; // import the Header component
 
-const NoticeBoard = () => {
+const NoticeBoot = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
@@ -296,11 +296,13 @@ const NoticeBoard = () => {
 
   return (
     <div>
-      <Header />
+      <Header className={styles["fixed-header"]} />
       <div className={styles["content"]}>
+
       
+      <div class='app'>
         <img src={arrow} className={styles["app-arrow"]} alt="back_arrow" onClick={() => navigate(-1)} />
-        <h1 className={styles["title-text2"]}>게시판</h1>
+        <h1 className={styles["title-text2"]}>부트캠프 게시판</h1>
 
         <img src={bar} className={styles["app-bar"]} alt="bar" />
 
@@ -316,6 +318,7 @@ const NoticeBoard = () => {
         <button onClick={togglePopup} className={styles["report-button"]}>
           신고하기
         </button>
+      </div>
       </div>
       {isPopupOpen && (
         <div className={styles["popup"]}>
@@ -416,4 +419,4 @@ const NoticeBoard = () => {
   );
 };
 
-export default NoticeBoard;
+export default NoticeBoot;

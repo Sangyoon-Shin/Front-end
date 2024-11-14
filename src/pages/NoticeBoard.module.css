@@ -17,16 +17,7 @@
 }
 
 .content {
-  padding-top: 60px; /* 헤더의 높이만큼 여백 추가 (필요에 따라 조정) */
-}
-
-/* body 스타일 설정 */
-body {
-  display: flex;
-  justify-content: center; /* 수평 중앙 정렬 */
-  align-items: center;     /* 수직 중앙 정렬 */
-  min-height: 70vh;       /* 화면 전체 높이를 차지 */
-  margin: 0;
+  padding-top: 20px; /* 헤더의 높이만큼 여백 추가 (필요에 따라 조정) */
 }
 
 /* 컨테이너 스타일 설정 */
@@ -53,7 +44,7 @@ body {
 
 /* 텍스트 스타일 (아래로 살짝 내림) */
 .title-text { /*공지사항*/
-  font-size: 0.9rem !important;
+  font-size: 0.9rem;
   color: #000000;
   margin-bottom: 20px;
   /* 텍스트를 아래로 살짝 내림 */
@@ -61,7 +52,7 @@ body {
 }
 
 .title-text2 { /*게시판*/
-  font-size: 1.6rem !important;
+  font-size: 1.6rem;
   color: #000000;
   margin-bottom: 20px;
   /* 텍스트를 아래로 살짝 내림 */
@@ -71,16 +62,16 @@ body {
 }
 
 .title-text3 { /*게시판 제목*/
-  font-size: 1.3rem !important;
+  font-size: 1.3rem;
   color: #000000;
   margin-bottom: -82px;
   /* 텍스트를 아래로 살짝 내림 */
-  margin-left: 60px;
+  margin-left: 30px;
   margin-top : -10px;
 }
 
 .title-text4 { /*작성일*/
-  font-size: 1.0rem !important;
+  font-size: 1.0rem ;
   color: #000000;
   margin-bottom: -25px;
   /* 텍스트를 아래로 살짝 내림 */
@@ -226,23 +217,6 @@ h2 {
   /* 왼쪽 정렬 */
   margin-top: 10px;
   margin-left: 28px;
-}
-
-/* 버튼 스타일 */
-button {
-  margin-top: 10px;
-  margin-left: 323px;
-  padding: 5px 10px;
-  font-size: 1rem;
-  color: white;
-  background-color: #0056A0;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #003D73;
 }
 
 .comments-section {

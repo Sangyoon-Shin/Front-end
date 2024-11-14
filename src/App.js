@@ -9,6 +9,8 @@ import Classroom from './pages/Classroom';
 import BootCamp from './pages/BootCamp';
 import Industry from './pages/Industry';
 import Study from './pages/Study';
+import NoticeBoot from './pages/NoticeBoot';
+import InformationCode from './pages/InformationCode';
 
 
 
@@ -25,6 +27,8 @@ function App() {
             <Route path="/Bootcamp" element={<BootCamp />} />
             <Route path="/Industry" element={<Industry />} />
             <Route path="/Study" element={<Study />} />
+            <Route path="/NoticeBoot" element={<NoticeBoot />} />
+            <Route path="/InformationCode" element={<InformationCode />} />
             
 
     </Routes>

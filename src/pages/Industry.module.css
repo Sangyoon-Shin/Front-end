@@ -117,7 +117,7 @@
   
 /* 작성 버튼 스타일 */
 .submit-group {
-  margin-top: 10px;
+  margin-top: -50px;
   margin-left: 14px;
   display: flex;
   justify-content: center;
@@ -169,4 +169,30 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-bottom: px;
+}
+
+.image-upload {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.camera-icon {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.image-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.image-preview {
+  max-width: 80%;
+  max-height: 120px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
