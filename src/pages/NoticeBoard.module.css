@@ -3,7 +3,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   background-color: #ffffff;
+  min-height: 100vh;
+  margin: 0 auto;
 }
 
 .fixed-header {
@@ -38,9 +41,6 @@
   gap: 10px;
   /* 아이콘 사이의 간격 */
 }
-
-
-
 
 /* 텍스트 스타일 (아래로 살짝 내림) */
 .title-text { /*공지사항*/
