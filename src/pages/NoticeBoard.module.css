@@ -20,7 +20,13 @@
 }
 
 .content {
-  padding-top: 20px; /* 헤더의 높이만큼 여백 추가 (필요에 따라 조정) */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 수평 가운데 정렬 */
+  justify-content: center; /* 수직 가운데 정렬 */
+  margin: 0 auto; /* 자동으로 좌우 여백 조정 */
+  max-width: 800px; /* 필요한 최대 너비 설정 */
+  padding: 20px;
 }
 
 /* 컨테이너 스타일 설정 */
@@ -57,7 +63,7 @@
   margin-bottom: 20px;
   /* 텍스트를 아래로 살짝 내림 */
   margin-top: -38px;
-  margin-left: 200px;
+  margin-left: 30px;
   /* 텍스트를 아래로 살짝 내림 */
 }
 
@@ -66,7 +72,7 @@
   color: #000000;
   margin-bottom: -82px;
   /* 텍스트를 아래로 살짝 내림 */
-  margin-left: 30px;
+  margin-right: 330px;
   margin-top : -10px;
 }
 
@@ -76,7 +82,7 @@
   margin-bottom: -25px;
   /* 텍스트를 아래로 살짝 내림 */
   margin-top: 20px;
-  margin-left: 30px;
+  margin-right: 300px;
 }
 
 .title-text5 {
@@ -153,7 +159,7 @@ h2 {
   cursor: pointer;
   /* 커서를 손 모양으로 변경 */
   transition: transform 0.3s ease;
-  margin-right:30px;
+  margin-left:430px;
   /* 부드러운 확대 효과 추가 */
 }
 
@@ -180,7 +186,7 @@ h2 {
   border-radius: 5px;
   resize: none;
   /* 사용자가 크기 조정하지 못하게 */
-  margin-left: 20px;
+  margin-left: 30px;
   /* 왼쪽에 배치 */
 }
 
@@ -205,7 +211,7 @@ h2 {
   border-radius: 5px;
   resize: none;
   /* 사용자가 크기 조정하지 못하게 */
-  margin-left: 0px;
+  margin-left: 10px;
   /* 왼쪽에 배치 */
 }
 
@@ -228,8 +234,9 @@ h2 {
   /* 상단 경계선 추가 */
   background-color: #f9f9f9;
   /* 배경색 설정 */
-  width: 90%; /* 전체 너비 사용 */
+  width: 81%; /* 전체 너비 사용 */
   height: 60px; /* 댓글 목록을 표시할 고정 높이 */
+  margin-left: 40px;
 }
 
 .comment-item:nth-child(odd) {
@@ -280,6 +287,7 @@ h2 {
   justify-content: flex-end; /* 오른쪽 정렬 */
   width: 100%; /* 부모 컨테이너의 너비를 설정 */
   margin-top: 10px;
+
 }
 
 .popup-close, .popup-receive {
@@ -324,6 +332,9 @@ h2 {
   margin-left: 20px; /* 대댓글 입력창을 댓글보다 살짝 오른쪽으로 이동 */
 }
 
+.reply-button {
+  margin-left: 40px;
+}
 .reply-input textarea {
   width: 91%; /* 대댓글 입력창의 너비를 100%로 설정 */
   min-height: 50px; /* 최소 높이 설정 */
@@ -331,7 +342,6 @@ h2 {
   border-radius: 4px; /* 둥근 모서리 */
   padding: 8px; /* 내부 여백 */
   resize: none; /* 크기 조정 비활성화 */
-  margin-right : 10px;
 }
 
 .reply-input button {
@@ -344,6 +354,7 @@ h2 {
   cursor: pointer; /* 커서가 포인터로 변경 */
   transition: background-color 0.3s; /* 배경 색상 전환 효과 */
   font-size: 0.9em; /* 폰트 크기를 줄여서 더 작게 설정 */
+  margin-left: 230px;
 }
 
 .reply-input button:hover {
@@ -364,6 +375,7 @@ button {
   border-radius: 4px; /* 둥근 모서리 */
   padding: 8px 12px; /* 버튼 내부 여백 */
   transition: background-color 0.3s; /* 배경 색상 전환 효과 */
+  margin-left: 20px;
 }
 
 button:hover {
@@ -381,15 +393,15 @@ button:hover {
   border-radius: 5px;
   resize: none;
   /* 사용자가 크기 조정하지 못하게 */
-  margin-left: 100;
+  margin-right: 10px;
   /* 왼쪽에 배치 */
 }
 
 .reply-container {
   display: flex; /* Flexbox로 설정 */
-  justify-content: flex-end; /* 오른쪽 정렬 */
+  justify-content: center; /* 오른쪽 정렬 */
   margin-top: -30px; /* 위쪽 여백 추가 */
-  margin-right: 10px;
+  margin-right: 20px;
 }
 
 .toggle-reply-button {
@@ -400,4 +412,5 @@ button:hover {
   border: none; /* 테두리 제거 */
   border-radius: 4px; /* 모서리를 둥글게 */
   cursor: pointer; /* 커서 변경 */
+  margin-left:270px;
 }
