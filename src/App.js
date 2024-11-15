@@ -22,6 +22,15 @@ import InformationCode from './pages/InformationCode';
 // 코드 질문방 본문
 import QuestionCode from './pages/QuestionCode';
 
+// 대회 정보게시판
+import InformationContest from './pages/InformationContest';
+
+// 대회 글쓰기
+import ContestWrite from './pages/ContestWrite';
+
+// 석진이형 페이지
+import NoticeBoard from './pages/NoticeBoard';
+
 function App() {
   return (
     <BrowserRouter>
@@ -34,6 +43,13 @@ function App() {
         <Route path="/Message" element={<Message />} />
         <Route path="/InformationCode" element={<InformationCode />} /> {/* InformationCode 라우트 추가 */}
         <Route path="/QuestionCode" element={<QuestionCode />} />
+        <Route path="/InformationContest" element={<InformationContest />} />
+        <Route path="/ContestWrite" element={<ContestWrite />} />
+
+        {/* 석진이 형 페이지*/}
+
+        <Route path="/Notice" element={<NoticeBoard />} />
+
         <Route path="/chatroom/:id" element={<ChatRoom />} /> {/* 동적 라우팅을 통한 채팅방 페이지 */}
       </Routes>
     </BrowserRouter>

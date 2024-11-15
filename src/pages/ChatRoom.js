@@ -15,6 +15,7 @@ const ChatRoom = () => {
     const messageListRef = useRef(null);
 
     useEffect(() => {
+        /*
         // 하드코딩된 방 데이터 (나중에 백엔드와 연동할 때 교체)
         const dummyData = {
             1: { username: 'char1', lastMessage: '마지막 내용 1', title: '글 제목 1' },
@@ -46,8 +47,7 @@ const ChatRoom = () => {
                 setRoomData(data);
             } catch (error) {
                 console.error('방 정보를 불러오는 중 오류가 발생했습니다:', error);
-            };
-            fetchRoomData();
+            }
         };
 
         const fetchMessages = async () => {

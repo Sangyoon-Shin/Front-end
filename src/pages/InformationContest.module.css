@@ -76,7 +76,7 @@
 }
 
 .content {
-    margin-top: 20px;
+    margin-top:  20px;
     /* 상단바도 하나의 그룹이라 내가 원하는 항목 만들면 아래로 밀림.*/
     padding: 20px;
     background-color: white;
@@ -128,9 +128,9 @@
 
 .dropdownMenu {
     position: absolute;
-    top: 7rem;
+    top: 11.6rem;
     /* 버튼 아래에 위치 */
-    margin-right: -0.8rem;
+    margin-right: 2rem;
     right: 60px;
     border-radius: 5px;
     z-index: 100;

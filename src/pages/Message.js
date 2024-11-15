@@ -6,8 +6,9 @@ import styles from './Message.module.css';
 import menuIcon from '../images/메뉴버튼.png';
 
 const Message = () => {
+
+    /*
     // 하드코딩된 방 목록 (백엔드 연동 시 주석 처리)
-    
     const [messages, setMessages] = useState([
         { id: 1, username: 'char1', title: '글 제목 1', lastMessage: '마지막 내용 1' },
         { id: 2, username: 'char4', title: '글 제목 2', lastMessage: '마지막 내용 2' },
@@ -15,31 +16,36 @@ const Message = () => {
         { id: 4, username: 'int2', title: '글 제목 4', lastMessage: '마지막 내용 4' },
         { id: 5, username: 'char3', title: '글 제목 5', lastMessage: '마지막 내용 5' },
     ]); // 하드코딩된 메시지 목록
-    
+    */
     
     // 백엔드와 연동할 때 사용할 초기 상태
-    /* const [messages, setMessages] = useState([]); // 메시지 목록 상태 관리 */
+    const [messages, setMessages] = useState([]); // 메시지 목록 상태 관리 
     const [visibleMessages, setVisibleMessages] = useState(4); // 처음에는 4개의 메시지만 표시
     const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
     const navigate = useNavigate();
 
-    /*
      // 백엔드와 연동할 때 사용할 코드
     useEffect(() => {
-        const fetchMessages = async () => {
+        const fetchMessages = async () => { 
             try {
-                const response = await fetch('https://your-backend-api.com/api/messages');
+                const id = 'subibi21'
+                const response = await fetch(`http://192.168.165.161:8080/Room/userId/${id}`);
                 if (!response.ok) {
                     throw new Error('메시지 목록을 불러오는데 실패했습니다.');
                 }
                 const data = await response.json();
-                setMessages(data); // 메시지 목록 상태 업데이트
+                if(data.code!=200){
+                    throw new Error('메시지 목록을 불러오는데 실패했습니다.')
+                }
+                setMessages(data.data); // 메시지 목록 상태 업데이트
             } catch (error) {
                 console.error('메시지 목록 불러오는 중 오류가 발생했습니다:', error);
             }
         };
         fetchMessages();
-    }, []); */
+    }, []); 
+    
+   
 
     // 방 클릭 시 해당 채팅방으로 이동하는 함수
     const handleRoomClick = (id) => {

@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-import styles from './_.module.css';
+import styles from "./_.module.css";
 import main_mascot from '../images/대학 심볼 횃불이.png';  // 로고 이미지 불러오기
 //import main_info from '../images/대학 심볼 횃불이.png';  // 로고 이미지 불러오기
 import main_bell from '../images/bell.png';  // 로고 이미지 불러오기

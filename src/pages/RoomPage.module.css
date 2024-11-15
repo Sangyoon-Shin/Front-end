@@ -5,10 +5,10 @@
 }
 
 .content {
-  margin-top: -590px;
+  margin-top: 20px;
   /* 상단바도 하나의 그룹이라 내가 원하는 항목 만들면 아래로 밀림.*/
   padding: 20px;
-  background-color: #f5f5f5;
+  background-color: white;
   /* 배경색 설정 */
   height: 100vh;
   overflow-y: auto;
@@ -254,7 +254,7 @@
 /* 신고하기 버튼 스타일 */
 .reportButton {
   margin-top: 20px;
-  padding: 10px 20px;
+  padding: 8px 16px;
   background-color: #ff4c4c;
   color: white;
   border: none;
@@ -276,7 +276,7 @@
 /* 신고 모드에서 사용하는 취소 버튼 스타일 */
 .cancelButton {
   margin-left: 10px;
-  padding: 10px 20px;
+  padding: 8px 16px;
   background-color: #495057;
   color: white;
   border: none;
@@ -340,7 +340,7 @@
 .reportTextarea {
   margin-bottom: 15px;
   width: 91%;
-  height: 90px;
+  height: 60px;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;

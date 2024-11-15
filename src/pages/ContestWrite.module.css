@@ -34,8 +34,14 @@
     position: relative;
 }
 
+.subtitle {
+    font-size: 0.8rem; /* 작은 크기로 설정 */
+    color: black; /* 원하는 색상으로 설정 */
+    margin-top: -20px;
+  }
+
 .pageTitle {
-    margin-top: -150px;
+    margin-top: -130px;
     font-size: 1.5rem;
     font-weight: bold;
     text-align: center;
@@ -136,7 +142,9 @@
     outline: none;
     font-size: 1rem;
     resize: none;
-    height: 20px;
+    width: 340px;
+    height: 150px;
+    margin-left: -20px;
 }
 
 .submitButton {

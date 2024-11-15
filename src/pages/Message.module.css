@@ -5,9 +5,9 @@
 }
 
 .content {
-    margin-top: -590px;
+    margin-top: 20px;
     padding: 20px;
-    background-color: #f5f5f5;
+    background-color: white;
     height: 100vh;
     overflow-y: auto;
 }
@@ -76,17 +76,18 @@
     height: 1.5rem;
 }
 
-.dropdownMenu {
+.dropdownMenu { 
     position: absolute;  /* 절대 위치로 설정 */
     top: 0;              /* 메뉴 아이콘의 바로 아래에 나타나도록 설정 */
     right: 0;
-    transform: translateY(150%);  /* 간격 조정 */
+    transform: translateY(110%);  /* 간격을 줄여서 삭제 버튼이 메뉴 버튼과 더 가까워지도록 설정 */
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 100;
 }
+
 
 .deleteButton {
     background-color: #ff4c4c;

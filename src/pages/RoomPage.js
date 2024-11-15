@@ -291,7 +291,7 @@ const RoomPage = () => {
         {isModalOpen && (
           <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
-              <h3>신고하기</h3>
+              <h4>신고하기</h4>
               <textarea
                 className={styles.reportTextarea}
                 value={reportReason}
