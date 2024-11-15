@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
 import Header from './_.js';  // 상단바 컴포넌트
@@ -10,27 +10,20 @@ import IconScrap from '../images/횃불이스크랩.png';
 import IconUnscrap from '../images/횃불이스크랩X.png';
 
 // 게시물 목록에 대한 초기 데이터 (가상 데이터)
-const initialPosts = [
+/* const initialPosts = [
   { id: 1, title: '[C/C++] 게시판 제목 1', date: '2024-01-01', likes: 10, isScraped: true },
   { id: 2, title: '[JAVA] 게시판 제목 2', date: '2024-01-02', likes: 20, isScraped: false },
   { id: 3, title: '[Python] 게시판 제목 3', date: '2024-01-03', likes: 5, isScraped: false },
   { id: 4, title: '[C#] 게시판 제목 4', date: '2024-01-04', likes: 30, isScraped: true },
   { id: 5, title: '[C/C++] 게시판 제목 5', date: '2024-01-05', likes: 15, isScraped: false },
   { id: 6, title: '[JAVA] 게시판 제목 6', date: '2024-01-06', likes: 25, isScraped: false },
-];
+]; */
 
 const InformationCode = () => {
   const [menuOpen, setMenuOpen] = useState(false);  // 드롭다운 상태 관리
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
-  const [scrapStatus, setScrapStatus] = useState({
-    1: true,
-    2: false,
-    3: false,
-    4: true,
-    5: false,
-    6: false,
-  }); // 각 게시물의 스크랩 상태 관리
-  const [posts, setPosts] = useState(initialPosts); // 게시물 목록 상태 관리
+  const [scrapStatus, setScrapStatus] = useState({}); // 각 게시물의 스크랩 상태 관리
+  const [posts, setPosts] = useState([]); // 게시물 목록 상태 관리
   const [sortType, setSortType] = useState('latest'); // 초기 정렬 상태는 'latest'
   const [selectedLanguage, setSelectedLanguage] = useState('전체'); // 선택된 언어 필터
 
@@ -38,6 +31,24 @@ const InformationCode = () => {
 
   // 반응형 처리를 위한 useMediaQuery 사용
   const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
+
+  useEffect(() => {
+    // 페이지 로드 시 백엔드에서 게시물 목록을 불러옴
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('https://f03a-116-45-67-236.ngrok-free.app/api/board/coding');
+        if (!response.ok) {
+          throw new Error('게시물 목록을 불러오는데 실패했습니다.');
+        }
+        const data = await response.json();   
+        console.log(data);
+        setPosts(data);
+      } catch (error) {
+        console.error('게시물 목록을 불러오는 중 오류가 발생했습니다:', error);
+      }
+    };
+    fetchPosts();
+  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);  // 드롭다운 토글
@@ -47,9 +58,23 @@ const InformationCode = () => {
     setSelectedLanguage(language);
     setMenuOpen(false);  // 메뉴 닫기
     if (language === '전체') {
-      setPosts(initialPosts);
+      // 전체 게시물 표시
+      const fetchPosts = async () => {
+        try {
+          const response = await fetch('https://your-backend-api.com/api/posts');
+          if (!response.ok) {
+            throw new Error('게시물 목록을 불러오는데 실패했습니다.');
+          }
+          const data = await response.json();
+          setPosts(data);
+        } catch (error) {
+          console.error('게시물 목록을 불러오는 중 오류가 발생했습니다:', error);
+        }
+      };
+      fetchPosts();
     } else {
-      setPosts(initialPosts.filter(post => post.title.includes(`[${language}]`)));
+      // 선택된 언어 게시물 필터링
+      setPosts(posts.filter(post => post.title.includes(`[${language}]`)));
     }
   };
 
