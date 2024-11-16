@@ -288,3 +288,10 @@
 .pageButton:hover {
     background-color: #f0f0f0;
 }
+
+.activeMenuItem {
+    font-weight: bold; /* 굵게 표시 */
+    color: #007bff; /* 강조 색상 */
+    background-color: #f0f8ff; /* 선택된 배경 */
+  }
+  

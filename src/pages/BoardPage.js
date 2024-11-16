@@ -75,6 +75,7 @@ const BoardPage = () => {
     setMenuOpen(false);  // 메뉴 닫기
   };
 
+  
   const toggleScrap = async (id) => {
     // 백엔드에 스크랩 상태를 업데이트하는 요청 보내기
     try {
@@ -106,6 +107,7 @@ const BoardPage = () => {
       alert('스크랩 상태 업데이트에 실패했습니다. 다시 시도해주세요.');
     }
   };
+
 
 
   // 검색 입력값을 변경하는 함수

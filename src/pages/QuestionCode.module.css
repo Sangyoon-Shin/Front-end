@@ -61,7 +61,7 @@
 
 .languageSelection {
     display: flex;
-    gap: 10px;
+    gap: 20px;
     flex-wrap: wrap;
 }
 
@@ -74,6 +74,8 @@
 .languageSelectionLabel {
     font-size: 0.9rem;
     font-weight: bold;
+    min-width: 80px; /* 일정한 너비로 유지해 제목과 입력 필드 정렬을 맞추기 */
+    margin-left: 13px;
 }
 
 .languageButton {
