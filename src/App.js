@@ -11,6 +11,7 @@ import Industry from './pages/Industry';
 import Study from './pages/Study';
 import NoticeBoot from './pages/NoticeBoot';
 import InformationCode from './pages/InformationCode';
+import BoardPage from './pages/BoardPage';
 
 
 
@@ -29,6 +30,7 @@ function App() {
             <Route path="/Study" element={<Study />} />
             <Route path="/NoticeBoot" element={<NoticeBoot />} />
             <Route path="/InformationCode" element={<InformationCode />} />
+            <Route path="/BoardPage" element={<BoardPage />} />
             
 
     </Routes>
