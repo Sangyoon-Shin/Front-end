@@ -69,7 +69,6 @@
   }
 }
 
-
 .container {
   margin: 0;
   padding: 0;
@@ -77,10 +76,10 @@
 }
 
 .content {
-  margin-top: -560px;
+  margin-top: 20px;
   /* 상단바도 하나의 그룹이라 내가 원하는 항목 만들면 아래로 밀림.*/
   padding: 20px;
-  background-color: #f5f5f5;
+  background-color: white;
   /* 배경색 설정 */
   height: 100vh;
   overflow-y: auto;
@@ -98,7 +97,7 @@
 
 .pageTitle {
   margin-top: -150px;
-  font-size: 2.0rem;
+  font-size: 1.2rem;
   text-align: center;
   flex-grow: 1;
   /* 제목이 가능한 넓은 공간을 차지하도록 설정 */
@@ -128,7 +127,7 @@
 
 .dropdownMenu {
   position: absolute;
-  top: 12.5rem;
+  top: 7rem;
   /* 버튼 아래에 위치 */
   margin-right: 2rem;
   right: 60px;
@@ -146,11 +145,12 @@
 }
 
 .menuItem {
+ 
   padding: 10px 20px;
   /* 각 항목의 크기를 적절히 조정 */
   cursor: pointer;
   list-style: none;
-  font-size: 1.6rem;
+  font-size: 1.1rem;
   /* 텍스트 크기를 살짝 줄임 */
   font-weight: bold;
   /* 텍스트를 더 두껍게 표시 */
