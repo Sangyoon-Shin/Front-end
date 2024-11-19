@@ -37,12 +37,12 @@ const BoardPage = () => {
   const [sortType, setSortType] = useState('latest'); // 초기 정렬 상태는 'latest'
   const [selectedCategory, setSelectedCategory] = useState(''); // 선택된 항목 상태
 
-// 현재 선택된 게시판 상태
+  // 현재 선택된 게시판 상태
 
- // 카테고리 선택 핸들러
- const handleCategorySelect = (category) => {
-  setSelectedCategory(category);
-};
+  // 카테고리 선택 핸들러
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+  };
 
   // 백엔드 연동용. 코드 수정 필요
   // const [posts, setPosts] = useState(initialPosts); // 게시물 목록 상태 관리
@@ -150,8 +150,30 @@ const BoardPage = () => {
     navigate(`/post/${postId}`);  // 해당 게시물 상세 페이지로 이동
   };
 
-  
-      // 정렬 버튼 클릭 시 정렬 상태 업데이트
+  // 글쓰기 버튼 클릭 핸들러
+  const handleWriteButtonClick = () => {
+    if (!selectedCategory) {
+      alert('먼저 카테고리를 선택해주세요.');
+      return;
+    }
+
+    // 선택된 카테고리에 따라 다른 동작 수행
+    switch (selectedCategory) {
+      case '부트캠프':
+        navigate('/bootcamp'); // 부트캠프 글쓰기 페이지로 이동
+        break;
+      case '산업 연계':
+        navigate('/industry'); // 산업 연계 글쓰기 페이지로 이동
+        break;
+      case '스터디':
+        navigate('/study'); // 스터디 글쓰기 페이지로 이동
+        break;
+      default:
+        alert('알 수 없는 카테고리입니다.');
+    }
+  };
+
+  // 정렬 버튼 클릭 시 정렬 상태 업데이트
   const handleSort = (type) => {
     setSortType(type);
     if (type === 'latest') {
@@ -166,7 +188,7 @@ const BoardPage = () => {
       );
     }
   };
-  
+
   return (
     <div className={styles.container}>
       <Header />
@@ -192,18 +214,17 @@ const BoardPage = () => {
           />
         </div>
         <div className={styles.categoryContainer}>
-  {['부트캠프', '산업 연계', '스터디'].map((category) => (
-    <span
-      key={category}
-      className={`${styles.category} ${
-        selectedCategory === category ? styles.activeCategory : ''
-      }`}
-      onClick={() => handleCategorySelect(category)}
-    >
-      {category}
-    </span>
-  ))}
-</div>
+          {['부트캠프', '산업 연계', '스터디'].map((category) => (
+            <span
+              key={category}
+              className={`${styles.category} ${selectedCategory === category ? styles.activeCategory : ''
+                }`}
+              onClick={() => handleCategorySelect(category)}
+            >
+              {category}
+            </span>
+          ))}
+        </div>
 
         {/* 드롭다운 메뉴 */}
         {menuOpen && (
@@ -224,7 +245,7 @@ const BoardPage = () => {
           {/* 글쓰기 버튼 */}
           <button
             className={`${styles.writeButton} ${isDesktop ? styles.desktopWriteButton : ''}`}
-            onClick={() => navigate('/write')} // 글쓰기 페이지로 이동
+            onClick={handleWriteButtonClick} // 동적 동작을 위한 핸들러 연결
           >
             글쓰기
           </button>

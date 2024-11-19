@@ -12,6 +12,9 @@ import Study from './pages/Study';
 import NoticeBoot from './pages/NoticeBoot';
 import InformationCode from './pages/InformationCode';
 import BoardPage from './pages/BoardPage';
+import Scrap from './pages/Scrap';
+import My_board from './pages/My_board';
+import My_message from './pages/My_message';
 
 
 
@@ -31,6 +34,9 @@ function App() {
             <Route path="/NoticeBoot" element={<NoticeBoot />} />
             <Route path="/InformationCode" element={<InformationCode />} />
             <Route path="/BoardPage" element={<BoardPage />} />
+            <Route path="/Scrap" element={<Scrap />} />
+            <Route path="/My_board" element={<My_board />} />
+            <Route path="/My_message" element={<My_message />} />
             
 
     </Routes>
