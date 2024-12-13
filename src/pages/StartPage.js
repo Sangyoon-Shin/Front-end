@@ -8,11 +8,13 @@ import computer_logo from '../images/컴퓨터공학부 횃불이.png';  // 로�
 const StartPage = () => {
   return (
     <div className={styles.app}>
+          <div className={styles.container}> {/* CSS 모듈 클래스 적용 */}
+
       <header className={styles["app-header"]}>
         <div className={styles["empty-space"]}></div>
         <div className={styles["title-group"]}>
           <img src={computer_logo_} className={styles["app-computer_logo_"]} alt="computer_logo_" />
-          <h2 className={styles["title-text"]}>인천대학교 정보기술대학</h2>
+          <h2 className={styles["title-text"]}>인천대학교<br /> 정보기술대학</h2>
           <img src={computer_logo} className={styles["app-computer_logo"]} alt="computer_logo" />
         </div>
 
@@ -27,6 +29,7 @@ const StartPage = () => {
           INFORMATION TECHNOLOGY
         </p>
       </header>
+      </div>
     </div>
   );
 };
