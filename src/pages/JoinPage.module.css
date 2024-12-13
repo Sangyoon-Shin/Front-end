@@ -22,8 +22,8 @@
   .group-info {
     display: flex;
     justify-content: center; /* 가로 중앙 정렬 */
-    margin-left: -200px; /* 왼쪽으로 20px 이동 */
-    gap: 10px;  
+    margin-left: -270px; /* 왼쪽으로 20px 이동 */
+    gap: 110px;  
     margin-top: 60px; /* 왼쪽으로 220px 이동 */
   }
   
