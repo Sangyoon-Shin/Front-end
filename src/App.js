@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage'; // .의 의미: 현재 디렉토리(s
 // 내가속한방 추가
 import RoomPage from './pages/RoomPage';
 
+
 // 게시판 메인 페이지
 import BoardPage from './pages/BoardPage';
 
@@ -51,6 +52,7 @@ function App() {
         <Route path="/Notice" element={<NoticeBoard />} />
 
         <Route path="/chatroom/:id" element={<ChatRoom />} /> {/* 동적 라우팅을 통한 채팅방 페이지 */}
+
       </Routes>
     </BrowserRouter>
   );

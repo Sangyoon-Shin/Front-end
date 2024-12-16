@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
 import Header from './_.js';  // 상단바 컴포넌트
@@ -16,6 +17,7 @@ import IconUnscrap from '../images/횃불이스크랩X.png';
 // 게시물 목록에 대한 초기 데이터 (가상 데이터)
 /*
  const initialPosts = [
+
   { id: 1, title: '[C/C++] 게시판 제목 1', date: '2024-01-01', likes: 10, isScraped: true },
   { id: 2, title: '[JAVA] 게시판 제목 2', date: '2024-01-02', likes: 20, isScraped: false },
   { id: 3, title: '[Python] 게시판 제목 3', date: '2024-01-03', likes: 5, isScraped: false },
@@ -24,6 +26,7 @@ import IconUnscrap from '../images/횃불이스크랩X.png';
   { id: 6, title: '[JAVA] 게시판 제목 6', date: '2024-01-06', likes: 25, isScraped: false },
 ]; 
 */
+
 
 const InformationCode = () => {
   const [menuOpen, setMenuOpen] = useState(false);  // 드롭다운 상태 관리
@@ -115,6 +118,7 @@ const InformationCode = () => {
       setPosts(data.content); // API 응답 데이터의 `content` 필드만 설정
     } catch (error) {
       console.error('언어별 게시물 필터링 중 오류 발생:', error);
+
     }
   };
 
@@ -130,6 +134,7 @@ const InformationCode = () => {
           },
         }
       );
+
 
       if (!response.ok) {
         throw new Error('스크랩 상태 업데이트에 실패했습니다.');
@@ -148,8 +153,6 @@ const InformationCode = () => {
     }
   };
 
-
-  // 검색 입력값을 변경하는 함수
   const handleSearch = async () => {
     console.log('검색 버튼 클릭됨');
     if (searchTerm.trim() !== '') {
@@ -164,6 +167,7 @@ const InformationCode = () => {
           }
         );
 
+
         if (!response.ok) {
           throw new Error('검색 결과를 불러오는데 실패했습니다.');
         }
@@ -173,6 +177,7 @@ const InformationCode = () => {
 
         // 검색 결과를 게시물 목록으로 업데이트 (명세서에 따른 구조 반영)
         setPosts(data.content); // 'content' 필드가 검색 결과로 가정
+
 
         alert('검색이 완료되었습니다. 결과가 화면에 표시됩니다.');
       } catch (error) {
@@ -227,11 +232,12 @@ const InformationCode = () => {
   };
 
 
+
   return (
     <div className={styles.container}>
       <Header />
       <div className={styles.content}>
-        {/* 상단 제목 및 버튼 */}
+
         <div className={`${styles.titleContainer} ${isDesktop ? styles.desktopTitleContainer : ''}`}>
           {/* 왼쪽 나가기 버튼 */}
           <img
@@ -245,11 +251,13 @@ const InformationCode = () => {
             정보 게시판 - 코드 질문 게시판
           </h1>
           {/* 드롭다운 버튼 */}
+
           <img
             src={DownMenu}
             className={`${styles.downMenuButton} ${isDesktop ? styles.desktopDownMenuButton : ''}`}
             alt="언어 선택"
             onClick={toggleMenu}  /* 드롭다운 열기/닫기 */
+
           />
         </div>
 
@@ -266,6 +274,7 @@ const InformationCode = () => {
                     handleLanguageChange(language); // 선택된 언어가 달라질 때만 함수 호출
                   }
                 }}
+
               >
                 {language}
               </div>
@@ -273,13 +282,13 @@ const InformationCode = () => {
           </div>
         )}
 
-
         {/* 컨트롤 패널 (글쓰기 버튼, 검색창, 정렬 버튼) */}
         <div className={`${styles.controlPanel} ${isDesktop ? styles.desktopControlPanel : ''}`}>
           {/* 글쓰기 버튼 */}
           <button
             className={`${styles.writeButton} ${isDesktop ? styles.desktopWriteButton : ''}`}
             onClick={() => navigate('/QuestionCode')} // 글쓰기 페이지로 이동
+
           >
             글쓰기
           </button>
@@ -290,6 +299,7 @@ const InformationCode = () => {
               type="text"
               value={searchTerm}
               onChange={handleSearchChange} // 기존 함수명을 새 함수명으로 교체
+
               className={`${styles.searchInput} ${isDesktop ? styles.desktopSearchInput : ''}`}
               placeholder="검색어 입력"
             />
@@ -300,7 +310,6 @@ const InformationCode = () => {
               onClick={handleSearch} // 돋보기 아이콘 클릭 시 검색
             />
           </div>
-
 
           {/* 최신순 정렬 버튼 */}
           <button
@@ -317,7 +326,6 @@ const InformationCode = () => {
           >
             추천순
           </button>
-
 
         </div>
 
@@ -344,16 +352,17 @@ const InformationCode = () => {
               </div>
 
               {/* 스크랩 상태 아이콘 */}
+
               <img
                 src={scrapStatus[post.id] ? IconScrap : IconUnscrap}
                 alt={scrapStatus[post.id] ? '스크랩됨' : '스크랩안됨'}
                 className={styles.scrapIcon}
-                onClick={() => toggleScrap(post.id)} // 스크랩 상태 변경 및 백엔드 전송
+
+                onClick={() => toggleScrap(post.id)}  // 스크랩 상태 변경 및 백엔드 전송
               />
             </div>
           ))}
         </div>
-
 
         {/* 페이지네이션 */}
         <div className={styles.pagination}>
@@ -362,6 +371,7 @@ const InformationCode = () => {
               key={pageNumber}
               className={`${styles.pageButton} ${page === pageNumber - 1 ? styles.activePageButton : ''}`} // 현재 페이지 강조
               onClick={() => setPage(pageNumber - 1)} // 페이지 번호 업데이트
+
             >
               {pageNumber}
             </button>

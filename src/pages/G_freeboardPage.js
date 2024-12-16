@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
-import Header from './_.js';  // 상단바 컴포넌트
-import styles from './BoardPage.module.css';  // BoardPage용 CSS 파일
+import Header from './G_.js';  // 상단바 컴포넌트
+import styles from './FreeboardPage.module.css';  // BoardPage용 CSS 파일
 import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
 import DownMenu from '../images/아래방향메뉴선택.png';
 import SearchIcon from '../images/돋보기아이콘.png';  // 돋보기 아이콘
@@ -20,7 +20,7 @@ const initialPosts = [
 ];
 
 
-const BoardPage = () => {
+const G_freeboardPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);  // 드롭다운 상태 관리
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
   const [scrapStatus, setScrapStatus] = useState({
@@ -70,7 +70,7 @@ const BoardPage = () => {
 
   const handleBoardChange = (boardName) => {
     if (boardName === '질문 게시판') {
-      navigate('/QuestionBoardPage/'); // 질문 게시판으로 이동
+      navigate('/G_questionboardPage/'); // 질문 게시판으로 이동
     }
     setMenuOpen(false);  // 메뉴 닫기
   };
@@ -106,6 +106,7 @@ const BoardPage = () => {
       alert('스크랩 상태 업데이트에 실패했습니다. 다시 시도해주세요.');
     }
   };
+
 
   // 검색 입력값을 변경하는 함수
   const handleSearchInputChange = (event) => {
@@ -202,7 +203,7 @@ const BoardPage = () => {
           {/* 글쓰기 버튼 */}
           <button
             className={`${styles.writeButton} ${isDesktop ? styles.desktopWriteButton : ''}`}
-            onClick={() => navigate('/write')} // 글쓰기 페이지로 이동
+            onClick={() => navigate('/G_freewritePage')} // 글쓰기 페이지로 이동
           >
             글쓰기
           </button>
@@ -305,5 +306,5 @@ const BoardPage = () => {
   );
 };
 
-export default BoardPage;
 
+export default G_freeboardPage;
