@@ -107,7 +107,6 @@ const BoardPage = () => {
     }
   };
 
-
   // 검색 입력값을 변경하는 함수
   const handleSearchInputChange = (event) => {
     setSearchTerm(event.target.value);
@@ -306,5 +305,5 @@ const BoardPage = () => {
   );
 };
 
-
 export default BoardPage;
+
