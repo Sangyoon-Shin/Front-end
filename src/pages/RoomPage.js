@@ -30,7 +30,7 @@ const RoomPage = () => {
   const navigate = useNavigate();
 
   // 반응형 페이지 처리를 위한 useMediaQuery 사용
-  const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
+  const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
 
   {/*
    // 방 목록을 백엔드에서 가져오기 위한 useEffect

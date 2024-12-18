@@ -16,7 +16,7 @@ const QuestionCode = () => {
     const navigate = useNavigate();  // useNavigate 훅을 컴포넌트 내부에서 호출
 
     // 반응형 처리를 위한 useMediaQuery 사용
-    const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
+    const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
 
     const handleLanguageChange = (language) => {
         setSelectedLanguage(language);

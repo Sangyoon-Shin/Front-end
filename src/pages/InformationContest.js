@@ -14,7 +14,7 @@ const InformationContest = () => {
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
   const [sortType, setSortType] = useState('latest'); // 초기 정렬 상태는 'latest'
   const navigate = useNavigate();  // 페이지 이동을 위한 navigate 훅 사용
-  const isDesktop = useMediaQuery({ query: '(min-width: 769px)' }); // 반응형 페이지 처리를 위한 미디어쿼리
+  const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' }); // 반응형 페이지 처리를 위한 미디어쿼리
 
   // 게시물 목록 조회 - 백엔드 연동
   useEffect(() => {

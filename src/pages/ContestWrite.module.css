@@ -1,5 +1,5 @@
 /* 데스크탑 전용 CSS 설정 */
-@media (min-width: 769px) {
+@media (min-width: 1024px) {
     .desktopTitleContainer{
         margin-top:20px;
         font-size: 2rem;

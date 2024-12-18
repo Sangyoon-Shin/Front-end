@@ -63,6 +63,9 @@
 }
 
 .messageList {
+    display:flex;
+    flex-direction: column; /* 메시지들을 세로로 정렬 */
+    gap: 10px; /* 메시지 사이 간격 */
     flex-grow: 1;
     overflow-y: auto;
     margin-bottom: 20px;

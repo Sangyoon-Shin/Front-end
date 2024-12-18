@@ -23,7 +23,7 @@ const Message = () => {
     const [messages, setMessages] = useState([]); // 메시지 목록 상태 관리 
     */
     const [visibleMessages, setVisibleMessages] = useState(4); // 처음에는 4개의 메시지만 표시
-    const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
+    const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
     const navigate = useNavigate();
 
     /*

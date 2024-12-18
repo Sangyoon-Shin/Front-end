@@ -1,5 +1,5 @@
 /* 데스크탑 전용 CSS 설정 */
-@media (min-width: 769px) {
+@media (min-width: 1024px) {
     .desktopTitleContainer {
       padding-top: 20px;
       padding-bottom: 20px;

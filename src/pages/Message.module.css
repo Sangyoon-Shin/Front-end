@@ -167,7 +167,7 @@
 
 
 /* 데스크탑 전용 CSS 설정 */
-@media (min-width: 769px) {
+@media (min-width: 1024px) {
     .desktopContainer {
         padding: 40px;
     }

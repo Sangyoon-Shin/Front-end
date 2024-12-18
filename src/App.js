@@ -32,6 +32,19 @@ import ContestWrite from './pages/ContestWrite';
 // 석진이형 페이지
 import NoticeBoard from './pages/NoticeBoard';
 
+// 알림페이지
+import AlarmPage from './pages/AlarmPage';
+
+// 공지사항
+import Announcement from './pages/Announcement';
+
+// 지민이가 만든 채팅방 페이지
+import ClassChatRoom from './pages/ClassChatRoom'
+import ClassChat from './pages/ClassChat'
+
+// 질문게시판
+import QuestionboardPage from './pages/QuestionboardPage';
+
 function App() {
   return (
     <BrowserRouter>
@@ -46,6 +59,16 @@ function App() {
         <Route path="/QuestionCode" element={<QuestionCode />} />
         <Route path="/InformationContest" element={<InformationContest />} />
         <Route path="/ContestWrite" element={<ContestWrite />} />
+        <Route path="/AlarmPage" element={<AlarmPage />} />
+        <Route path="/Announcement" element={<Announcement />} />
+        <Route path="/ClassChatRoom" element={<ClassChatRoom />} />
+        <Route path="/ClassChat" element={<ClassChat />} />
+        <Route path="/QuestionboardPage" element={<QuestionboardPage />} />
+
+
+
+
+
 
         {/* 석진이 형 페이지*/}
 
