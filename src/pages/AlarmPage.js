@@ -6,23 +6,23 @@ import styles from './Message.module.css';
 import menuIcon from '../images/메뉴버튼.png';
 import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
 
-const Message = () => {
+const AlarmPage = () => {
 
     // 하드코딩된 방 목록 (백엔드 연동 시 주석 처리)
     const [messages, setMessages] = useState([
-        { id: 1, username: 'char1', title: '글 제목 1', lastMessage: '마지막 내용 1' },
-        { id: 2, username: 'char4', title: '글 제목 2', lastMessage: '마지막 내용 2' },
-        { id: 3, username: 'float2', title: '글 제목 3', lastMessage: '마지막 내용 3' },
-        { id: 4, username: 'int2', title: '글 제목 4', lastMessage: '마지막 내용 4' },
-        { id: 5, username: 'char3', title: '글 제목 5', lastMessage: '마지막 내용 5' },
-        { id: 6, username: 'char3', title: '글 제목 5', lastMessage: '마지막 내용 5' }
+        { id: 1, username: '자유게시판 - 질문', title: '글 제목 ', lastMessage: '익명 1이 새로운 댓글을 달았습니다.' },
+        { id: 2, username: '정보게시판 - 자기 개발', title: '글 제목 ', lastMessage: '졸업생 1이 새로운 댓글을 달았습니다.' },
+        { id: 3, username: '자유게시판', title: '글 제목 ', lastMessage: '익명 1이 새로운 댓글을 달았습니다.' },
+        { id: 4, username: '자유게시판 - 질문', title: '글 제목 ', lastMessage: '익명 1이 새로운 댓글을 달았습니다.' },
+        { id: 5, username: '자유게시판 - 질문', title: '글 제목 ', lastMessage: '익명 1이 새로운 댓글을 달았습니다.' },
+        { id: 6, username: '자유게시판 - 질문', title: '글 제목 ', lastMessage: '익명 1이 새로운 댓글을 달았습니다.' },
     ]); // 하드코딩된 메시지 목록
-    
+
     /*
     // 백엔드와 연동할 때 사용할 초기 상태
     const [messages, setMessages] = useState([]); // 메시지 목록 상태 관리 
     */
-    const [visibleMessages, setVisibleMessages] = useState(4); // 처음에는 4개의 메시지만 표시
+    const [visibleMessages, setVisibleMessages] = useState(5); // 처음에는 4개의 메시지만 표시
     const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
     const navigate = useNavigate();
 
@@ -48,7 +48,7 @@ const Message = () => {
         fetchMessages();
     }, []); 
     */
-   
+
 
     // 방 클릭 시 해당 채팅방으로 이동하는 함수
     const handleRoomClick = (id) => {
@@ -93,8 +93,8 @@ const Message = () => {
         <div className={styles.container}>
             <Header />
             <div className={styles.content}>
-                <h2 className={styles.sectionTitle}>쪽지</h2>
-                <div className={styles.messageList}>
+                
+                <div className={`${styles.messageList} ${isDesktop ? styles.desktopmessageList : ''}`}>
                     {messages.slice(0, visibleMessages).map((message) => (
                         <div
                             key={message.id}
@@ -157,5 +157,5 @@ const Message = () => {
     );
 };
 
-export default Message;
+export default AlarmPage;
 

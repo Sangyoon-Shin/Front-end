@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
 import Header from './_.js';  // 상단바 컴포넌트
-import styles from './BoardPage.module.css';  // BoardPage용 CSS 파일
+import styles from './Announcement.module.css';  // 
 import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
 import DownMenu from '../images/아래방향메뉴선택.png';
 import SearchIcon from '../images/돋보기아이콘.png';  // 돋보기 아이콘
@@ -20,7 +20,7 @@ const initialPosts = [
 ];
 
 
-const BoardPage = () => {
+const Announcement = () => {
   const [menuOpen, setMenuOpen] = useState(false);  // 드롭다운 상태 관리
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
   const [scrapStatus, setScrapStatus] = useState({
@@ -175,7 +175,7 @@ const BoardPage = () => {
           />
           {/* 페이지 타이틀 */}
           <h1 className={`${styles.pageTitle} ${isDesktop ? styles.desktopPageTitle : ''}`}>
-            자유 게시판
+            공지 사항
           </h1>
           {/* 드롭다운 버튼 (이미지로 표시) */}
           <img
@@ -309,4 +309,4 @@ const BoardPage = () => {
 };
 
 
-export default BoardPage;
+export default Announcement;

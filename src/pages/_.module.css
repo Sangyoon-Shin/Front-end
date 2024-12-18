@@ -10,7 +10,6 @@
 .app-header {
   position: fixed;
   top: 10px; /* 여기 수정하면 상단바 위치 조정 가능*/
-
   left: 0;
   width: 100%;
   height: 60px; /* 필요에 따라 조정 */

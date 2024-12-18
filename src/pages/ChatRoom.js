@@ -15,7 +15,7 @@ const ChatRoom = () => {
     const messageListRef = useRef(null);
 
     useEffect(() => {
-        /*
+        
         // 하드코딩된 방 데이터 (나중에 백엔드와 연동할 때 교체)
         const dummyData = {
             1: { username: 'char1', lastMessage: '마지막 내용 1', title: '글 제목 1' },
@@ -36,8 +36,9 @@ const ChatRoom = () => {
             { id: 3, text: '전 임베짱입니다 ㅋ', sender: 'char1', time: '01:01', type: 'received' },
         ]);
 
+        
          /* 백엔드 연동용 코드 (주석 해제하여 사용)*/
-        const fetchRoomData = async () => {
+        /* const fetchRoomData = async () => {
             try {
                 const response = await fetch(`https://your-backend-api.com/api/chatrooms/${id}`);
                 if (!response.ok) {
@@ -65,8 +66,9 @@ const ChatRoom = () => {
 
         fetchRoomData();
         fetchMessages();
-        
-    }, [id]);
+        */
+    }, [id]); 
+    
 
     useEffect(() => {
         // 새로운 메시지가 추가되면 스크롤을 가장 하단으로 이동

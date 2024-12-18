@@ -1,15 +1,16 @@
 /* 데스크탑 전용 CSS 설정 */
 @media (min-width: 769px) {
-    .desktopTitleContainer {
-        padding-top: 20px;
-        padding-bottom: 20px;
+    .desktopTitleContainer{
+        margin-top:20px;
+        font-size: 2rem;
     }
 
-    .desktopGoBackButton {
+    .desktopGoBackButton  {
         height: 3rem;
         margin-left: 40px;
         margin-top: 15px;
     }
+    
 }
 
 .container {

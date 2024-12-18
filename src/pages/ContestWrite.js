@@ -9,6 +9,7 @@ import PlusIcon from '../images/plusIcon.png'; // 이미지 첨부 플러스 아
 const ContestWrite = () => {
     const [selectedLanguage, setSelectedLanguage] = useState('언어 선택');
     const [title, setTitle] = useState('');
+    const [recruitPeriod, setRecruitPeriod] = useState(''); // 모집기간 상태 추가
     const [hashTag, setHashTag] = useState('');
     const [content, setContent] = useState('');
     const [image, setImage] = useState(null);
@@ -53,7 +54,7 @@ const ContestWrite = () => {
                 </div>
 
                 {/* 폼 입력 부분 */}
-                <div className={styles.form}>
+                <div className={`${styles.form} ${isDesktop ? styles.desktopform : ''}`}>
 
                     {/* 제목 입력 */}
                     <div className={styles.inputContainer}>
@@ -67,13 +68,13 @@ const ContestWrite = () => {
                         />
                     </div>
                     
-                    {/* 제목 입력 */}
+                    {/* 모집기간 입력 */}
                     <div className={styles.inputContainer}>
                         <label className={styles.inputLabel}>모집기간</label>
                         <input
                             type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            value={recruitPeriod} // 모집기간 상태로 변경
+                            onChange={(e) => setRecruitPeriod(e.target.value)} // 모집기간 상태 업데이트
                             placeholder=""
                             className={styles.inputField}
                         />
@@ -99,7 +100,7 @@ const ContestWrite = () => {
                             onChange={(e) => setContent(e.target.value)}
                             placeholder="<가이드라인>
                             오류 부분, 궁금한 점을 표시하고 상세히 적어주세요!"
-                            className={styles.textarea}
+                            className={`${styles.textarea} ${isDesktop ? styles.desktoptextarea : ''}`}
                         />
                     </div>
 
