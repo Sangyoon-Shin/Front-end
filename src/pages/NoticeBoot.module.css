@@ -28,6 +28,25 @@
     text-align: center;
     margin-top: 80px; /* fixed-header 아래로 콘텐츠 배치 */
   }
+
+    /* 태블릿 크기 대응 */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .container {
+    padding: 24px;
+    font-size: 16px;
+  }
+
+  .titleContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .writeButton {
+    font-size: 18px;
+    padding: 10px 20px;
+  }
+}
   
   
   .right-section {

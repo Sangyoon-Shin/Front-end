@@ -3,9 +3,28 @@
     padding: 0;
     box-sizing: border-box;
   }
+
+  /* 태블릿 크기 대응 */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .container {
+    padding: 24px;
+    font-size: 16px;
+  }
+
+  .titleContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .writeButton {
+    font-size: 18px;
+    padding: 10px 20px;
+  }
+}
   
   .content {
-    margin-top: 20px;
+    margin-top: 0px;
     /* 상단바도 하나의 그룹이라 내가 원하는 항목 만들면 아래로 밀림.*/
     padding: 20px;
     background-color: white;
