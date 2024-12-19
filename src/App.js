@@ -1,28 +1,27 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'; // 라우팅 관련 컴포넌트
-import StartPage from './pages/StartPage'
-import _ from './pages/_'
-import LoginPage from './pages/LoginPage'
+import StartPage from './pages/StartPage';
+import _ from './pages/_';
+import LoginPage from './pages/LoginPage'; // .의 의미: 현재 디렉토리(src)에서 pages 폴더로 들어가서 LoginPage.js 파일을 가져온다는 것.
 
-import FindIDPage from './pages/FindIDPage'
-import FindPWPage from './pages/FindPWPage'
-import JoinPage from './pages/JoinPage'
-import _save from './pages/_save'
+// 내가속한방 추가
+import RoomPage from './pages/RoomPage';
 
-import FreepostingPage from './pages/FreepostingPage';
-import QuestionpostingPage from './pages/QuestionpostingPage';
-import FreewritePage from './pages/FreewritePage';
-import QuestionwritePage from './pages/QuestionwritePage';
-import FreeboardPage from './pages/FreeboardPage';
-import QuestionboardPage from './pages/QuestionboardPage';
 
-import G_freepostingPage from './pages/G_freepostingPage';
-import G_questionpostingPage from './pages/G_questionpostingPage';
-import G_freewritePage from './pages/G_freewritePage';
-import G_questionwritePage from './pages/G_questionwritePage';
-import G_freeboardPage from './pages/G_freeboardPage';
-import G_questionboardPage from './pages/G_questionboardPage';
+// 게시판 메인 페이지
+import BoardPage from './pages/BoardPage';
 
+// 쪽지방
+import Message from './pages/Message';
+
+// 채팅방 컴포넌트 추가
+import ChatRoom from './pages/ChatRoom';
+
+// 정보 게시판 - 코드 질문방
+import InformationCode from './pages/InformationCode';
+
+// 코드 질문방 본문
+import QuestionCode from './pages/QuestionCode';
 
 //상윤님
 import BoardPage from './pages/BoardPage';// 게시판 메인 페이지
@@ -42,18 +41,15 @@ import ClassChatRoom from './pages/ClassChatRoom'
 import ClassChat from './pages/ClassChat'
 
 
-//석진님
-import NoticeBoard from './pages/NoticeBoard'; //게시판
-import WritePage from './pages/WritePage'; //게시글 쓰기
-
-
+// 석진이형 페이지
+import NoticeBoard from './pages/NoticeBoard';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<StartPage />} />
-        <Route path="/_" element={<_ />} />  {/* 두 번째 페이지 라우팅 */}
+        <Route path="/_" element={<_ />} /> {/* 두 번째 페이지 라우팅 */}
         <Route path="/LoginPage" element={<LoginPage />} />
         <Route path="/FindIDPage" element={<FindIDPage />} />
         <Route path="/FindPWPage" element={<FindPWPage />} />
@@ -88,9 +84,12 @@ function App() {
         <Route path="/ClassChatRoom" element={<ClassChatRoom />} />
         <Route path="/ClassChat" element={<ClassChat />} />
 
-        {/* 석진님 */}
-        <Route path="/Notice" element={<NoticeBoard />} />{/*게시판 */}
-        <Route path="/Write" element={<WritePage />} />{/* 게시글 쓰기 */}
+        {/* 석진이 형 페이지*/}
+
+        <Route path="/Notice" element={<NoticeBoard />} />
+
+        <Route path="/chatroom/:id" element={<ChatRoom />} /> {/* 동적 라우팅을 통한 채팅방 페이지 */}
+
       </Routes>
     </BrowserRouter>
   );
