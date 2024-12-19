@@ -52,13 +52,13 @@
   }
   
   /* 두 버튼의 공통 속성 */
-.desktopSortButtons {
-  cursor: pointer;
-  display: flex;
-  flex-direction: row; /* 정렬 버튼들을 가로 방향으로 배치 */
-  gap: 20px; /* 정렬 버튼 사이 간격 조정 */
-  margin-left: 20px; /* 정렬 버튼 그룹을 오른쪽으로 이동 */
-}
+  .desktopSortButtons {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row; /* 정렬 버튼들을 가로 방향으로 배치 */
+    gap: 20px; /* 정렬 버튼 사이 간격 조정 */
+    margin-left: 20px; /* 정렬 버튼 그룹을 오른쪽으로 이동 */
+  }
 
   .desktopLatestSortButton {
     color: #244A95; /* 데스크탑에서 최신순 버튼의 색상 */
@@ -67,6 +67,12 @@
   .desktopRecommendSortButton {
     color: #FF6347; /* 데스크탑에서 추천순 버튼의 색상 */
   }
+  
+  .desktopPageTitle {
+    margin-top: -150px;
+    font-size: 2rem;
+  }
+
 }
 
 .container {
@@ -216,23 +222,8 @@
 }
 
 /* 최신순 버튼 전용 스타일 */
-.latestSortButton {
-  background: none;
-  border: none;
-  color: #555;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.sortButton {
-  background: none;
-  border: none;
-  color: #555;
-  font-weight: bold;
-  cursor: pointer;
-  width: 60px;
-  /* 너비를 줄여 균형 잡기 */
-  margin-left: -10px;
+.latestSortButton, .recommendSortButton{
+  font-size: 0.8rem;
 }
 
 .activeSortButton {

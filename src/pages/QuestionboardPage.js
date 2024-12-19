@@ -70,7 +70,7 @@ const QuestionboardPage = () => {
 
   const handleBoardChange = (boardName) => {
     if (boardName === '자유 게시판') {
-      navigate('/FreeboardPage/'); // 질문 게시판으로 이동
+      navigate('/BoardPage/'); 
     }
     setMenuOpen(false);  // 메뉴 닫기
   };

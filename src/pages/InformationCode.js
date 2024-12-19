@@ -244,7 +244,7 @@ const InformationCode = () => {
 
         {/* 드롭다운 메뉴 */}
         {menuOpen && (
-          <div className={`${styles.dropdownMenu} ${isDesktop ? styles.desktopDropdownMenu : ''}`}>
+          <div className={`${styles.dropdownMenu} ${isDesktop ? styles.desktopDropdownMenu : ''}`} >
             {['전체', 'C/C++', 'Python', 'JAVA', 'C#', '기타'].map((language) => (
               <div
                 key={language}
