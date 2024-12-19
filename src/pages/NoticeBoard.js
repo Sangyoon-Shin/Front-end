@@ -313,9 +313,12 @@ const NoticeBoard = () => {
 
         <h2 className={styles["title-text4"]}>작성일: {formattedDate}</h2>
 
-        <button onClick={togglePopup} className={styles["report-button"]}>
+        <div className={styles["report"]}>
+          <button onClick={togglePopup} className={styles["report-button"]}>
           신고하기
-        </button>
+          </button>
+        </div>
+        
       </div>
       {isPopupOpen && (
         <div className={styles["popup"]}>
@@ -356,12 +359,15 @@ const NoticeBoard = () => {
         onChange={handleFileChange}
       />
 
+      <div className={styles["heart"]}>
       <img
         src={isHeartFilled ? filledHeart : heart}
         className={styles["app-heart"]}
         alt="heart"
         onClick={handleHeartClick}
       />
+      </div>
+
 
       <div className={styles["content-input2"]}>
         <textarea

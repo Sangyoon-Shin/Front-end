@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from "./NoticeBoot.module.css";
+import styles from "./NoticeBoard.module.css";
 import main_mascot from '../images/대학 심볼 횃불이.png';
 import main_bell from '../images/bell.png';
 import main_message from '../images/message.png';
@@ -13,7 +13,7 @@ import bar from '../images/bar.png';
 import Header from './_.js';  // 상단바 컴포넌트
 // import Header from './Header'; // import the Header component
 
-const NoticeBoot = () => {
+const NoticeBoard = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
@@ -127,99 +127,99 @@ const NoticeBoot = () => {
     setReplyContents(newReplyContents);
   };
 
-  // const handleAddComment = () => {
-  //   if (commentContent.trim() !== '') {
-  //     const newNicknameCount = { ...nicknameCount };
-  //     newNicknameCount[nickname] += 1;
-  //     setNicknameCount(newNicknameCount);
-
-  //     setComments([...comments, { nickname: `${nickname}${newNicknameCount[nickname]}`, content: commentContent, replies: [] }]);
-  //     setReplyContents([...replyContents, '']);
-  //     setCommentContent('');
-  //   }
-  // };
-  const handleAddComment = async () => {
+  const handleAddComment = () => {
     if (commentContent.trim() !== '') {
-      const newComment = {
-        nickname: `${nickname}${nicknameCount[nickname] + 1}`,
-        content: commentContent,
-        replies: []
-      };
+      const newNicknameCount = { ...nicknameCount };
+      newNicknameCount[nickname] += 1;
+      setNicknameCount(newNicknameCount);
 
-      try {
-        const response = await fetch('/api/comments', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newComment),
-        });
-
-        if (response.ok) {
-          const savedComment = await response.json(); // 서버에서 저장된 댓글 데이터 반환
-          setComments([...comments, savedComment]);
-          setNicknameCount((prev) => ({ ...prev, [nickname]: prev[nickname] + 1 }));
-          setCommentContent('');
-        } else {
-          console.error('댓글 추가에 실패했습니다.');
-        }
-      } catch (error) {
-        console.error('댓글 추가 중 오류 발생:', error);
-      }
+      setComments([...comments, { nickname: `${nickname}${newNicknameCount[nickname]}`, content: commentContent, replies: [] }]);
+      setReplyContents([...replyContents, '']);
+      setCommentContent('');
     }
   };
+  // const handleAddComment = async () => {
+  //   if (commentContent.trim() !== '') {
+  //     const newComment = {
+  //       nickname: `${nickname}${nicknameCount[nickname] + 1}`,
+  //       content: commentContent,
+  //       replies: []
+  //     };
 
-  // const handleAddReply = (index) => {
-  //   if (replyContents[index].trim() !== '') {
-  //     const updatedComments = [...comments];
-  //     const newNicknameCount = { ...nicknameCount };
-  //     newNicknameCount[nickname] += 1;
-  //     setNicknameCount(newNicknameCount);
+  //     try {
+  //       const response = await fetch('/api/comments', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify(newComment),
+  //       });
 
-  //     updatedComments[index].replies.push({ nickname: `${nickname}${newNicknameCount[nickname]}`, content: replyContents[index] });
-  //     setComments(updatedComments);
-
-  //     const newReplyContents = [...replyContents];
-  //     newReplyContents[index] = '';
-  //     setReplyContents(newReplyContents);
-  //     setReplyVisible((prev) => ({ ...prev, [index]: false }));
+  //       if (response.ok) {
+  //         const savedComment = await response.json(); // 서버에서 저장된 댓글 데이터 반환
+  //         setComments([...comments, savedComment]);
+  //         setNicknameCount((prev) => ({ ...prev, [nickname]: prev[nickname] + 1 }));
+  //         setCommentContent('');
+  //       } else {
+  //         console.error('댓글 추가에 실패했습니다.');
+  //       }
+  //     } catch (error) {
+  //       console.error('댓글 추가 중 오류 발생:', error);
+  //     }
   //   }
   // };
-  const handleAddReply = async (index) => {
+
+  const handleAddReply = (index) => {
     if (replyContents[index].trim() !== '') {
-      const newReply = {
-        nickname: `${nickname}${nicknameCount[nickname] + 1}`,
-        content: replyContents[index],
-      };
+      const updatedComments = [...comments];
+      const newNicknameCount = { ...nicknameCount };
+      newNicknameCount[nickname] += 1;
+      setNicknameCount(newNicknameCount);
 
-      try {
-        const response = await fetch(`/api/comments/${index}/replies`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newReply),
-        });
+      updatedComments[index].replies.push({ nickname: `${nickname}${newNicknameCount[nickname]}`, content: replyContents[index] });
+      setComments(updatedComments);
 
-        if (response.ok) {
-          const savedReply = await response.json(); // 서버에서 저장된 대댓글 데이터 반환
-          const updatedComments = [...comments];
-          updatedComments[index].replies.push(savedReply);
-          setComments(updatedComments);
-          setNicknameCount((prev) => ({ ...prev, [nickname]: prev[nickname] + 1 }));
-
-          const newReplyContents = [...replyContents];
-          newReplyContents[index] = '';
-          setReplyContents(newReplyContents);
-          setReplyVisible((prev) => ({ ...prev, [index]: false }));
-        } else {
-          console.error('대댓글 추가에 실패했습니다.');
-        }
-      } catch (error) {
-        console.error('대댓글 추가 중 오류 발생:', error);
-      }
+      const newReplyContents = [...replyContents];
+      newReplyContents[index] = '';
+      setReplyContents(newReplyContents);
+      setReplyVisible((prev) => ({ ...prev, [index]: false }));
     }
   };
+  // const handleAddReply = async (index) => {
+  //   if (replyContents[index].trim() !== '') {
+  //     const newReply = {
+  //       nickname: `${nickname}${nicknameCount[nickname] + 1}`,
+  //       content: replyContents[index],
+  //     };
+
+  //     try {
+  //       const response = await fetch(`/api/comments/${index}/replies`, {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify(newReply),
+  //       });
+
+  //       if (response.ok) {
+  //         const savedReply = await response.json(); // 서버에서 저장된 대댓글 데이터 반환
+  //         const updatedComments = [...comments];
+  //         updatedComments[index].replies.push(savedReply);
+  //         setComments(updatedComments);
+  //         setNicknameCount((prev) => ({ ...prev, [nickname]: prev[nickname] + 1 }));
+
+  //         const newReplyContents = [...replyContents];
+  //         newReplyContents[index] = '';
+  //         setReplyContents(newReplyContents);
+  //         setReplyVisible((prev) => ({ ...prev, [index]: false }));
+  //       } else {
+  //         console.error('대댓글 추가에 실패했습니다.');
+  //       }
+  //     } catch (error) {
+  //       console.error('대댓글 추가 중 오류 발생:', error);
+  //     }
+  //   }
+  // };
 
 
   const handleToggleReply = (index) => {
@@ -227,36 +227,36 @@ const NoticeBoot = () => {
   };
 
 
-  // const handleHeartClick = () => {
-  //   setIsHeartFilled(!isHeartFilled);
-  // };
-
-  const handleHeartClick = async () => {
-    // 현재 좋아요 상태를 토글
-    const newHeartStatus = !isHeartFilled;
-    setIsHeartFilled(newHeartStatus);
-
-    try {
-      // 서버에 좋아요 상태 업데이트 요청
-      const response = await fetch('/api/like', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ isHeartFilled: newHeartStatus }), // 좋아요 상태 전달
-      });
-
-      if (!response.ok) {
-        console.error('좋아요 요청에 실패했습니다.');
-        // 요청 실패 시 좋아요 상태를 되돌림
-        setIsHeartFilled(!newHeartStatus);
-      }
-    } catch (error) {
-      console.error('좋아요 요청 중 오류 발생:', error);
-      // 오류 발생 시 좋아요 상태를 되돌림
-      setIsHeartFilled(!newHeartStatus);
-    }
+  const handleHeartClick = () => {
+    setIsHeartFilled(!isHeartFilled);
   };
+
+  // const handleHeartClick = async () => {
+  //   // 현재 좋아요 상태를 토글
+  //   const newHeartStatus = !isHeartFilled;
+  //   setIsHeartFilled(newHeartStatus);
+
+  //   try {
+  //     // 서버에 좋아요 상태 업데이트 요청
+  //     const response = await fetch('/api/like', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ isHeartFilled: newHeartStatus }), // 좋아요 상태 전달
+  //     });
+
+  //     if (!response.ok) {
+  //       console.error('좋아요 요청에 실패했습니다.');
+  //       // 요청 실패 시 좋아요 상태를 되돌림
+  //       setIsHeartFilled(!newHeartStatus);
+  //     }
+  //   } catch (error) {
+  //     console.error('좋아요 요청 중 오류 발생:', error);
+  //     // 오류 발생 시 좋아요 상태를 되돌림
+  //     setIsHeartFilled(!newHeartStatus);
+  //   }
+  // };
 
   const togglePopup = () => {
     setIsPopupOpen(!isPopupOpen);
@@ -296,11 +296,9 @@ const NoticeBoot = () => {
 
   return (
     <div>
-      <Header className={styles["fixed-header"]} />
+      <Header />
       <div className={styles["content"]}>
 
-      
-      <div class='app'>
         <img src={arrow} className={styles["app-arrow"]} alt="back_arrow" onClick={() => navigate(-1)} />
         <h1 className={styles["title-text2"]}>부트캠프 게시판</h1>
 
@@ -315,10 +313,12 @@ const NoticeBoot = () => {
 
         <h2 className={styles["title-text4"]}>작성일: {formattedDate}</h2>
 
-        <button onClick={togglePopup} className={styles["report-button"]}>
+        <div className={styles["report"]}>
+          <button onClick={togglePopup} className={styles["report-button"]}>
           신고하기
-        </button>
-      </div>
+          </button>
+        </div>
+        
       </div>
       {isPopupOpen && (
         <div className={styles["popup"]}>
@@ -359,12 +359,15 @@ const NoticeBoot = () => {
         onChange={handleFileChange}
       />
 
+      <div className={styles["heart"]}>
       <img
         src={isHeartFilled ? filledHeart : heart}
         className={styles["app-heart"]}
         alt="heart"
         onClick={handleHeartClick}
       />
+      </div>
+
 
       <div className={styles["content-input2"]}>
         <textarea
@@ -375,9 +378,13 @@ const NoticeBoot = () => {
         />
       </div>
 
-      <button onClick={handleAddComment}>
-        댓글 달기
-      </button>
+
+
+      <div className={styles["reply-button"]}>
+        <button onClick={handleAddComment}>
+          댓글 달기
+        </button>
+      </div>
 
       <div className={styles["comments-section"]}>
         {comments.map((comment, index) => (
@@ -419,4 +426,4 @@ const NoticeBoot = () => {
   );
 };
 
-export default NoticeBoot;
+export default NoticeBoard;
