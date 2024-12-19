@@ -4,24 +4,26 @@ import StartPage from './pages/StartPage';
 import _ from './pages/_';
 import LoginPage from './pages/LoginPage'; // .의 의미: 현재 디렉토리(src)에서 pages 폴더로 들어가서 LoginPage.js 파일을 가져온다는 것.
 
-// 내가속한방 추가
-import RoomPage from './pages/RoomPage';
+//소윤 
+import FindIDPage from './pages/FindIDPage'; // FindID 페이지
+import FindPWPage from './pages/FindPWPage'; // FindPW 페이지
+import JoinPage from './pages/JoinPage'; // 회원가입 페이지
+import FreepostingPage from './pages/FreepostingPage'; // 자유게시글 작성 페이지
+import QuestionpostingPage from './pages/QuestionpostingPage'; // 질문게시글 작성 페이지
+import FreewritePage from './pages/FreewritePage'; // 자유게시글 작성 페이지
+import QuestionwritePage from './pages/QuestionwritePage'; // 질문게시글 작성 페이지
+import FreeboardPage from './pages/FreeboardPage'; // 자유게시판 페이지
+import QuestionboardPage from './pages/QuestionboardPage'; // 질문게시판 페이지
+
+// G로 시작하는 컴포넌트들
+import G_freepostingPage from './pages/G_freepostingPage'; // G_ 자유게시글 작성 페이지
+import G_questionpostingPage from './pages/G_questionpostingPage'; // G_ 질문게시글 작성 페이지
+import G_freewritePage from './pages/G_freewritePage'; // G_ 자유게시글 작성 페이지
+import G_questionwritePage from './pages/G_questionwritePage'; // G_ 질문게시글 작성 페이지
+import G_freeboardPage from './pages/G_freeboardPage'; // G_ 자유게시판 페이지
+import G_questionboardPage from './pages/G_questionboardPage'; // G_ 질문게시판 페이지
 
 
-// 게시판 메인 페이지
-import BoardPage from './pages/BoardPage';
-
-// 쪽지방
-import Message from './pages/Message';
-
-// 채팅방 컴포넌트 추가
-import ChatRoom from './pages/ChatRoom';
-
-// 정보 게시판 - 코드 질문방
-import InformationCode from './pages/InformationCode';
-
-// 코드 질문방 본문
-import QuestionCode from './pages/QuestionCode';
 
 //상윤님
 import BoardPage from './pages/BoardPage';// 게시판 메인 페이지
@@ -54,7 +56,6 @@ function App() {
         <Route path="/FindIDPage" element={<FindIDPage />} />
         <Route path="/FindPWPage" element={<FindPWPage />} />
         <Route path="/JoinPage" element={<JoinPage />} />
-        <Route path="_save" element={<_save />} />
 
         <Route path="FreepostingPage" element={<FreepostingPage />} />
         <Route path="QuestionpostingPage" element={<QuestionpostingPage />} />

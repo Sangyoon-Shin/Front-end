@@ -13,16 +13,10 @@ import IconUnscrap from '../images/횃불이스크랩X.png';
 // const location = useLocation();
 // const { postId } = location.state || {};
 
-// import { useLocation } from 'react-router-dom';
-// const location = useLocation();
-// const { postId } = location.state || {};
-
 
 const InformationCode = () => {
   const [menuOpen, setMenuOpen] = useState(false);  // 드롭다운 상태 관리
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
-  const [scrapStatus, setScrapStatus] = useState({}); // 각 게시물의 스크랩 상태 관리
-  const [posts, setPosts] = useState([]); // 게시물 목록 상태 관리
   const [scrapStatus, setScrapStatus] = useState({}); // 각 게시물의 스크랩 상태 관리
   const [posts, setPosts] = useState([]); // 게시물 목록 상태 관리
   const [sortType, setSortType] = useState('latest'); // 초기 정렬 상태는 'latest'
@@ -38,20 +32,10 @@ const InformationCode = () => {
   // 로딩 상태 관리
   const [isLoading, setIsLoading] = useState(false); // 데이터 로딩 상태
 
-  // 페이징 및 추가 필터링 상태
-  const [page, setPage] = useState(0); // 현재 페이지 번호
-  const [size, setSize] = useState(10); // 페이지당 항목 수
-  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
-  const [hashtagKeyword, setHashtagKeyword] = useState(''); // 해시태그 필터
-  const [typeKeyword, setTypeKeyword] = useState(''); // 타입 필터
-
-  // 로딩 상태 관리
-  const [isLoading, setIsLoading] = useState(false); // 데이터 로딩 상태
-
   const navigate = useNavigate();  // useNavigate 훅을 컴포넌트 내부에서 호출
 
   // 반응형 처리를 위한 useMediaQuery 사용
-  const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
+  const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
 
 
   useEffect(() => {
@@ -95,7 +79,6 @@ const InformationCode = () => {
     setMenuOpen(!menuOpen);  // 드롭다운 토글
   };
 
-  const handleLanguageChange = async (language) => {
   const handleLanguageChange = async (language) => {
     setSelectedLanguage(language);
     setMenuOpen(false); // 메뉴 닫기
@@ -142,10 +125,8 @@ const InformationCode = () => {
       }
 
       // 성공적으로 응답을 받은 경우 상태를 업데이트
-      // 성공적으로 응답을 받은 경우 상태를 업데이트
       setScrapStatus((prevState) => ({
         ...prevState,
-        [id]: !prevState[id], // 현재 상태를 토글
         [id]: !prevState[id], // 현재 상태를 토글
       }));
 
@@ -197,15 +178,7 @@ const InformationCode = () => {
   };
 
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value); // 검색어 상태 업데이트
-  };
-
-
   const handlePostClick = (postId) => {
-    navigate(`/coding/${postId}`); // 해당 게시물 상세 페이지로 이동
-    // navigate(`/post/${postId}`, { state: { postId } }); // 게시물 데이터를 상태로 전달해야하는 경우
-
     navigate(`/coding/${postId}`); // 해당 게시물 상세 페이지로 이동
     // navigate(`/post/${postId}`, { state: { postId } }); // 게시물 데이터를 상태로 전달해야하는 경우
 
@@ -340,11 +313,8 @@ const InformationCode = () => {
         {/* 게시물 목록 */}
         <div className={styles.postList}>
           {posts.map((post, index) => (
-          {posts.map((post, index) => (
             <div key={post.id} className={styles.postItem}>
               {/* HOT 표시 (상단 3개의 게시물) */}
-              {index < 3 && <span className={styles.hotTag}>HOT</span>} {/* index를 사용해 상단 3개 표시 */}
-
               {index < 3 && <span className={styles.hotTag}>HOT</span>} {/* index를 사용해 상단 3개 표시 */}
 
               {/* 게시물 제목 및 정보 */}
@@ -353,12 +323,6 @@ const InformationCode = () => {
                   className={styles.postTitle}
                   onClick={() => handlePostClick(post.id)} // 게시물 제목 클릭 시 상세 페이지로 이동
                 >
-                  {post.codingTitle || '제목 없음'} {/* 백엔드 데이터의 키에 맞춰 수정, 기본값 처리 */}
-                </span>
-                <span className={styles.postDate}>
-                  {post.codingCreatedTime
-                    ? new Date(post.codingCreatedTime).toLocaleDateString() // 작성 날짜 표시
-                    : '날짜 없음'}
                   {post.codingTitle || '제목 없음'} {/* 백엔드 데이터의 키에 맞춰 수정, 기본값 처리 */}
                 </span>
                 <span className={styles.postDate}>
@@ -383,7 +347,6 @@ const InformationCode = () => {
         {/* 페이지네이션 */}
         <div className={styles.pagination}>
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
             <button
               key={pageNumber}
               className={`${styles.pageButton} ${page === pageNumber - 1 ? styles.activePageButton : ''}`} // 현재 페이지 강조
@@ -393,7 +356,6 @@ const InformationCode = () => {
             </button>
           ))}
         </div>
-
 
       </div>
     </div>
