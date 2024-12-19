@@ -26,8 +26,21 @@ import G_questionboardPage from './pages/G_questionboardPage';
 
 //상윤님
 import BoardPage from './pages/BoardPage';// 게시판 메인 페이지
-import InformationCode from './pages/InformationCode';// 정보 게시판 - 코드 질문방
 import QuestionCode from './pages/QuestionCode';// 코드 질문방 본문
+import RoomPage from './pages/RoomPage'; // 내가속한방 추가
+import Message from './pages/Message'; // 쪽지방
+import ChatRoom from './pages/ChatRoom'; // 채팅방 컴포넌트 추가
+import InformationCode from './pages/InformationCode'; // 정보 게시판 - 코드 질문방
+import InformationContest from './pages/InformationContest'; // 대회 정보게시판
+import ContestWrite from './pages/ContestWrite'; // 대회 글쓰기
+import AlarmPage from './pages/AlarmPage'; // 알림페이지
+import Announcement from './pages/Announcement'; // 공지사항
+
+
+// 지민이가 만든 채팅방 페이지
+import ClassChatRoom from './pages/ClassChatRoom'
+import ClassChat from './pages/ClassChat'
+
 
 //석진님
 import NoticeBoard from './pages/NoticeBoard'; //게시판
@@ -64,8 +77,16 @@ function App() {
 
         {/* 상윤님 */}
         <Route path="/BoardPage" element={<BoardPage />} /> {/*게시판 메인 페이지 */}
-        <Route path="/InformationCode" element={<InformationCode />} /> {/* 정보 게시판 - 코드 질문방 */}
         <Route path="/QuestionCode" element={<QuestionCode />} /> {/* 코드 질문방 본문 */}
+        <Route path="/RoomPage" element={<RoomPage />} />
+        <Route path="/Message" element={<Message />} />
+        <Route path="/InformationCode" element={<InformationCode />} /> {/* InformationCode 라우트 추가 */}
+        <Route path="/InformationContest" element={<InformationContest />} />
+        <Route path="/ContestWrite" element={<ContestWrite />} />
+        <Route path="/AlarmPage" element={<AlarmPage />} />
+        <Route path="/Announcement" element={<Announcement />} />
+        <Route path="/ClassChatRoom" element={<ClassChatRoom />} />
+        <Route path="/ClassChat" element={<ClassChat />} />
 
         {/* 석진님 */}
         <Route path="/Notice" element={<NoticeBoard />} />{/*게시판 */}

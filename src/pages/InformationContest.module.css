@@ -1,17 +1,8 @@
 /* 데스크탑 전용 CSS 설정 */
 @media (min-width: 769px) {
     .desktopTitleContainer {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        /* 중앙 정렬 */
-        width: 100%;
-        position: relative;
-    }
-
-    .desktopPageTitle {
-        margin-top: -150px;
-        font-size: 2rem;
+      padding-top: 20px;
+      padding-bottom: 20px;
     }
   
     .desktopGoBackButton {
@@ -24,19 +15,16 @@
     .desktopDownMenuButton {
       height: 3rem;
       right: 50px;
-      margin-top: 10px;
-      margin-right:530px;
+      margin-top: 50px;
     }
   
-    /* 드롭다운 메뉴 */
     .desktopDropdownMenu {
-        position: absolute; /* 부모인 메뉴 버튼 기준으로 위치 설정 */
-        display:center;
-        margin-right:100px;
-        top: 100%; /* 버튼 바로 아래에 배치 */
-        width: 180px;
-        border-radius: 5px;
-        z-index: 100;
+      position: absolute;
+      margin-top: 3rem;
+      right: 80px;
+      width: 180px;
+      z-index: 150;
+      /* 다른 요소 위에 보이도록 설정 */
     }
   
     .desktopControlPanel {
@@ -79,7 +67,6 @@
     .desktopRecommendSortButton {
       color: #FF6347; /* 데스크탑에서 추천순 버튼의 색상 */
     }
-
 }
   
 .container {
@@ -89,7 +76,7 @@
 }
 
 .content {
-    margin-top: 20px;
+    margin-top:  20px;
     /* 상단바도 하나의 그룹이라 내가 원하는 항목 만들면 아래로 밀림.*/
     padding: 20px;
     background-color: white;
@@ -141,9 +128,9 @@
 
 .dropdownMenu {
     position: absolute;
-    top: 7rem;
+    top: 11.6rem;
     /* 버튼 아래에 위치 */
-    margin-right: -0.8rem;
+    margin-right: 2rem;
     right: 60px;
     border-radius: 5px;
     z-index: 100;
@@ -301,10 +288,3 @@
 .pageButton:hover {
     background-color: #f0f0f0;
 }
-
-.activeMenuItem {
-    font-weight: bold; /* 굵게 표시 */
-    color: #007bff; /* 강조 색상 */
-    background-color: #f0f8ff; /* 선택된 배경 */
-  }
-  

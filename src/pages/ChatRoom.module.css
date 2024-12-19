@@ -1,0 +1,143 @@
+.container {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.content {
+    margin-top: 20px; /* 기존 스타일 유지 */
+    padding: 20px;
+    background-color: white;  /* 기존 배경색 */
+    height: 100vh;
+    overflow-y: auto;  /* 스크롤 가능 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 입력창이 항상 하단에 위치하도록 설정 */
+}
+
+.sectionTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #FCA400;
+    margin-top: -10px;
+    margin-left: 20px;
+    text-decoration: underline;
+    text-underline-offset: 10px;
+}
+
+.headerRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.goBackButton {
+    cursor: pointer;
+    height: 2rem; /* 기존 크기 유지 */
+}
+
+.roomHeaderInfo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.roomTitle {
+    font-size: 1rem;
+    margin: 0;
+    color: black;
+}
+
+.roomUsername {
+    font-weight: bold;
+    color:black;
+    font-size: 1.5rem;
+}
+
+.separator {
+    font-weight: bold;
+    font-size: 1.5rem;
+    font-size: 1rem;
+    color: #555;
+}
+
+.messageList {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+/* 보낸 메시지 */
+.sentMessage {
+    background-color: #f0d7a8;
+    align-self: flex-end; /* 오른쪽 정렬 */
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    max-width: 60%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 받은 메시지 */
+.receivedMessage {
+    background-color: #d0e3f1;
+    align-self: flex-start; /* 왼쪽 정렬 */
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    max-width: 60%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.messageText {
+    font-size: 1rem;
+}
+
+.messageTime {
+    font-size: 0.8rem;
+    color: #777;
+    margin-left: 10px;
+    align-self: flex-end;
+}
+
+.inputContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    background-color: #d9d9d9;
+    border-top: 1px solid #ddd;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.inputField {
+    flex-grow: 1;
+    padding: 10px;
+    margin-left: 20px;
+    border: none;
+    outline: none;
+    border-radius: 20px;
+    background-color: white;
+}
+
+.sendButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.sendIcon {
+    height: 2rem;
+}
+
+.heartIcon{
+    height: 3rem;
+}
