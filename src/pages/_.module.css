@@ -25,7 +25,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 90%;
   z-index: 1000; /* 페이지 상단에 표시 */
   background-color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -33,7 +33,6 @@
 /* 컨테이너 스타일 설정 */
 .container {
   width: 100%;
-  max-width: 1200px;
   text-align: center;
   margin-top: 80px; /* fixed-header 아래로 콘텐츠 배치 */
 }
@@ -62,25 +61,23 @@
 }
 
 
-.title-group{
- 
+.title-group{ 
   display: flex;
   justify-content: center; /* 가로 중앙 정렬 */
-  gap: 10px;  
+  gap: 5px;  
   margin-bottom: 10px;
 }
 
-.right-section {
- 
+.right-section { 
   display: flex;
   align-items: center; /* 가로로 나란히 정렬 */
   margin-top: 40px; /* 아래로 30px 만큼 내림 (값은 조절 가능) */
-  gap: 10px; /* 아이콘 사이의 간격 */
+  gap: 5px; /* 아이콘 사이의 간격 */
 }
 
 .mascot-logo {
   width: 0px;
-  margin-right: 40px; /* 로고와 문구 사이의 간격 */
+  margin-right: 30px; /* 로고와 문구 사이의 간격 */
 }
 
 /* 로고 이미지 크기 조절 */

@@ -29,7 +29,7 @@
 
   /* 텍스트 스타일 (아래로 살짝 내림) */
   .title-text {
-    font-size: 0.9rem !important;
+    font-size: 0.9rem ;
     color: #000000;
     margin-bottom: 20px;
     /* 텍스트를 아래로 살짝 내림 */
