@@ -224,7 +224,7 @@ const RoomPage = () => {
           onClick={toggleMenu}
         />
         {menuOpen && (
-          <div className={styles.dropdownMenu}>
+          <div className={`${styles.dropdownMenu} ${isDesktop ? styles["desktopDropDownMenu"] : ''}`}>
             <div className={styles.menuItem} onClick={handleEditClick}>편집하기</div>
             <div className={styles.menuItem} onClick={handleReportClick}>신고하기</div>
           </div>
@@ -266,10 +266,10 @@ const RoomPage = () => {
         {/* 방 신고 및 취소 버튼 */}
         {isSelectingForReport && (
           <div className={styles.reportActions}>
-            <button className={styles.reportButton} onClick={handleOpenReportModal}>
+            <button className={`${styles.reportButton} ${isDesktop ? styles["desktopReportButton"] : ''}`} onClick={handleOpenReportModal}>
               선택된 방 신고하기
             </button>
-            <button className={styles.cancelButton} onClick={handleCancelReport}>
+            <button className={`${styles.cancelButton} ${isDesktop ? styles["desktopCancelButton"] : ''}`} onClick={handleCancelReport}>
               신고 모드 취소
             </button>
           </div>
@@ -278,10 +278,10 @@ const RoomPage = () => {
         {/* 방 삭제 및 취소 버튼 */}
         {isSelectingForEdit && (
           <div className={styles.reportActions}>
-            <button className={styles.reportButton} onClick={handleDeleteRooms}>
+            <button className={`${styles.reportButton} ${isDesktop ? styles.desktopReportButton : ''}`}  onClick={handleDeleteRooms}>
               선택된 방 삭제하기
             </button>
-            <button className={styles.cancelButton} onClick={handleCancelEdit}>
+            <button className={`${styles.cancelButton} ${isDesktop ? styles.desktopCancelButton : ''}`} onClick={handleCancelEdit}>
               편집 모드 취소
             </button>
           </div>
@@ -299,10 +299,10 @@ const RoomPage = () => {
                 placeholder="신고 사유를 입력하세요"
               />
               <div className={styles.modalButtons}>
-                <button onClick={handleSubmitReport} className={styles.reportButton}>
+                <button onClick={handleSubmitReport} className={`${styles.reportButton} ${isDesktop ? styles.desktopAnotherReportButton : ''}`}>
                   신고하기
                 </button>
-                <button onClick={handleCloseModal} className={styles.cancelButton}>
+                <button onClick={handleCloseModal} className={`${styles.cancelButton} ${isDesktop ? styles.desktopAnotherCancelButton : ''}`}>
                   취소
                 </button>
               </div>

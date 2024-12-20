@@ -193,26 +193,28 @@
 
 .goBackButton {
     cursor: pointer;
-    height: 2rem;
-    position: absolute;
-    left: 10px;
-    /* 화면 왼쪽에 고정 */
+    margin-left: 10px;
+    margin-top: -40px;
+    height: 1rem;
+    width:auto;
 }
 
 .titleContainer {
     display: flex;
+    justify-content: space-between;
+    /* 화살표는 왼쪽, 제목은 중앙 */
     align-items: center;
-    justify-content: center;
-    /* 중앙 정렬 */
     width: 100%;
     position: relative;
-    margin-top:-10px;
-    margin-bottom: 20px;
-  }
+  
+    /* 위 아래 공백 추가 */
+    padding-bottom: 10%;
+    padding-top: 5%;
+}
 
 /* 데스크탑 전용 CSS 설정 */
 @media (min-width: 1024px) {
-    .desktopContainer {
+    .desktopTitleContainer {
         padding-top: 20px;
         padding-bottom: 20px;
     }
@@ -224,6 +226,12 @@
         height: 100vh;
         overflow-y: auto;
         padding-top:60px;
+    }
+
+    .desktopGoBackButton {
+        height: 3rem;
+        margin-left: 40px;
+        margin-top: 15px;
     }
 
     .desktopMessageItem {

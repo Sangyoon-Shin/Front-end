@@ -93,7 +93,16 @@ const AlarmPage = () => {
         <div className={styles.container}>
             <Header />
             <div className={styles.content}>
-                
+                <div className={`${styles.titleContainer} ${isDesktop ? styles.desktopTitleContainer : ''}`}>
+                    <img
+                        src={CommunicationRoom_goBack}
+                        className={`${styles.goBackButton} ${isDesktop ? styles.desktopGoBackButton : ''}`}
+                        alt="뒤로가기"
+                        onClick={() => navigate(-1)}  /* 뒤로 가기 동작 추가 */
+                    />
+
+                </div>
+
                 <div className={`${styles.messageList} ${isDesktop ? styles.desktopmessageList : ''}`}>
                     {messages.slice(0, visibleMessages).map((message) => (
                         <div
