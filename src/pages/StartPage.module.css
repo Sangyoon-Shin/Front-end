@@ -24,6 +24,7 @@
   justify-content: center; /* 가로 중앙 정렬 */
   gap: 20px;
   flex-wrap: wrap; /* 작은 화면에서 내용이 줄 바꿈 */
+  margin-bottom: -35px;
 }
 
 /* 여백 스타일 */
@@ -68,7 +69,7 @@ h2 {
   font-size: 1.5rem;
   color: #f29c19;
   margin-bottom: 0px;
-  margin-top: 30px;
+  margin-top: 0px;
 }
 
 /* 하단 설명 텍스트 */
