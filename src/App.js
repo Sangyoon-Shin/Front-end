@@ -92,7 +92,7 @@ function App() {
         <Route path="/ClassChat" element={<ClassChat />} />
 
         {/* 석진이 형 페이지*/}
-        <Route path="/Notice" element={<NoticeBoard />} />
+        <Route path="/Noticeboard" element={<NoticeBoard />} />
         <Route path="/chatroom/:id" element={<ChatRoom />} /> {/* 동적 라우팅을 통한 채팅방 페이지 */}
         <Route path="/Write" element={<WritePage />} />
         <Route path="/Classroom" element={<Classroom />} />
