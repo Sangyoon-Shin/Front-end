@@ -194,7 +194,7 @@ const InformationCode = () => {
       if (type === 'recommend') {
         // 추천순 정렬 엔드포인트
         url = 'https://ecc6-106-101-130-133.ngrok-free.app/api/board/coding/sort-by-likes';
-        
+
       }
 
       const response = await fetch(url, {
@@ -221,16 +221,16 @@ const InformationCode = () => {
       <Header />
       <div className={styles.content}>
         {/* 상단 제목 및 버튼 */}
-        <div className={`${styles.titleContainer} ${isDesktop ? styles.desktopTitleContainer : ''}`}>
+        <div className={`${styles.titleContainer} ${isDesktop ? styles["desktopTitleContainer"] : ''}`}>
           {/* 왼쪽 나가기 버튼 */}
           <img
             src={CommunicationRoom_goBack}
-            className={`${styles.goBackButton} ${isDesktop ? styles.desktopGoBackButton : ''}`}
+            className={`${styles.goBackButton} ${isDesktop ? styles["desktopGoBackButton"] : ''}`}
             alt="뒤로가기"
             onClick={() => navigate(-1)}  /* 뒤로 가기 동작 추가 */
           />
           {/* 페이지 타이틀 */}
-          <h1 className={`${styles.pageTitle} ${isDesktop ? styles.desktopPageTitle : ''}`}>
+          <h1 className={`${styles.pageTitle} ${isDesktop ? styles["desktopPageTitle"] : ''}`}>
             정보 게시판 - 코드 질문 게시판
           </h1>
           {/* 드롭다운 버튼 */}
@@ -264,22 +264,22 @@ const InformationCode = () => {
 
 
         {/* 컨트롤 패널 (글쓰기 버튼, 검색창, 정렬 버튼) */}
-        <div className={`${styles.controlPanel} ${isDesktop ? styles.desktopControlPanel : ''}`}>
+        <div className={`${styles["controlPanel"]} ${isDesktop ? styles.desktopControlPanel : ''}`}>
           {/* 글쓰기 버튼 */}
           <button
-            className={`${styles.writeButton} ${isDesktop ? styles.desktopWriteButton : ''}`}
+            className={`${styles["writeButton"]} ${isDesktop ? styles.desktopWriteButton : ''}`}
             onClick={() => navigate('/QuestionCode')} // 글쓰기 페이지로 이동
           >
             글쓰기
           </button>
 
           {/* 검색창 */}
-          <div className={`${styles.searchBar} ${isDesktop ? styles.desktopSearchBar : ''}`}>
+          <div className={`${styles["searchBar"]} ${isDesktop ? styles["desktopSearchBar"] : ''}`}>
             <input
               type="text"
               value={searchTerm}
               onChange={handleSearchChange} // 기존 함수명을 새 함수명으로 교체
-              className={`${styles.searchInput} ${isDesktop ? styles.desktopSearchInput : ''}`}
+              className={`${styles["searchInput"]} ${isDesktop ? styles.desktopSearchInput : ''}`}
               placeholder="검색어 입력"
             />
             <img
@@ -291,21 +291,23 @@ const InformationCode = () => {
           </div>
 
 
-          {/* 최신순 정렬 버튼 */}
-          <button
-            className={`${styles.sortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''} ${sortType === 'latest' ? styles.activeSortButton : ''}`}
-            onClick={() => handleSort('latest')} // handleSort 함수 호출
-          >
-            최신순
-          </button>
+          {/* 정렬 버튼들 */}
+          <div className={`${styles.sortButtons} ${isDesktop ? styles.desktopSortButtons : ''}`}>
+            <button
+              className={`${styles.sortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''} ${sortType === 'latest' ? styles.activeSortButton : ''}`}
+              onClick={() => handleSort('latest')} // handleSort 함수 호출
+            >
+              최신순
+            </button>
 
-          {/* 추천순 정렬 버튼 */}
-          <button
-            className={`${styles.sortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''} ${sortType === 'recommend' ? styles.activeSortButton : ''}`}
-            onClick={() => handleSort('recommend')} // handleSort 함수 호출
-          >
-            추천순
-          </button>
+            {/* 추천순 정렬 버튼 */}
+            <button
+              className={`${styles.sortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''} ${sortType === 'recommend' ? styles.activeSortButton : ''}`}
+              onClick={() => handleSort('recommend')} // handleSort 함수 호출
+            >
+              추천순
+            </button>
+          </div>
 
 
         </div>

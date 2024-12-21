@@ -3,21 +3,25 @@
   flex-direction: column;
   align-items: center;
   background-color: #ffffff;
-  padding-top: 60px; /* 상단바 높이만큼 패딩을 추가해 페이지 컨텐츠가 겹치지 않도록 함 */
+  padding-top: 60px;
+  /* 상단바 높이만큼 패딩을 추가해 페이지 컨텐츠가 겹치지 않도록 함 */
 
-} 
+}
 
 .app-header {
   position: fixed;
-  top: 10px; /* 여기 수정하면 상단바 위치 조정 가능*/
+  top: 10px;
+  /* 여기 수정하면 상단바 위치 조정 가능*/
   left: 0;
   width: 100%;
-  height: 60px; /* 필요에 따라 조정 */
+  height: 60px;
+  /* 필요에 따라 조정 */
   background-color: white;
   z-index: 1000;
   display: flex;
   align-items: center;
-  justify-content: center; /* 모든 요소들을 가운데 정렬 */
+  justify-content: center;
+  /* 모든 요소들을 가운데 정렬 */
   padding: 0 20px;
 }
 
@@ -26,86 +30,76 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000; /* 페이지 상단에 표시 */
+  z-index: 1000;
+  /* 페이지 상단에 표시 */
   background-color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
 /* 컨테이너 스타일 설정 */
 .container {
   width: 100%;
   max-width: 1200px;
   text-align: center;
-  margin-top: 80px; /* fixed-header 아래로 콘텐츠 배치 */
+  margin-top: 80px;
+  /* fixed-header 아래로 콘텐츠 배치 */
 }
 
 .content {
-  padding-top: 60px; /* 헤더의 높이만큼 여백 추가 (필요에 따라 조정) */
+  padding-top: 60px;
+  /* 헤더의 높이만큼 여백 추가 (필요에 따라 조정) */
 }
 
 
-.title-group{
- 
+.title-group {
+
   display: flex;
-  justify-content: center; /* 가로 중앙 정렬 */
-  gap: 10px;  
+  justify-content: center;
+  /* 가로 중앙 정렬 */
+  gap: 10px;
   margin-bottom: 10px;
 }
 
 .right-section {
- 
+
   display: flex;
-  align-items: center; /* 가로로 나란히 정렬 */
-  margin-top: 40px; /* 아래로 30px 만큼 내림 (값은 조절 가능) */
-  gap: 10px; /* 아이콘 사이의 간격 */
+  align-items: center;
+  /* 가로로 나란히 정렬 */
+  margin-top: 40px;
+  /* 아래로 30px 만큼 내림 (값은 조절 가능) */
+  gap: 10px;
+  /* 아이콘 사이의 간격 */
 }
 
 .mascot-logo {
   width: 0px;
-  margin-right: 40px; /* 로고와 문구 사이의 간격 */
+  margin-right: 40px;
+  /* 로고와 문구 사이의 간격 */
 }
 
 /* 로고 이미지 크기 조절 */
 .app-main_mascot {
-  height: 60px;
-  margin-bottom: 10px;
+  height: 55px;
   margin-top: 30px;
 }
 
-.app-main_bell {
-  height: 35px;
-  margin-bottom: 10px;
-}
-
-.app-main_message {
-  height: 35px;
-  margin-bottom:10px;
-}
-
-
+.app-main_bell,
+.app-main_message,
 .app-main_my {
   height: 35px;
-  margin-bottom: 10px;
-  margin-left: 6px;
-
+  margin-bottom: 30px;
 }
 
-/* 공지사항 텍스트  width: 100%;
-  height: 30%;*/
-.title-text {
-  font-size: 0.9rem ;
 
-  color: #000000;
-  margin-bottom: 20px;  /* 텍스트 아래에 여백 */
-  margin-top: 10px;  /* 텍스트 위에 여백 */
+/* 공지사항 텍스트 */
+.title-text {
+  font-size: 0.8rem;
+  margin-bottom: 40px;
 }
 
 
 /* INFO 텍스트 */
 h2 {
-  font-size: 2.0rem ;
-  color: #0056A0;
-  margin-bottom: 0px;
-  margin-top: 43px;
-  margin-right: 5px;  /* 텍스트 오른쪽에 여백 */
-
+  font-size: 1.8rem ;
+  
 }

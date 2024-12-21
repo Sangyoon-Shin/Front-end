@@ -208,24 +208,22 @@ const BoardPage = () => {
     <div className={styles.container}>
       <Header />
       <div className={styles.content}>
-        <div
-          className={`${styles.titleContainer} ${isDesktop ? styles.desktopTitleContainer : ''}`}
-        >
+        <div className={`${styles.titleContainer} ${isDesktop ? styles.desktopTitleContainer : ''}`}>
           {/* 왼쪽 나가기 버튼 */}
           <img
             src={CommunicationRoom_goBack}
-            className={`${styles.goBackButton} ${isDesktop ? styles.desktopGoBackButton : ''}`}
+            className={`${styles.goBackButton} ${isDesktop ? styles["desktopGoBackButton"] : ''}`}
             alt="뒤로가기"
             onClick={() => navigate(-1)} /* 뒤로 가기 동작 추가 */
           />
           {/* 페이지 타이틀 */}
-          <h1 className={`${styles.pageTitle} ${isDesktop ? styles.desktopPageTitle : ''}`}>
+          <h1 className={`${styles.pageTitle} ${isDesktop ? styles["desktopPageTitle"] : ''}`}>
             자유 게시판
           </h1>
           {/* 드롭다운 버튼 */}
           <img
             src={DownMenu}
-            className={`${styles.downMenuButton} ${isDesktop ? styles.desktopDownMenuButton : ''}`}
+            className={`${styles.downMenuButton} ${isDesktop ? styles["desktopDownMenuButton"]: ''}`}
             alt="게시판 선택"
             onClick={toggleMenu}
           />
@@ -235,7 +233,7 @@ const BoardPage = () => {
         {menuOpen && (
           <div className={`${styles.dropdownMenu} ${isDesktop ? styles.desktopDropdownMenu : ''}`}>
             <div
-              className={`${styles.menuItem} ${isDesktop ? styles.desktopMenuItem : ''}`}
+              className={`${styles.menuItem} ${isDesktop ? styles["desktopMenuItem"] : ''}`}
               onClick={() => handleBoardChange('질문 게시판')}
             >
               질문 게시판
@@ -244,10 +242,10 @@ const BoardPage = () => {
         )}
 
         {/* 컨트롤 패널 */}
-        <div className={`${styles.controlPanel} ${isDesktop ? styles.desktopControlPanel : ''}`}>
+        <div className={`${styles.controlPanel} ${isDesktop ? styles["desktopControlPanel"] : ''}`}>
           {/* 글쓰기 버튼 */}
           <button
-            className={`${styles.writeButton} ${isDesktop ? styles.desktopWriteButton : ''}`}
+            className={`${styles.writeButton} ${isDesktop ? styles["desktopWriteButton"]: ''}`}
             onClick={() => navigate('/write')} // 글쓰기 페이지로 이동
           >
             글쓰기
