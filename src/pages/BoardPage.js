@@ -271,7 +271,7 @@ const BoardPage = () => {
           {/* 정렬 버튼들 */}
           <div className={`${styles.sortButtons} ${isDesktop ? styles.desktopSortButtons : ''}`}>
             <button
-              className={`${styles.sortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''} ${sortType === 'latest' ? styles.activeSortButton : ''}`}
+              className={`${styles.latestSortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''} ${sortType === 'latest' ? styles.activeSortButton : ''}`}
               onClick={() => handleSort('latest')} // handleSort 함수 호출
             >
               최신순
@@ -279,7 +279,7 @@ const BoardPage = () => {
 
             {/* 추천순 정렬 버튼 */}
             <button
-              className={`${styles.sortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''} ${sortType === 'recommend' ? styles.activeSortButton : ''}`}
+              className={`${styles.recommendSortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''} ${sortType === 'recommend' ? styles.activeSortButton : ''}`}
               onClick={() => handleSort('recommend')} // handleSort 함수 호출
             >
               추천순

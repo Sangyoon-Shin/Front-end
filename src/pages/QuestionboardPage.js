@@ -70,7 +70,7 @@ const QuestionboardPage = () => {
 
   const handleBoardChange = (boardName) => {
     if (boardName === '자유 게시판') {
-      navigate('/BoardPage/'); 
+      navigate('/BoardPage/');
     }
     setMenuOpen(false);  // 메뉴 닫기
   };
@@ -142,20 +142,35 @@ const QuestionboardPage = () => {
     navigate(`/post/${postId}`);  // 해당 게시물 상세 페이지로 이동
   };
 
-  
-      // 정렬 버튼 클릭 시 정렬 상태 업데이트
-  const handleSort = (type) => {
-    setSortType(type);
-    if (type === 'latest') {
-      // 최신순으로 정렬
-      setPosts((prevPosts) =>
-        [...prevPosts].sort((a, b) => new Date(b.date) - new Date(a.date))
-      );
-    } else if (type === 'recommend') {
-      // 추천순으로 정렬 (좋아요 개수 기준)
-      setPosts((prevPosts) =>
-        [...prevPosts].sort((a, b) => b.likes - a.likes)
-      );
+
+  // 정렬 버튼 클릭 시 정렬 상태 업데이트
+  const handleSort = async (type) => {
+    setSortType(type); // 정렬 상태 업데이트
+
+    try {
+      let url = 'https://ecc6-106-101-130-133.ngrok-free.app/api/board/coding';
+
+      if (type === 'recommend') {
+        // 추천순 정렬 엔드포인트
+        url = 'https://ecc6-106-101-130-133.ngrok-free.app/api/board/coding/sort-by-likes';
+
+      }
+
+      const response = await fetch(url, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('정렬된 데이터를 불러오는데 실패했습니다.');
+      }
+
+      const data = await response.json();
+      setPosts(data.content); // 정렬된 데이터로 게시물 목록 업데이트
+    } catch (error) {
+      console.error('정렬 데이터 로드 중 오류 발생:', error);
+      alert('정렬된 데이터를 가져오는 중 오류가 발생했습니다.');
     }
   };
   
@@ -228,39 +243,19 @@ const QuestionboardPage = () => {
           {/* 정렬 버튼들 */}
           <div className={`${styles.sortButtons} ${isDesktop ? styles.desktopSortButtons : ''}`}>
             <button
-              className={`${styles.sortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''}`}
+              className={`${styles.latestSortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''}`}
               onClick={() => handleSort('latest')}
             >
               최신순
             </button>
             <button
-              className={`${styles.sortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''}`}
+              className={`${styles.recommendSortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''}`}
               onClick={() => handleSort('recommend')}
             >
               추천순
             </button>
           </div>
         </div>
-
-        {/* 백엔드 할 때
-          <div className={styles.sortButtons}>
-            <button
-              className={`${styles.sortButton} ${sortType === 'latest' ? styles.activeSortButton : ''
-                }`}
-              onClick={() => handleSort('latest')}
-            >
-              최신순
-            </button>
-            <button
-              className={`${styles.sortButton} ${sortType === 'recommend' ? styles.activeSortButton : ''
-                }`}
-              onClick={() => handleSort('recommend')}
-            >
-              추천순
-            </button>
-          </div>
-        </div>
-        */}
 
         {/* 게시물 목록 */}
         <div className={styles.postList}>
