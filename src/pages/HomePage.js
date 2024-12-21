@@ -1,8 +1,9 @@
 /*import React from 'react';*/
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from "./HomePage.module.css";
+
 import main_mascot from '../images/대학 심볼 횃불이.png';  // 로고 이미지 불러오기
 import main_bell from '../images/bell.png';  // 로고 이미지 불러오기
 import main_message from '../images/message.png';  // 로고 이미지 불러오기
@@ -14,23 +15,21 @@ import PlusButton from '../assets/MoreButton'; // 플러스 버튼 컴포넌트 
 
 import S_cute from '../assets/S_cuteButton'; //스크랩
 
-
+import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
 
 const HomePage = () => {
 
   const [dropdownVisible, setDropdownVisible] = useState(false);  // 드롭다운 상태 관리
   const [activeTab, setActiveTab] = useState('정보게시판'); // Default active tab
-
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false); //logout
   const navigate = useNavigate(); // useNavigate 훅 선언
 
-  // 버튼 클릭 시 이동할 링크
-  const handlePlusClick2 = () => {
-    navigate('/add-code-question');  // 추가 질문 페이지로 이동
-  };
+ // 반응형 페이지 처리를 위한 useMediaQuery 사용
+ const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
 
   // 질문 항목 클릭 시 이동할 링크
   const handleQuestionClick = (questionId) => {
-    navigate(`/code-question/${questionId}`);  // 질문 상세 페이지로 이동
+    navigate(`/page/${questionId}`);  // 질문 상세 페이지로 이동
   };
 
 
@@ -39,11 +38,32 @@ const HomePage = () => {
     navigate(link); // 페이지 이동
   };
 
+//로그아웃
+  const handleLogoutClick = (e) => { 
+    e.preventDefault(); 
+    setIsLogoutModalOpen(true); 
+  }; 
+  
+  const handleLogoutConfirm = () => { 
+    setIsLogoutModalOpen(false); navigate('/Start'); 
+  }; 
+  
+  const handleLogoutCancel = () => { 
+    setIsLogoutModalOpen(false);
+  };
 
 
+
+{/*
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
-  };
+  }; */}
+
+    // 드롭다운 메뉴 토글 함수
+    const toggleDropdown = () => {
+      setDropdownVisible((prev) => !prev);
+    };
+
 
 
   // Render content based on the active tab
@@ -52,10 +72,6 @@ const HomePage = () => {
       case '정보게시판':
         return (
           <>
-         {/*   <div className={styles.infoheader}>
-             <h2 className={styles.comtext}>코드 정보</h2>
-             <PlusButton className={styles.plusButton}/>
-            </div> */}
 
 
           {/* 코드 정보 섹션 */}
@@ -238,23 +254,83 @@ const HomePage = () => {
         );
       case '소통 채팅방':
         return (
+    
           <>
-            <h2>자기 개발</h2>
-            <div className={styles.selfDevelopment}>
-              <div className={styles.developmentItem}>
-                <span>[부트 캠프] SSAFY</span>
-                <span>2024.01.01</span>
-              </div>
-              <div className={styles.developmentItem}>
-                <span>[산업 연계] CJ 클라우드 네트워크스</span>
-                <span>2024.01.01</span>
-              </div>
-              <div className={styles.developmentItem}>
-                <span>[스터디 모집] 운영체제 스터디 모집</span>
-              </div>
-              <a href="/self-development" className={styles.moreLink}>+</a>
-            </div>
+ 
+ 
+ <div className={styles.container}>
+      <div className={styles.infoheader}>
+      <h2 className={styles.comtext}>자유 게시판</h2>
+        <a href="/self-development" className={styles.plusButtonLink}>
+          <PlusButton className={styles.plusButton} />
+        </a>
+      </div>
+      
+
+      <div className={styles.postList}>
+        <div className={styles.postItem} onClick={() => handleQuestionClick(1)}>
+          <span className={styles.index2}>HOT</span>
+          <span className={styles.question}>[부트 캠프] SSAFY</span>
+          <span className={styles.date}>2024.01.01</span>
+          <S_cute className={styles.S_cute} />
+        </div>
+
+        <div className={styles.postItem} onClick={() => handleQuestionClick(2)}>
+          <span className={styles.index2}>HOT</span>
+          <span className={styles.question}>[산업 연계] CJ 클라우드 네트워크스</span>
+          <span className={styles.date}>2024.01.01</span>
+          <S_cute className={styles.S_cute} />
+        </div>
+
+        <div className={styles.postItem} onClick={() => handleQuestionClick(3)}>
+          <span className={styles.index2}>HOT</span>
+          <span className={styles.question}>[스터디 모집] 운영체제 스터디 모집</span>
+          <span className={styles.date}>2024.01.01</span>
+          <S_cute className={styles.S_cute} />
+        </div>
+
+      </div>
+    </div>
+
+
+    <div className={styles.container}>
+      <div className={styles.infoheader}>
+      <h2 className={styles.comtext}>질문 게시판</h2>
+        <a href="/self-development" className={styles.plusButtonLink}>
+          <PlusButton className={styles.plusButton} />
+        </a>
+      </div>
+      
+
+      <div className={styles.postList}>
+        <div className={styles.postItem} onClick={() => handleQuestionClick(1)}>
+          <span className={styles.index2}>HOT</span>
+          <span className={styles.question}>[부트 캠프] SSAFY</span>
+          <span className={styles.date}>2024.01.01</span>
+          <S_cute className={styles.S_cute} />
+        </div>
+
+        <div className={styles.postItem} onClick={() => handleQuestionClick(2)}>
+          <span className={styles.index2}>HOT</span>
+          <span className={styles.question}>[산업 연계] CJ 클라우드 네트워크스</span>
+          <span className={styles.date}>2024.01.01</span>
+          <S_cute className={styles.S_cute} />
+        </div>
+
+        <div className={styles.postItem} onClick={() => handleQuestionClick(3)}>
+          <span className={styles.index2}>HOT</span>
+          <span className={styles.question}>[스터디 모집] 운영체제 스터디 모집</span>
+          <span className={styles.date}>2024.01.01</span>
+          <S_cute className={styles.S_cute} />
+        </div>
+
+      </div>
+    </div>
+
+
+            
           </>
+       
         );
       default:
         return null;
@@ -266,42 +342,79 @@ const HomePage = () => {
   return (
     <div className={styles.app}>
       {/* 상단바 */}
-      
-      <header className={styles["app-header"]}>
-        <div className={styles["title-group"]}>
-          <img src={main_mascot} className={styles["app-main_mascot"]} alt="main_mascot" />
-          <h2>INFO!</h2>
-          <div className={styles["right-section"]}>
-            <div className={styles["mascot-logo"]}></div>
-            <h2 className={styles["title-text"]}>공지사항</h2>
-            <img src={main_bell} className={styles["app-main_bell"]} alt="main_bell" />
-            <img src={main_message} className={styles["app-main_message"]} alt="main_message" />
-            <img src={main_my} className={styles["app-main_my"]} alt="main_my" />
+      <header className={`${styles["app-header"]} ${isDesktop ? styles.desktopHeader : ''}`}>
+        <div className={`${styles["title-group"]} ${isDesktop ? styles.desktopTitleGroup : ''}`}>
+          <img
+            src={main_mascot}
+            className={`${styles["app-main_mascot"]} ${isDesktop ? styles.desktopMainMascot : ''}`}
+            alt="main_mascot"
+            onClick={() => navigate("/HomePage")}
+          />
+          <h2
+            onClick={() => navigate("/HomePage")}
+            style={{ cursor: "pointer" }}
+          >
+            INFO!
+          </h2>
+  
+          <div className={`${styles["right-section"]} ${isDesktop ? styles.desktopRightSection : ''}`}>
+            <h2
+              className={styles["title-text"]}
+              onClick={() => navigate("/notice")}
+              style={{ cursor: "pointer" }}
+            >
+              공지사항
+            </h2>
+  
+            <img
+              src={main_bell}
+              className={`${styles["app-main_bell"]} ${isDesktop ? styles.desktopMainBell : ''}`}
+              alt="main_bell"
+              onClick={() => navigate("/notification")}
+            />
+            <img
+              src={main_message}
+              className={`${styles["app-main_message"]} ${isDesktop ? styles.desktopMainMessage : ''}`}
+              alt="main_message"
+              onClick={() => navigate("/message")}
+            />
+            <img
+              src={main_my}
+              className={`${styles["app-main_my"]} ${isDesktop ? styles.desktopMainMy : ''}`}
+              alt="main_my"
+              onClick={toggleDropdown}
+            />
+  
             {/* 드롭다운 메뉴 */}
             {dropdownVisible && (
-              <div className={styles["dropdown-menu"]}>
-                <a href="/scrap">스크랩</a>
-                <a href="/write-post">작성 게시글</a>
-                <a href="/write-comment">작성 댓글</a>
-                <a href="/user-auth">사용자 권한 인증</a>
-                <a href="/logout" className={styles["logout"]}>로그아웃</a>
+              <div className={`${styles["dropdown-menu"]} ${isDesktop ? styles.desktopDropdownMenu : ''}`}>
+                <a href="/scrap" className={styles["menu-item"]}>스크랩</a>
+                <a href="/write-post" className={styles["menu-item"]}>작성 게시글</a>
+                <a href="/write-comment" className={styles["menu-item"]}>작성 댓글</a>
+                <a href="/User_auth" className={styles["menu-item"]}>사용자 권한 인증</a>
+                <a
+                  href="#"
+                  onClick={handleLogoutClick}
+                  className={`${styles["menu-item"]} ${styles["logout"]}`}
+                >
+                  로그아웃
+                </a>
               </div>
             )}
-          
           </div>
         </div>
       </header>
-
+  
       {/* 대회 정보 부분 */}
-      <div className={styles.comheader}>
-      <h2 className={styles.comtext}>대회 정보</h2>
+      <div className={`${styles.comheader} ${isDesktop ? styles.desktopComHeader : ''}`}>
+        <h2 className={styles.comtext}>대회 정보</h2>
         <a href="/com" className={styles.plusButtonLink}>
           <PlusButton className={styles.plusButton} />
         </a>
       </div>
-
+  
       {/* 대회 정보 이미지 부분 */}
-      <div className={styles.competitions}>
+      <div className={`${styles.competitions} ${isDesktop ? styles.desktopCompetitions : ''}`}>
         <a className={styles.competitionItem} href="https://example.com/competition1" target="_blank" rel="noopener noreferrer">
           <img src={competitionImage1} className={styles.competitionImage} alt="대회 1" />
         </a>
@@ -312,10 +425,9 @@ const HomePage = () => {
           <img src={competitionImage3} className={styles.competitionImage} alt="대회 3" />
         </a>
       </div>
-
-
+  
       {/* 탭 네비게이션 */}
-      <div className={styles.tabContainer}>
+      <div className={`${styles.tabContainer} ${isDesktop ? styles.desktopTabContainer : ''}`}>
         <button
           className={activeTab === '정보게시판' ? styles.activeTab : styles.inactiveTab}
           onClick={() => setActiveTab('정보게시판')}
@@ -335,28 +447,22 @@ const HomePage = () => {
           소통 채팅방
         </button>
       </div>
-
+  
       {/* 탭 내용 */}
-      <div className={styles.tabContent}>
+      <div className={`${styles.tabContent} ${isDesktop ? styles.desktopTabContent : ''}`}>
         {renderTabContent()}
       </div>
-
-
-      {/* 하단바 추가 */}
-      <div className={styles.footer}>
+  
+      {/* 하단바 */}
+      <div className={`${styles.footer} ${isDesktop ? styles.desktopFooter : ''}`}>
         <div className={styles.footerItem}>
-          <span>문의하기</span>
+          <span>문의하기 </span>
           <a href="mailto:abcd@gmail.com">abcd@gmail.com</a>
         </div>
         <div className={styles.footerItem}>
           <span>개인정보처리방침</span>
         </div>
       </div>
-
-
-
-
-
     </div>
   );
 };
