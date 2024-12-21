@@ -52,11 +52,11 @@ const QuestionCode = () => {
                 </div>
 
                 {/* 폼 입력 부분 */}
-                <div className={styles.form}>
+                <div className={`${styles.form} ${isDesktop ? styles.desktopForm : ''}`}>
                     {/* 언어 선택 */}
-                    <div className={styles.languageSelectionContainer}>
-                        <label className={styles.languageSelectionLabel}>언어 선택</label>
-                        <div className={styles.languageSelection}>
+                    <div className={`${styles.languageSelectionContainer} ${isDesktop ? styles.desktopLanguageSelectionContainer : ''}`}>
+                        <label className={`${styles.languageSelectionLabel} ${isDesktop ? styles.desktopLanguageSelectionLabel : ''}`}>언어 선택</label>
+                        <div className={`${styles.languageSelection} ${isDesktop ? styles.desktopLanguageSelection : ''}`}>
                             {['C/C++', 'C#', 'JAVA', 'Python', '기타'].map((language) => (
                                 <button
                                     key={language}
@@ -71,33 +71,33 @@ const QuestionCode = () => {
 
 
                     {/* 제목 입력 */}
-                    <div className={styles.inputContainer}>
-                        <label className={styles.inputLabel}>제목</label>
+                    <div className={`${styles.inputContainer} ${isDesktop ? styles.desktopInputContainer : ''}`}>
+                        <label className={`${styles.languageSelectionLabel} ${isDesktop ? styles.desktopLanguageSelectionLabel : ''}`}>제목</label>
                         <input
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             placeholder=""
-                            className={styles.inputField}
+                            className={`${styles.inputField} ${isDesktop ? styles.desktopInputField : ''}`}
                         />
                     </div>
 
                     {/* 해시태그 입력 */}
-                    <div className={styles.inputContainer}>
-                        <label className={styles.inputLabel}>해시태그</label>
+                    <div className={`${styles.inputContainer} ${isDesktop ? styles.desktopInputContainer : ''}`}>
+                        <label className={`${styles.languageSelectionLabel} ${isDesktop ? styles.desktopLanguageSelectionLabel : ''}`}>해시태그</label>
                         <input
                             type="text"
                             value={hashTag}
                             onChange={(e) => setHashTag(e.target.value)}
                             placeholder="#해시태그"
-                            className={styles.inputField}
+                            className={`${styles.inputField} ${isDesktop ? styles.desktopInputField : ''}`}
                         />
                     </div>
 
                     {/* 이미지 첨부 */}
-                    <div className={styles.inputContainer}>
-                        <label className={styles.inputLabel}>이미지 첨부</label>
-                        <div className={styles.imageUpload}>
+                    <div className={`${styles.inputContainer} ${isDesktop ? styles.desktopInputContainer : ''}`}>
+                        <label className={`${styles.languageSelectionLabel} ${isDesktop ? styles.desktopLanguageSelectionLabel : ''}`}>이미지 첨부</label>
+                        <div className={`${styles.imageUpload} ${isDesktop ? styles.desktopImageUpload : ''}`}>
                             <label htmlFor="imageUploadInput">
                                 <img src={PlusIcon} alt="이미지 첨부" className={styles.plusIcon} />
                             </label>
@@ -112,18 +112,18 @@ const QuestionCode = () => {
                     </div>
 
                     {/* 내용 입력 */}
-                    <div className={styles.inputContainer}>
-                        <label className={styles.inputLabel}>내용</label>
+                    <div className={`${styles.inputContainer} ${isDesktop ? styles.desktopInputContainer : ''}`}>
+                        <label className={`${styles.languageSelectionLabel} ${isDesktop ? styles.desktopLanguageSelectionLabel : ''}`}>내용</label>
                         <textarea
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             placeholder="내용을 입력하세요..."
-                            className={styles.textarea}
+                            className={`${styles.textarea} ${isDesktop ? styles.desktopTextarea: ''}`}
                         />
                     </div>
 
                     {/* 게시글 올리기 버튼 */}
-                    <button className={styles.submitButton} onClick={handleSubmit}>
+                    <button className={`${styles.submitButton} ${isDesktop ? styles.desktopSubmitButton: ''}`} onClick={handleSubmit}>
                         게시글 올리기
                     </button>
                 </div>

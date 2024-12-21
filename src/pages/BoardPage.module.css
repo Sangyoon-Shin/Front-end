@@ -307,6 +307,11 @@
     margin-top: 15px;
   }
 
+  .desktopPageTitle {
+    margin-top: -150px;
+    font-size: 1.5rem;
+  }
+
   /* 큰 화면용 메뉴 버튼 */
   .desktopDownMenuButton {
     height: 1rem;
@@ -382,11 +387,6 @@
   
   .desktopRecommendSortButton {
     color: black; /* 데스크탑에서 추천순 버튼의 색상 */
-  }
-  
-  .desktopPageTitle {
-    margin-top: -150px;
-    font-size: 1.5rem;
   }
 
   .desktopMenuItem{
