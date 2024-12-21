@@ -14,16 +14,13 @@ import FreewritePage from './pages/FreewritePage'; // 자유게시글 작성 페
 import QuestionwritePage from './pages/QuestionwritePage'; // 질문게시글 작성 페이지
 import FreeboardPage from './pages/FreeboardPage'; // 자유게시판 페이지
 import QuestionboardPage from './pages/QuestionboardPage'; // 질문게시판 페이지
-
-// G로 시작하는 컴포넌트들
+// 졸업생 자유/질문 게시판 
 import G_freepostingPage from './pages/G_freepostingPage'; // G_ 자유게시글 작성 페이지
 import G_questionpostingPage from './pages/G_questionpostingPage'; // G_ 질문게시글 작성 페이지
 import G_freewritePage from './pages/G_freewritePage'; // G_ 자유게시글 작성 페이지
 import G_questionwritePage from './pages/G_questionwritePage'; // G_ 질문게시글 작성 페이지
 import G_freeboardPage from './pages/G_freeboardPage'; // G_ 자유게시판 페이지
 import G_questionboardPage from './pages/G_questionboardPage'; // G_ 질문게시판 페이지
-
-
 
 //상윤님
 import BoardPage from './pages/BoardPage';// 게시판 메인 페이지
@@ -37,7 +34,6 @@ import ContestWrite from './pages/ContestWrite'; // 대회 글쓰기
 import AlarmPage from './pages/AlarmPage'; // 알림페이지
 import Announcement from './pages/Announcement'; // 공지사항
 
-
 // 지민이가 만든 채팅방 페이지
 import ClassChatRoom from './pages/ClassChatRoom'
 import ClassChat from './pages/ClassChat'
@@ -45,12 +41,22 @@ import ClassChat from './pages/ClassChat'
 
 // 석진이형 페이지
 import NoticeBoard from './pages/NoticeBoard';
+import WritePage from './pages/WritePage';
+import Classroom from './pages/Classroom';
+import BootCamp from './pages/BootCamp';
+import Industry from './pages/Industry';
+import Study from './pages/Study';
+import NoticeBoot from './pages/NoticeBoot';
+import Scrap from './pages/Scrap';
+import My_board from './pages/My_board';
+import My_message from './pages/My_message';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<StartPage />} />
+        <Route path="/StartPage" element={<StartPage />} />
         <Route path="/_" element={<_ />} /> {/* 두 번째 페이지 라우팅 */}
         <Route path="/LoginPage" element={<LoginPage />} />
         <Route path="/FindIDPage" element={<FindIDPage />} />
@@ -86,11 +92,17 @@ function App() {
         <Route path="/ClassChat" element={<ClassChat />} />
 
         {/* 석진이 형 페이지*/}
-
         <Route path="/Notice" element={<NoticeBoard />} />
-
         <Route path="/chatroom/:id" element={<ChatRoom />} /> {/* 동적 라우팅을 통한 채팅방 페이지 */}
-
+        <Route path="/Write" element={<WritePage />} />
+        <Route path="/Classroom" element={<Classroom />} />
+        <Route path="/Bootcamp" element={<BootCamp />} />
+        <Route path="/Industry" element={<Industry />} />
+        <Route path="/Study" element={<Study />} />
+        <Route path="/NoticeBoot" element={<NoticeBoot />} />
+        <Route path="/Scrap" element={<Scrap />} />
+        <Route path="/My_board" element={<My_board />} />
+        <Route path="/My_message" element={<My_message />} />
       </Routes>
     </BrowserRouter>
   );
