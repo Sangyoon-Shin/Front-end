@@ -6,6 +6,7 @@
   justify-content: center;
   height: 100vh;
   background-color: white;
+  padding: 0 20px;  /* 작은 화면에서 여백 추가 */
 }
 
 .header {
@@ -22,9 +23,9 @@
 .group-info {
   display: flex;
   justify-content: center; /* 가로 중앙 정렬 */
-  margin-left: -200px; /* 왼쪽으로 20px 이동 */
-  gap: 10px;  
-  margin-top: 60px; /* 왼쪽으로 220px 이동 */
+  margin-left: -200px;
+  gap: 10px;
+  margin-top: 60px;
 }
 
 h1 {
@@ -34,7 +35,6 @@ h1 {
   margin-top: -80px;
 }
 
-
 .loginBox {
   background-color: #73B3E3;
   padding: 30px;
@@ -42,12 +42,11 @@ h1 {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   width: 140%;
   max-width: 400px;
-  margin-bottom: 100px; /* 왼쪽으로 220px 이동 */
-    display: flex;           /* 부모 요소에 flexbox 적용 */
-  flex-direction: column;  /* 수직 정렬 */
-  align-items: center;     /* 자식 요소(버튼)를 가로 중앙 정렬 */
+  margin-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-
 
 .loginButton {
   background-color: #0056a0;
@@ -60,7 +59,6 @@ h1 {
   cursor: pointer;
   margin-top: 20px;
   margin-left: 20px;
-
 }
 
 .loginButton:hover {
@@ -93,14 +91,12 @@ h2 {
 .app-back_logo {
   height: 90px;
   margin-bottom: 80px;
-  margin-right: -120px;
+  margin-right: -40px;
 }
-
 
 .form-group {
   margin-bottom: 20px;
-  position: relative; /* 부모 요소에 상대적 위치 설정 */
-
+  position: relative;
 }
 
 .form-group label {
@@ -108,13 +104,12 @@ h2 {
   font-size: 1.2rem;
   margin-bottom: 10px;
   color: #333;
-  text-align: left; /* 입력한 텍스트도 왼쪽 정렬 */
-  
-
+  text-align: left;
 }
+
 .inputWrapper {
-  position: relative; /* 버튼의 절대 위치를 설정할 기준 */
-  width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+  position: relative;
+  width: 100%;
 }
 
 .form-group input {
@@ -123,18 +118,14 @@ h2 {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
-  box-sizing: border-box; /* input 내부 패딩이 너비에 포함되도록 설정 */
-
+  box-sizing: border-box;
 }
 
-
 .inputBtn {
-  position: relative; /* 원래 위치에서 10px 아래로 이동 */
- 
-  /*position: absolute; /* 버튼을 절대 위치로 설정 */
-  right: -95px; /* 오른쪽으로 10px 간격 */
-  top: 75%; /* 수직 중앙으로 설정 */
-  transform: translateY(-109%); /* 수직 중앙 정렬 보정 */
+  position: relative;
+  right: -95px;
+  top: 75%;
+  transform: translateY(-109%);
   padding: 8px;
   background-color: #0056A0;
   color: white;
@@ -147,10 +138,8 @@ h2 {
   background-color: #004080;
 }
 
-
 .popup {
   display: flex;
-  
   flex-direction: column;
   justify-content: center;
   position: fixed;
@@ -163,13 +152,12 @@ h2 {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 350px;
   border-radius: 10px;
-
 }
 
 .authTitle {
   font-size: 20px;
   margin-bottom: 10px;
-  text-align: center; /* 중앙 정렬 */
+  text-align: center;
 }
 
 .popupRow {
@@ -177,8 +165,6 @@ h2 {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  justify-content: space-between;
-
 }
 
 .formGroup {
@@ -187,7 +173,6 @@ h2 {
 }
 
 .inputField {
-  position: relative; /* 버튼의 절대 위치를 설정할 기준 */
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -197,7 +182,7 @@ h2 {
 }
 
 .inputBtn {
-  position: absolute; /*이걸로 입력 칸 안에 버튼 들어가게 하기*/
+  position: absolute;
   padding: 8px;
   background-color: #0056A0;
   color: white;
@@ -205,11 +190,10 @@ h2 {
   border-radius: 5px;
   cursor: pointer;
   font-size: 10px;
-  margin-top:9px;
+  margin-top: 9px;
   width: 35%;
-  margin-left: -108px; /*-109*/
-  height: 68%; /* 버튼 높이를 입력 필드와 유사하게 조정 */
-
+  margin-left: -108px;
+  height: 68%;
 }
 
 .inputBtn:hover {
@@ -241,9 +225,8 @@ h4 {
   margin-left: -1px;
 }
 
-
 .changeBtn {
-  position: absolute; /*이걸로 입력 칸 안에 버튼 들어가게 하기*/
+  position: absolute;
   padding: 8px;
   background-color: #0056A0;
   color: white;
@@ -251,13 +234,105 @@ h4 {
   border-radius: 5px;
   cursor: pointer;
   font-size: 13px;
-  margin-top:73px;
+  margin-top: 73px;
   width: 25%;
-  margin-left: 238px; /*-109*/
-  height: 8%; /* 버튼 높이를 입력 필드와 유사하게 조정 */
-
+  margin-left: 238px;
+  height: 8%;
 }
 
 .changeBtn:hover {
   background-color: #004080;
+}
+
+/* 반응형 디자인: 화면이 768px 이하일 때 */
+@media (max-width: 768px) {
+  .group-info {
+    margin-left: 0;
+    margin-top: 30px;
+    gap: 20px;
+  }
+
+  .loginBox {
+    width: 100%;
+    margin-bottom: 40px;
+    max-width: 100%;
+  }
+
+  .loginButton {
+    width: 80%;
+    font-size: 14px;
+  }
+
+  .footerLinks {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .footerLinks a {
+    margin-bottom: 10px;
+  }
+
+  .inputBtn {
+    right: -20px;
+    top: 75%;
+    transform: translateY(-109%);
+    width: 30%;
+  }
+
+  .popup {
+    width: 80%;
+    padding: 30px;
+  }
+
+  .changeBtn {
+    width: 40%;
+    margin-left: 30px;
+    margin-top: 20px;
+  }
+}
+
+/* 반응형 디자인: 화면이 480px 이하일 때 */
+@media (max-width: 480px) {
+  .group-info {
+    margin-left: 0;
+    margin-top: 10px;
+    gap: 10px;
+  }
+
+  .loginBox {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 20px;
+  }
+
+  .loginButton {
+    width: 70%;
+    font-size: 12px;
+  }
+
+  .footerLinks {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .footerLinks a {
+    margin-bottom: 8px;
+  }
+
+  .inputBtn {
+    width: 25%;
+  }
+
+  .popup {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .changeBtn {
+    width: 60%;
+    margin-left: 20px;
+    margin-top: 15px;
+  }
 }
