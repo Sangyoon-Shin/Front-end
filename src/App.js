@@ -7,9 +7,11 @@ import LoginPage from './pages/LoginPage'; // .의 의미: 현재 디렉토리(s
 // 내가속한방 추가
 import RoomPage from './pages/RoomPage';
 
-
 // 게시판 메인 페이지
 import BoardPage from './pages/BoardPage';
+
+// 질문게시판
+import QuestionboardPage from './pages/QuestionboardPage';
 
 // 쪽지방
 import Message from './pages/Message';
@@ -41,9 +43,6 @@ import Announcement from './pages/Announcement';
 // 지민이가 만든 채팅방 페이지
 import ClassChatRoom from './pages/ClassChatRoom'
 import ClassChat from './pages/ClassChat'
-
-// 질문게시판
-import QuestionboardPage from './pages/QuestionboardPage';
 
 function App() {
   return (
