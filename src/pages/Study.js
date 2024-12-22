@@ -20,6 +20,9 @@ const Study = () => {
   const [hashtag, setHashtag] = useState('');
   const [content, setContent] = useState('');
   const [images, setImages] = useState([]);  // 이미지 배열로 수정
+  const [participantCount, setParticipantCount] = useState(0); // 모집인원 상태 추가
+
+  const postData = { title, startDate, endDate, participantCount, hashtag, content };
 
   const handleSubmit = async () => {
     const postData = { title, startDate, endDate, hashtag, content };
@@ -49,6 +52,9 @@ const Study = () => {
     const newImages = files.map(file => URL.createObjectURL(file));
     setImages(newImages);
   };
+
+  
+
 
   return (
     <div className={styles.app}>
@@ -90,6 +96,38 @@ const Study = () => {
       </div>
 
       <div className={styles["input-group"]}>
+  <h2 className={styles["title-text7"]}>모집인원</h2>
+  <div className={styles["participant-input-group"]}>
+    <input
+      className={styles["input"]}
+      type="number"
+      value={participantCount}
+      onChange={(e) => {
+        const value = e.target.value;
+        setParticipantCount(value === '' ? 0 : Math.max(Number(value), 0));
+      }}
+      placeholder="0"
+    />
+    <div className={styles["button-group"]}>
+      <button
+        className={styles["toggle-button"]}
+        onClick={() => setParticipantCount((prev) => Math.max(prev - 1, 0))}
+        disabled={participantCount <= 0}
+      >
+        -
+      </button>
+      <button
+        className={styles["toggle-button"]}
+        onClick={() => setParticipantCount((prev) => prev + 1)}
+      >
+        +
+      </button>
+    </div>
+  </div>
+</div>
+
+
+      <div className={styles["input-group"]}>
         <h2 className={styles["title-text5"]}>해시태그</h2>
         <input
           className={styles["input"]}
@@ -116,7 +154,7 @@ const Study = () => {
           <img key={index} src={imgSrc} alt={`미리보기 ${index + 1}`} className={styles["image-preview"]} />
         ))}
       </div>
-      {/* 이미지 업로드 버튼 */ }
+      {/* 이미지 업로드 버튼 */}
       <div className={styles["image-upload"]}>
         <label htmlFor="image-input">
           <img src={camera} alt="카메라 아이콘" className={styles["camera-icon"]} />
