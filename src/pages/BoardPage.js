@@ -146,6 +146,10 @@ const BoardPage = () => {
     }
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value); // 검색어 상태 업데이트
+  };
+
   const handlePostClick = (postId) => {
     navigate(`/post/${postId}`);  // 해당 게시물 상세 페이지로 이동
   };
@@ -173,21 +177,39 @@ const BoardPage = () => {
     }
   };
 
-  // 정렬 버튼 클릭 시 정렬 상태 업데이트
-  const handleSort = (type) => {
-    setSortType(type);
-    if (type === 'latest') {
-      // 최신순으로 정렬
-      setPosts((prevPosts) =>
-        [...prevPosts].sort((a, b) => new Date(b.date) - new Date(a.date))
-      );
-    } else if (type === 'recommend') {
-      // 추천순으로 정렬 (좋아요 개수 기준)
-      setPosts((prevPosts) =>
-        [...prevPosts].sort((a, b) => b.likes - a.likes)
-      );
+  // 정렬 버튼 클릭 시 호출
+  const handleSort = async (type) => {
+    setSortType(type); // 정렬 상태 업데이트
+
+    try {
+      let url = 'https://ecc6-106-101-130-133.ngrok-free.app/api/board/coding';
+
+      if (type === 'recommend') {
+        // 추천순 정렬 엔드포인트
+        url = 'https://ecc6-106-101-130-133.ngrok-free.app/api/board/coding/sort-by-likes';
+
+      }
+
+      const response = await fetch(url, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('정렬된 데이터를 불러오는데 실패했습니다.');
+      }
+
+      const data = await response.json();
+      setPosts(data.content); // 정렬된 데이터로 게시물 목록 업데이트
+    } catch (error) {
+      console.error('정렬 데이터 로드 중 오류 발생:', error);
+      alert('정렬된 데이터를 가져오는 중 오류가 발생했습니다.');
     }
   };
+  
+
+  
 
   return (
     <div className={styles.container}>
@@ -228,24 +250,22 @@ const BoardPage = () => {
 
         {/* 드롭다운 메뉴 */}
         {menuOpen && (
-          <div
-            className={`${styles.dropdownMenu} ${isDesktop ? styles.desktopDropdownMenu : ''}`}
-          >
+          <div className={`${styles.dropdownMenu} ${isDesktop ? styles.desktopDropdownMenu : ''}`}>
             <div
-              className={`${styles.menuItem} ${isDesktop ? styles.desktopMenuItem : ''}`}
-              onClick={() => handleBoardChange('정보 게시판')}
+              className={`${styles.menuItem} ${isDesktop ? styles["desktopMenuItem"] : ''}`}
+              onClick={() => handleBoardChange('질문 게시판')}
             >
-              정보 게시판
+              질문 게시판
             </div>
           </div>
         )}
 
-        {/* 컨트롤 패널 (글쓰기 버튼, 검색창, 정렬 버튼) */}
-        <div className={`${styles.controlPanel} ${isDesktop ? styles.desktopControlPanel : ''}`}>
+        {/* 컨트롤 패널 */}
+        <div className={`${styles.controlPanel} ${isDesktop ? styles["desktopControlPanel"] : ''}`}>
           {/* 글쓰기 버튼 */}
           <button
-            className={`${styles.writeButton} ${isDesktop ? styles.desktopWriteButton : ''}`}
-            onClick={handleWriteButtonClick} // 동적 동작을 위한 핸들러 연결
+            className={`${styles.writeButton} ${isDesktop ? styles["desktopWriteButton"]: ''}`}
+            onClick={() => navigate('/write')} // 글쓰기 페이지로 이동
           >
             글쓰기
           </button>
@@ -254,8 +274,8 @@ const BoardPage = () => {
           <div className={`${styles.searchBar} ${isDesktop ? styles.desktopSearchBar : ''}`}>
             <input
               type="text"
-              value={searchTerm}
-              onChange={handleSearchInputChange}
+              value={searchTerm} // 상태에서 가져온 검색 키워드
+              onChange={handleSearchChange} // 기존 함수명을 새 함수명으로 교체
               className={`${styles.searchInput} ${isDesktop ? styles.desktopSearchInput : ''}`}
               placeholder="검색어 입력"
             />
@@ -263,26 +283,29 @@ const BoardPage = () => {
               src={SearchIcon}
               className={`${styles.searchIcon} ${isDesktop ? styles.desktopSearchIcon : ''}`}
               alt="검색"
-              onClick={handleSearch} // 돋보기 아이콘 클릭 시 검색
+              onClick={handleSearch} // 검색 버튼 클릭 시 호출
             />
           </div>
 
           {/* 정렬 버튼들 */}
           <div className={`${styles.sortButtons} ${isDesktop ? styles.desktopSortButtons : ''}`}>
             <button
-              className={`${styles.sortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''}`}
-              onClick={() => handleSort('latest')}
+              className={`${styles.latestSortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''} ${sortType === 'latest' ? styles.activeSortButton : ''}`}
+              onClick={() => handleSort('latest')} // handleSort 함수 호출
             >
               최신순
             </button>
+
+            {/* 추천순 정렬 버튼 */}
             <button
-              className={`${styles.sortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''}`}
-              onClick={() => handleSort('recommend')}
+              className={`${styles.recommendSortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''} ${sortType === 'recommend' ? styles.activeSortButton : ''}`}
+              onClick={() => handleSort('recommend')} // handleSort 함수 호출
             >
               추천순
             </button>
           </div>
         </div>
+        
 
         {/* 백엔드 할 때
           <div className={styles.sortButtons}>
