@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
+import axiosInstance from '../utils/api';
 import Header from './_.js';  // 상단바 컴포넌트
 import styles from './InformationCode.module.css';  // InformationCode용 CSS 파일
 import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
@@ -42,26 +43,24 @@ const InformationCode = () => {
     const fetchPosts = async () => {
       setIsLoading(true); // 로딩 시작
       try {
-        const response = await fetch('https://ecc6-106-101-130-133.ngrok-free.app/api/board/coding', {// page와 size 추가
-          // ?page=${page}&size=${size} -> 이거 써야할때 넣어주기
-          headers: {
-            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
-          },
+        const response = await axiosInstance.get('/api/board/coding', {
+          params: { page, size }, // 페이지와 사이즈를 쿼리 파라미터로 추가
         });
 
-        if (!response.ok) {
-          throw new Error('게시물 목록을 불러오는데 실패했습니다.');
-        }
-
-        const data = await response.json();
+        const data = response.data; // Axios는 자동으로 JSON을 파싱합니다.
         setPosts(data.content); // 게시물 데이터 설정
         setTotalPages(data.totalPages); // 전체 페이지 수 설정
         console.log(data);
 
-        // 데이터 가공 후 상태 업데이트
-        setPosts(data.content); // `content` 배열만 저장
+        if (!data.content || data.content.length === 0) {
+          console.warn('게시물이 없습니다.');
+          return;
+        }
+        
+
       } catch (error) {
         console.error('게시물 목록을 불러오는 중 오류가 발생했습니다:', error);
+        alert('게시물 데이터를 불러오는데 문제가 발생했습니다. 다시 시도해주세요.');
       } finally {
         setIsLoading(false); // 로딩 종료
       }
@@ -71,9 +70,25 @@ const InformationCode = () => {
   }, [page, size]); // page와 size 변경 시 재호출
 
   // 페이지 번호 변경 시 호출
-  const handlePageChange = (pageNumber) => {
+  const handlePageChange = async (pageNumber) => {
     setPage(pageNumber); // 페이지 번호 업데이트
+
+    try {
+      const response = await axiosInstance.get('/coding', {
+        params: {
+          page: pageNumber,
+          size: 10,
+        },
+      });
+
+      const data = response.data;
+      setPosts(data.content); // 새로운 페이지 데이터로 업데이트
+      setTotalPages(data.totalPages); // 전체 페이지 수 업데이트
+    } catch (error) {
+      console.error('페이지 변경 중 오류 발생:', error);
+    }
   };
+
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);  // 드롭다운 토글
@@ -84,45 +99,25 @@ const InformationCode = () => {
     setMenuOpen(false); // 메뉴 닫기
 
     try {
-      // 언어별 게시물 필터링
-      const response = await fetch(
-        `https://ecc6-106-101-130-133.ngrok-free.app/api/board/coding?typeKeyword=${encodeURIComponent(language)}`,
-        {
-          headers: {
-            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
-          },
-        }
-      );
+      const response = await axiosInstance.get('/coding', {
+        params: {
+          typeKeyword: language, // 선택된 언어 전달
+          page: 0,
+          size: 10,
+        },
+      });
 
-      if (!response.ok) {
-        throw new Error('언어별 게시물을 불러오는데 실패했습니다.');
-      }
-
-      const data = await response.json();
-      console.log('언어별 필터링 데이터:', data);
-
-      setPosts(data.content); // API 응답 데이터의 `content` 필드만 설정
+      const data = response.data;
+      setPosts(data.content); // 필터링된 게시물 업데이트
     } catch (error) {
       console.error('언어별 게시물 필터링 중 오류 발생:', error);
     }
   };
 
+
   const toggleScrap = async (id) => {
     try {
-      // 백엔드에 스크랩 상태를 업데이트하는 요청 보내기
-      const response = await fetch(
-        `https://ecc6-106-101-130-133.ngrok-free.app/api/board/coding/${id}/scrap`, // 명세서에 따른 엔드포인트
-        {
-          method: 'POST', // POST 메서드 사용
-          headers: {
-            'ngrok-skip-browser-warning': 'true', // 경고 페이지 우회
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('스크랩 상태 업데이트에 실패했습니다.');
-      }
+      const response = await axiosInstance.post(`/coding/${id}/scrap`);
 
       // 성공적으로 응답을 받은 경우 상태를 업데이트
       setScrapStatus((prevState) => ({
@@ -144,20 +139,15 @@ const InformationCode = () => {
     if (searchTerm.trim() !== '') {
       try {
         console.log(`검색어: ${searchTerm}`);
-        const response = await fetch(
-          `https://ecc6-106-101-130-133.ngrok-free.app/api/board/coding?searchKeyword=${encodeURIComponent(searchTerm)}`,
-          {
-            headers: {
-              'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
-            },
-          }
-        );
+        const response = await axiosInstance.get('/coding', {
+          params: {
+            searchKeyword: searchTerm, // 검색어 전달
+            page: 0,
+            size: 10,
+          },
+        });
 
-        if (!response.ok) {
-          throw new Error('검색 결과를 불러오는데 실패했습니다.');
-        }
-
-        const data = await response.json();
+        const data = response.data;
         console.log('검색 결과:', data);
 
         // 검색 결과를 게시물 목록으로 업데이트 (명세서에 따른 구조 반영)
@@ -189,25 +179,18 @@ const InformationCode = () => {
     setSortType(type); // 정렬 상태 업데이트
 
     try {
-      let url = 'https://ecc6-106-101-130-133.ngrok-free.app/api/board/coding';
+      const params = {
+        page: 0,
+        size: 10,
+      };
 
+      // 정렬 방식에 따라 추가 파라미터 설정
       if (type === 'recommend') {
-        // 추천순 정렬 엔드포인트
-        url = 'https://ecc6-106-101-130-133.ngrok-free.app/api/board/coding/sort-by-likes';
-
+        params.sortBy = 'likes'; // API 명세에 따라 변경 필요
       }
 
-      const response = await fetch(url, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('정렬된 데이터를 불러오는데 실패했습니다.');
-      }
-
-      const data = await response.json();
+      const response = await axiosInstance.get('/coding', { params });
+      const data = response.data;
       setPosts(data.content); // 정렬된 데이터로 게시물 목록 업데이트
     } catch (error) {
       console.error('정렬 데이터 로드 중 오류 발생:', error);

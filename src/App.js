@@ -31,14 +31,16 @@ import InformationContest from './pages/InformationContest';
 // 대회 글쓰기
 import ContestWrite from './pages/ContestWrite';
 
-// 석진이형 페이지
-import NoticeBoard from './pages/NoticeBoard';
-
 // 알림페이지
 import AlarmPage from './pages/AlarmPage';
 
 // 공지사항
 import Announcement from './pages/Announcement';
+
+
+
+// 석진이형 페이지
+import NoticeBoard from './pages/NoticeBoard';
 
 // 지민이가 만든 채팅방 페이지
 import ClassChatRoom from './pages/ClassChatRoom'
@@ -54,6 +56,7 @@ function App() {
         <Route path="/RoomPage" element={<RoomPage />} />
         <Route path="/BoardPage" element={<BoardPage />} />
         <Route path="/Message" element={<Message />} />
+        <Route path="/chatroom/:id" element={<ChatRoom />} /> {/* 동적 라우팅을 통한 채팅방 페이지 */}
         <Route path="/InformationCode" element={<InformationCode />} /> {/* InformationCode 라우트 추가 */}
         <Route path="/QuestionCode" element={<QuestionCode />} />
         <Route path="/InformationContest" element={<InformationContest />} />
@@ -65,15 +68,9 @@ function App() {
         <Route path="/QuestionboardPage" element={<QuestionboardPage />} />
 
 
-
-
-
-
         {/* 석진이 형 페이지*/}
 
         <Route path="/Notice" element={<NoticeBoard />} />
-
-        <Route path="/chatroom/:id" element={<ChatRoom />} /> {/* 동적 라우팅을 통한 채팅방 페이지 */}
 
       </Routes>
     </BrowserRouter>
