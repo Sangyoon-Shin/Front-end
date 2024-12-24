@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'; // 라우팅 �
 import StartPage from './pages/StartPage'
 import _ from './pages/_'
 import LoginPage from './pages/LoginPage'
+
+
 import HomePage from './pages/HomePage'
 
 import RoomPage from './pages/RoomPage'
@@ -14,14 +16,13 @@ import ChatPreview from './pages/ChatPreview'
 import Otherprofile from './pages/Otherprofile'
 import { UserProvider } from './pages/UserContext'; //유저 프로필
 import User_auth from './pages/User_auth'
-
-
 import Chat from './pages/Chat'
-
 
 import G_HomePage from './pages/G_HomePage'
 
 
+
+import Home from './pages/Home'
 
 
 
@@ -60,6 +61,9 @@ function App() {
             <Route path="/G_HomePage" element={<G_HomePage />} />
 
             <Route path="/Chat/" element={<Chat />} />
+
+            
+            <Route path="/Home/" element={<Home />} />
 
     </Routes>
     </BrowserRouter>

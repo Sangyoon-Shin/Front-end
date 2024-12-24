@@ -1,9 +1,10 @@
+//메인페이지 기존 코드
+
 /*import React from 'react';*/
 
-import React, { useState, useEffect } from 'react'; // 이 라인이 빠져 있을 수 있습니다.
-
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import styles from "./HomePage.module.css";
+import styles from "./Home.module.css";
 
 import main_mascot from '../images/대학 심볼 횃불이.png';  // 로고 이미지 불러오기
 import main_bell from '../images/bell.png';  // 로고 이미지 불러오기
@@ -14,78 +15,29 @@ import competitionImage2 from '../images/com2.png'; // 대회 이미지 2 (추�
 import competitionImage3 from '../images/com3.png'; // 대회 이미지 3 (추가)
 import PlusButton from '../assets/MoreButton'; // 플러스 버튼 컴포넌트 import
 
+import Icon1 from '../images/하트이모지.png';  // 방 1의 아이콘
+import Icon2 from '../images/눈이모지.png';   // 방 2의 아이콘
+import Icon3 from '../images/폭죽이모지.png'; // 방 3의 아이콘
+
 import S_cute from '../assets/S_cuteButton'; //스크랩
 
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
 
 
 
-import {  fetchFreeBoardData, fetchQuestBoardData, fetchCompetitionBoardData,fetchCodingBoardData, fetchStudyBoardData } from '../api/boardApi'; //Api
-//fetchMainPageData,
-const HomePage = () => {
-  const navigate = useNavigate(); // useNavigate 훅 선언-> 최상단에 호출
+
+const Home = () => {
+
   //Api..
-
-  
-  const [freeBoardData, setFreeBoardData] = useState([]);//자유게시판
-  //const [mainPageData, setMainPageData] = useState([]);
-  const [questBoardData, setQuestBoardData] = useState([]);//질문게시판
-  const [competitionBoardData, setCompetitionBoardData] = useState([]); //대회 게시판
-  const [codingBoardData, setCodingBoardData] = useState([]); // 코딩 게시판
-  const [studyBoardData, setStudyBoardData] = useState({ // 스터디 게시판
-    bootcampStudies: [],
-    industryStudies: [],
-    regularStudies: [],
-}); 
-
-
-const [loading, setLoading] = useState(true);
-const [error, setError] = useState(null);
-
-  // 반응형 페이지 처리를 위한 useMediaQuery 사용
-  const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
-
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const [freeData, questData, ComData, codingData, studyData,] = await Promise.all([//mainData, 
-         // fetchMainPageData(),
-          fetchFreeBoardData(),
-          fetchQuestBoardData(),
-          fetchCompetitionBoardData(),
-          fetchCodingBoardData(),
-          fetchStudyBoardData(),
-        ]);
-
-        //setMainPageData(mainData);
-        setFreeBoardData(freeData);
-        setQuestBoardData(questData);
-        setCompetitionBoardData(ComData);
-        setCodingBoardData(codingData);
-        setStudyBoardData(studyData);
-
-
-      } catch (err) {
-        setError('Failed to load data.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
-  }, []);
-
-
-
-  //여기까지 Api..
 
 
   const [dropdownVisible, setDropdownVisible] = useState(false);  // 드롭다운 상태 관리
   const [activeTab, setActiveTab] = useState('정보게시판'); // Default active tab
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false); //logout
+  const navigate = useNavigate(); // useNavigate 훅 선언
 
-
+ // 반응형 페이지 처리를 위한 useMediaQuery 사용
+ const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
 
   // 질문 항목 클릭 시 이동할 링크
   const handleQuestionClick = (questionId) => {
@@ -112,10 +64,22 @@ const [error, setError] = useState(null);
     setIsLogoutModalOpen(false);
   };
 
-//이 밑 2줄도 Api (위에 배치할 시 오류나기도 함)
-  
-  if (loading) return <p>Loading...</p>; // 로딩 상태 표시
-  if (error) return <p>{error}</p>; // 에러 메시지 표시
+  //소통방
+    // 방 ID에 맞는 페이지로 이동하기
+    const handleRoomClick = (path) => {
+        navigate(`/${path}`);  // 방 ID에 맞는 페이지로 이동
+      };
+
+      const roomsData = [
+        { id: 1, title: '내가 속한 방 제목 1', lastMessage: '마지막 내용', icon: Icon1, selected: false },
+        { id: 2, title: '내가 속한 방 제목 2', lastMessage: '마지막 내용', icon: Icon2, selected: false },
+        { id: 3, title: '내가 속한 방 제목 3', lastMessage: '마지막 내용', icon: Icon3, selected: false },
+      ];
+
+
+  const [rooms, setRooms] = useState(roomsData);
+
+
 
 
 {/*
@@ -149,39 +113,32 @@ const [error, setError] = useState(null);
 
           {/* 코드 정보 섹션 */}
 
-          <div className={styles.container}>
-          <div className={styles.infoheader}>
-               <h2 className={styles.comtext}>코드 질문</h2>
-               <a href="/new-link" className={styles.plusButtonLink}>
-                    <PlusButton className={styles.plusButton} />
-               </a>
-          </div>
 
-          {/* 코딩 게시판 상위 2개 게시물 리스트 */}
-          <div className={styles.postList}>
-               {codingBoardData.slice(0, 2).map((post) => (  // 상위 2개 게시물만 렌더링
-                    <div
-                         key={post.id}
-                         className={styles.postItem}
-                         onClick={() => handleQuestionClick(post.id)} // 게시물 클릭 시 상세 페이지로 이동
-                    >
-                         <span className={styles.index}>{codingBoardData.indexOf(post) + 1}</span>
-                         <span className={styles.question}>{post.codingTitle || '제목 없음'}</span>
-                         <span className={styles.date}>
-                              {new Date(post.codingCreatedTime).toLocaleDateString()}
-                         </span>
-                         {/* 첨부파일이 있으면 이미지로 표시 */}
-                         {post.fileAttached === 1 && post.storedFileName && (
-                              <img
-                                   src={`path/to/images/${post.storedFileName[0]}`}  // 이미지 경로 맞게 수정
-                                   alt="Coding Image"
-                                   className={styles.codingImage}
-                              />
-                         )}
-                    </div>
-               ))}
-          </div>
-     </div>
+    <div className={styles.container}>
+      <div className={styles.infoheader}>
+      <h2 className={styles.comtext}>코드 질문</h2>
+        <a href="/new-link" className={styles.plusButtonLink}>
+          <PlusButton className={styles.plusButton} />
+        </a>
+      </div>
+      
+
+      <div className={styles.postList}>
+        <div className={styles.postItem} onClick={() => handleQuestionClick(1)}>
+          <span className={styles.index}>1</span>
+          <span className={styles.question}>[C언어] 정렬 오류</span>
+          <span className={styles.date}>2024.01.01</span>
+          <S_cute className={styles.S_cute} />
+        </div>
+
+        <div className={styles.postItem} onClick={() => handleQuestionClick(2)}>
+          <span className={styles.index}>2</span>
+          <span className={styles.question}>[JS] 런타임 에러</span>
+          <span className={styles.date}>2024.01.01</span>
+          <S_cute className={styles.S_cute} />
+        </div>
+      </div>
+    </div>
 
 
 
@@ -214,119 +171,48 @@ const [error, setError] = useState(null);
 
 
 
+
     <div className={styles.container}>
-          <div className={styles.infoheader}>
-               <h2 className={styles.comtext}>자기 개발</h2>
-               <a href="/self-development" className={styles.plusButtonLink}>
-                    <PlusButton className={styles.plusButton} />
-               </a>
-          </div>
+      <div className={styles.infoheader}>
+      <h2 className={styles.comtext}>자기 개발</h2>
+        <a href="/self-development" className={styles.plusButtonLink}>
+          <PlusButton className={styles.plusButton} />
+        </a>
+      </div>
+      
 
-          {/* 스터디 게시판 각 카테고리별 상위 1개 게시물 */}
-          <div className={styles.postList}>
-               <div className={styles.postItem} onClick={() => handleQuestionClick(studyBoardData.bootcampStudies[0]?.id)}>
-                    <span className={styles.index}>1</span>
-                    <span className={styles.question}>
-                         {studyBoardData.bootcampStudies[0]?.studyTitle || '제목 없음'}
-                    </span>
-                    <span className={styles.date}>
-                         {studyBoardData.bootcampStudies[0]?.studyCreatedTime
-                              ? new Date(studyBoardData.bootcampStudies[0]?.studyCreatedTime).toLocaleDateString()
-                              : 'N/A'}
-                    </span>
-                    <S_cute className={styles.S_cute} />
-               </div>
+      <div className={styles.postList}>
+        <div className={styles.postItem} onClick={() => handleQuestionClick(1)}>
+          <span className={styles.index}>1</span>
+          <span className={styles.question}>[부트 캠프] SSAFY</span>
+          <span className={styles.date}>2024.01.01</span>
+          <S_cute className={styles.S_cute} />
+        </div>
 
-               <div className={styles.postItem} onClick={() => handleQuestionClick(studyBoardData.industryStudies[0]?.id)}>
-                    <span className={styles.index}>2</span>
-                    <span className={styles.question}>
-                         {studyBoardData.industryStudies[0]?.studyTitle || '제목 없음'}
-                    </span>
-                    <span className={styles.date}>
-                         {studyBoardData.industryStudies[0]?.studyCreatedTime
-                              ? new Date(studyBoardData.industryStudies[0]?.studyCreatedTime).toLocaleDateString()
-                              : 'N/A'}
-                    </span>
-                    <S_cute className={styles.S_cute} />
-               </div>
+        <div className={styles.postItem} onClick={() => handleQuestionClick(2)}>
+          <span className={styles.index}>2</span>
+          <span className={styles.question}>[산업 연계] CJ 클라우드 네트워크스</span>
+          <span className={styles.date}>2024.01.01</span>
+          <S_cute className={styles.S_cute} />
+        </div>
 
-               <div className={styles.postItem} onClick={() => handleQuestionClick(studyBoardData.regularStudies[0]?.id)}>
-                    <span className={styles.index}>3</span>
-                    <span className={styles.question}>
-                         {studyBoardData.regularStudies[0]?.studyTitle || '제목 없음'}
-                    </span>
-                    <span className={styles.date}>
-                         {studyBoardData.regularStudies[0]?.studyCreatedTime
-                              ? new Date(studyBoardData.regularStudies[0]?.studyCreatedTime).toLocaleDateString()
-                              : 'N/A'}
-                    </span>
-                    <S_cute className={styles.S_cute} />
-               </div>
-          </div>
-     </div>
+        <div className={styles.postItem} onClick={() => handleQuestionClick(3)}>
+          <span className={styles.index}>3</span>
+          <span className={styles.question}>[스터디 모집] 운영체제 스터디 모집</span>
+          <span className={styles.date}>2024.01.01</span>
+          <S_cute className={styles.S_cute} />
+        </div>
+
+      </div>
+    </div>
+
+
 
           </>
         );
-
-   // Handle other tabs here
-   case '자유 게시판':
-     return (
-       <div className={styles.container}>
-         {/* 자유 게시판 */}
-         <div className={styles.infoheader}>
-           <h2 className={styles.comtext}>자유 게시판</h2>
-           <a href="/self-development" className={styles.plusButtonLink}>
-             <PlusButton className={styles.plusButton} />
-           </a>
-         </div>
-
-         {/* 자유 게시판 리스트 (상위 3개 게시물) */}
-         <div className={styles.postList}>
-           {freeBoardData.slice(0, 3).map((post) => (
-             // 상위 3개 게시물만 렌더링
-             <div
-               key={post.id}
-               className={styles.postItem}
-               onClick={() => handleQuestionClick(post.id)} // 클릭 시 상세 페이지로 이동
-             >
-               <span className={styles.index2}>HOT</span>
-               <span className={styles.question}>{post.freeTitle}</span>
-               <span className={styles.date}>{new Date(post.freeCreatedTime).toLocaleDateString()}</span>
-               <S_cute className={styles.S_cute} />
-             </div>
-           ))}
-         </div>
-
-         {/* 질문 게시판 */}
-         <div className={styles.infoheader}>
-           <h2 className={styles.comtext}>질문 게시판</h2>
-           <a href="/self-development" className={styles.plusButtonLink}>
-             <PlusButton className={styles.plusButton} />
-           </a>
-         </div>
-
-         {/* 질문 게시판 리스트 (상위 3개 게시물) */}
-         <div className={styles.postList}>
-           {questBoardData.slice(0, 3).map((post) => (
-             // 상위 3개 게시물만 렌더링
-             <div
-               key={post.id}
-               className={styles.postItem}
-               onClick={() => handleQuestionClick(post.id)} // 클릭 시 상세 페이지로 이동
-             >
-               <span className={styles.index2}>HOT</span>
-               <span className={styles.question}>{post.questTitle}</span>
-               <span className={styles.date}>{new Date(post.questCreatedTime).toLocaleDateString()}</span>
-               <S_cute className={styles.S_cute} />
-             </div>
-           ))}
-         </div>
-       </div>
-     );
-   
-      case '소통 채팅방':
+      // Handle other tabs here
+      case '자유 게시판':
         return (
-    
           <>
  
  
@@ -402,8 +288,34 @@ const [error, setError] = useState(null);
 
             
           </>
-       
+        );case '소통 채팅방':
+        return (
+          
+    <>
+    {/* 방 목록 */}
+    <div className={styles.roomsList}>
+      {rooms.map((room) => (
+        <div
+          key={room.id}
+          className={`${styles.roomItem} ${room.selected ? styles.selected : ''}`}
+        >
+          <img src={room.icon} alt={`방 아이콘 ${room.id}`} className={styles.roomIcon} /> {/* 아이콘 추가 */}
+          <div className={styles.roomInfo}>
+            <div className={styles.roomTitle}>{room.title}</div>
+            <div className={styles.roomMessage}>{room.lastMessage}</div>
+          </div>
+          <button
+                      className={styles.joinButton}
+                      onClick={() => handleRoomClick(room.id)}
+                    >
+                      참여하기
+                    </button>
+        </div>
+      ))}
+    </div>
+    </>
         );
+      
       default:
         return null;
     }
@@ -479,30 +391,25 @@ const [error, setError] = useState(null);
   
       {/* 대회 정보 부분 */}
       <div className={`${styles.comheader} ${isDesktop ? styles.desktopComHeader : ''}`}>
-            <h2 className={styles.comtext}>대회 정보</h2>
-            <a href="/com" className={styles.plusButtonLink}>
-                  <PlusButton className={styles.plusButton} />
-            </a>
+        <h2 className={styles.comtext}>대회 정보</h2>
+        <a href="/com" className={styles.plusButtonLink}>
+          <PlusButton className={styles.plusButton} />
+        </a>
       </div>
-
-      {/* 대회 정보 리스트 (상위 3개 게시물) */}
+  
+      {/* 대회 정보 이미지 부분 */}
       <div className={`${styles.competitions} ${isDesktop ? styles.desktopCompetitions : ''}`}>
-            {competitionBoardData.slice(0, 3).map((post) => (  // 상위 3개 게시물만 렌더링
-                  <div key={post.id} className={styles.competitionItem}>
-                        <span className={styles.index2}>HOT</span>
-                        <span className={styles.competitionTitle}>{post.competitionTitle}</span>
-                        <span className={styles.date}>{new Date(post.competitionCreatedTime).toLocaleDateString()}</span>
-                        {post.fileAttached === 1 && post.storedFileName.length > 0 && (
-                              <img
-                                    src={`path/to/images/${post.storedFileName[0]}`}  // 파일 경로에 맞게 수정
-                                    alt="Competition Image"
-                                    className={styles.competitionImage}
-                              />
-                        )}
-                  </div>
-            ))}
+        <a className={styles.competitionItem} href="https://example.com/competition1" target="_blank" rel="noopener noreferrer">
+          <img src={competitionImage1} className={styles.competitionImage} alt="대회 1" />
+        </a>
+        <a className={styles.competitionItem} href="https://example.com/competition2" target="_blank" rel="noopener noreferrer">
+          <img src={competitionImage2} className={styles.competitionImage} alt="대회 2" />
+        </a>
+        <a className={styles.competitionItem} href="https://example.com/competition3" target="_blank" rel="noopener noreferrer">
+          <img src={competitionImage3} className={styles.competitionImage} alt="대회 3" />
+        </a>
       </div>
-
+  
       {/* 탭 네비게이션 */}
       <div className={`${styles.tabContainer} ${isDesktop ? styles.desktopTabContainer : ''}`}>
         <button
@@ -544,4 +451,4 @@ const [error, setError] = useState(null);
   );
 };
 
-export default HomePage;
+export default Home;
