@@ -1,34 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './My_board.module.css';
 import Header from './_.js'; // 상단바 컴포넌트
 import arrow from '../images/arrow.png';
 import bar from '../images/bar.png';
-import IconScrap from '../images/횃불이스크랩.png';
-import IconUnscrap from '../images/횃불이스크랩X.png';
 import menuIcon from '../images/메뉴버튼.png';
 
 const My_board = () => {
 
     const navigate = useNavigate();
-    // const [messages, setMessages] = useState([]); // 메시지 목록 상태 관리 
     const [visibleMessages, setVisibleMessages] = useState(4); // 처음에는 4개의 메시지만 표시
+    const [messages, setMessages] = useState([]); // 메시지 목록 상태 관리 
+
     // 방 클릭 시 해당 채팅방으로 이동하는 함수
     const handleRoomClick = (id) => {
         navigate(`/chatroom/${id}`); // 방 ID를 기반으로 동적 경로로 이동
     };
-    
-    // 하드코딩된 방 목록 (백엔드 연동 시 주석 처리)
-    const [messages, setMessages] = useState([
-        { id: 1, username: 'char1', title: '글 제목 1', lastMessage: '마지막 내용 1' },
-        { id: 2, username: 'char4', title: '글 제목 2', lastMessage: '마지막 내용 2' },
-        { id: 3, username: 'float2', title: '글 제목 3', lastMessage: '마지막 내용 3' },
-        { id: 4, username: 'int2', title: '글 제목 4', lastMessage: '마지막 내용 4' },
-        { id: 5, username: 'char3', title: '글 제목 5', lastMessage: '마지막 내용 5' },
-    ]); // 하드코딩된 메시지 목록
-    
 
-    
+    // 백엔드에서 메시지 목록을 받아오는 함수
+    useEffect(() => {
+        const fetchMessages = async () => {
+            try {
+                const response = await fetch('https://bcefb2d9d162.ngrok.app/api/mypage/my-posts', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IjIwMjIwMTY1OSIsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzM1MTk1MjU3LCJleHAiOjE3Mzg0MzUyNTd9.swBkh1kaXDEzW04G04llXKt-hB2B8c1XvuXpjuQbv3o', // 실제 토큰으로 변경
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // data.codings 배열에서 필요한 정보만 추출하여 상태에 저장
+                    const extractedMessages = data.codings.map(item => ({
+                        id: item.id,
+                        userID: item.userID,
+                        codingTitle: item.codingTitle,
+                        codingCreatedTime: item.codingCreatedTime,
+                    }));
+                    setMessages(extractedMessages); // 필요한 데이터만 상태에 저장
+                } else {
+                    console.error('메시지 목록을 가져오는 데 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('API 호출 중 오류 발생:', error);
+            }
+        };
+
+        fetchMessages();
+    }, []);
 
     // 더보기 버튼 클릭 시 화면에 보이는 메시지 수를 증가시키는 함수
     const handleLoadMore = () => {
@@ -81,10 +102,10 @@ const My_board = () => {
                     >
                         <div className={styles.messageInfo}>
                             <div className={styles.headerInfo}>
-                                <span className={styles.nickname}>{message.username}</span>
-                                <span className={styles.title}>{message.title}</span>
+                                <span className={styles.nickname}>{message.userID}</span>
+                                <span className={styles.title}>{message.codingTitle || '제목 없음'}</span>
                             </div>
-                            <span className={styles.lastMessage}>{message.lastMessage}</span>
+                            <span className={styles.Time}>{new Date(message.codingCreatedTime).toLocaleString()}</span>
                         </div>
                         <img
                             src={menuIcon}
@@ -131,7 +152,6 @@ const My_board = () => {
                 </div>
             )}
         </div>
-
     );
 };
 
