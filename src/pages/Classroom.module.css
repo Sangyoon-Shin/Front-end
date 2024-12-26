@@ -219,12 +219,6 @@
     cursor: pointer;
   }
   
-  .floor {
-    font-size: 16px;
-    color: #007bff;
-    cursor: pointer;
-  }
-  
   .activeFloor {
     font-weight: bold;
     text-decoration: underline;
@@ -236,7 +230,8 @@
     justify-content: space-between;
     padding: 20 50px;
     margin-bottom: 10px;
-    width: 100%;
+    width: 90%;
+    margin-left:30px;
   }
   
   .timeLabel {
@@ -252,14 +247,6 @@
     justify-content: space-between;
     margin: 0 20px;
     width: 100%;
-  }
-  
-  .timeSlot {
-    width: 10%;
-    height: 20px;
-    background-color: #ccc;
-    cursor: pointer;
-    transition: background-color 0.3s;
   }
   
   .available {
