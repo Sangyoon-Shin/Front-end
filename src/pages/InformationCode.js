@@ -23,6 +23,7 @@ const InformationCode = () => {
   const [sortType, setSortType] = useState('latest'); // 초기 정렬 상태는 'latest'
   const [selectedLanguage, setSelectedLanguage] = useState('전체'); // 선택된 언어 필터
 
+
   // 페이징 및 추가 필터링 상태
   const [page, setPage] = useState(0); // 현재 페이지 번호
   const [size, setSize] = useState(10); // 페이지당 항목 수
@@ -43,21 +44,24 @@ const InformationCode = () => {
     const fetchPosts = async () => {
       setIsLoading(true); // 로딩 시작
       try {
-        const response = await axiosInstance.get('/api/board/coding', {
+        const response = await axiosInstance.get('https://e937-106-101-137-133.ngrok-free.app/api/board/coding', {
           params: { page, size }, // 페이지와 사이즈를 쿼리 파라미터로 추가
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+          },
         });
 
         const data = response.data; // Axios는 자동으로 JSON을 파싱합니다.
-        setPosts(data.content); // 게시물 데이터 설정
-        setTotalPages(data.totalPages); // 전체 페이지 수 설정
-        console.log(data);
 
         if (!data.content || data.content.length === 0) {
           console.warn('게시물이 없습니다.');
+          setPosts([]); // 빈 데이터로 상태 초기화
           return;
         }
-        
 
+        setPosts(data.content); // 게시물 데이터 설정
+        setTotalPages(data.totalPages); // 전체 페이지 수 설정
+        console.log('게시물 데이터:', data);
       } catch (error) {
         console.error('게시물 목록을 불러오는 중 오류가 발생했습니다:', error);
         alert('게시물 데이터를 불러오는데 문제가 발생했습니다. 다시 시도해주세요.');
@@ -69,15 +73,19 @@ const InformationCode = () => {
     fetchPosts();
   }, [page, size]); // page와 size 변경 시 재호출
 
+
   // 페이지 번호 변경 시 호출
   const handlePageChange = async (pageNumber) => {
     setPage(pageNumber); // 페이지 번호 업데이트
 
     try {
-      const response = await axiosInstance.get('/coding', {
+      const response = await axiosInstance.get('https://e937-106-101-137-133.ngrok-free.app/api/board/coding', {
         params: {
           page: pageNumber,
           size: 10,
+        },
+        headers: {
+          'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
         },
       });
 
@@ -99,11 +107,14 @@ const InformationCode = () => {
     setMenuOpen(false); // 메뉴 닫기
 
     try {
-      const response = await axiosInstance.get('/coding', {
+      const response = await axiosInstance.get('https://e937-106-101-137-133.ngrok-free.app/api/board/coding', {
         params: {
           typeKeyword: language, // 선택된 언어 전달
           page: 0,
           size: 10,
+        },
+        headers: {
+          'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
         },
       });
 
@@ -117,7 +128,12 @@ const InformationCode = () => {
 
   const toggleScrap = async (id) => {
     try {
-      const response = await axiosInstance.post(`/coding/${id}/scrap`);
+      const response = await axiosInstance.post(`https://e937-106-101-137-133.ngrok-free.app/api/board/coding/${id}/scrap`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+        },
+
+      });
 
       // 성공적으로 응답을 받은 경우 상태를 업데이트
       setScrapStatus((prevState) => ({
@@ -139,11 +155,14 @@ const InformationCode = () => {
     if (searchTerm.trim() !== '') {
       try {
         console.log(`검색어: ${searchTerm}`);
-        const response = await axiosInstance.get('/coding', {
+        const response = await axiosInstance.get('https://e937-106-101-137-133.ngrok-free.app/api/board/coding', {
           params: {
             searchKeyword: searchTerm, // 검색어 전달
             page: 0,
             size: 10,
+          },
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
           },
         });
 
@@ -182,15 +201,25 @@ const InformationCode = () => {
       const params = {
         page: 0,
         size: 10,
+        searchKeyword: '', // 필요 시 값 설정
+        contentKeyword: '', // 필요 시 값 설정
+        hashtagKeyword: '', // 필요 시 값 설정
+        typeKeyword: '', // 필요 시 값 설정
       };
+      
+      const response = await axiosInstance.get('https://e937-106-101-137-133.ngrok-free.app/api/board/coding/sort-by-likes',{
+        params,
+        headers: {
+          'ngrok-skip-browser-warning': 'true', // 필요 시 유지
+        },
+      });
 
-      // 정렬 방식에 따라 추가 파라미터 설정
-      if (type === 'recommend') {
-        params.sortBy = 'likes'; // API 명세에 따라 변경 필요
-      }
-
-      const response = await axiosInstance.get('/coding', { params });
       const data = response.data;
+
+      if (!data || !data.content) {
+        throw new Error('API 응답이 올바르지 않습니다.');
+      }
+      
       setPosts(data.content); // 정렬된 데이터로 게시물 목록 업데이트
     } catch (error) {
       console.error('정렬 데이터 로드 중 오류 발생:', error);

@@ -2,20 +2,20 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-.content {
-    margin-top: -590px;
+  }
+  
+  .content {
+    margin-top: 20px;
     /* 상단바도 하나의 그룹이라 내가 원하는 항목 만들면 아래로 밀림.*/
     padding: 20px;
-    background-color: #f5f5f5;
+    background-color: white;
     /* 배경색 설정 */
     height: 100vh;
     overflow-y: auto;
     /* 스크롤 가능 */
-}
-
-.pageTitle {
+  }
+  
+  .pageTitle {
     margin-top: -200px;
     font-size: 1.3rem;
     text-align: center;
@@ -25,10 +25,10 @@
     left: 50%;
     transform: translateX(-50%);
     /* 제목을 정확히 중앙으로 이동 */
-}
-
-
-.roomsList {
+  }
+  
+  
+  .roomsList {
     margin-top: -20px;
     position: absolute;
     left: 50px;
@@ -36,9 +36,9 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-}
-
-.roomItem {
+  }
+  
+  .roomItem {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -47,84 +47,85 @@
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-/*
+  }
+  
+  /*
   .roomItem:hover {
     background-color: #f0f0f0;
   }
   */
-
-.selected {
+  
+  .selected {
     background-color: #d0e6ff;
-}
-
-.roomTitle {
-    font-size: 1.2rem;
+  }
+  
+  .roomTitle {
+    font-size: 1rem;
     font-weight: bold;
-}
-
-.roomMessage {
+  }
+  
+  .roomMessage {
     font-size: 0.9rem;
     color: #555;
-}
-
-.actionButton {
+  }
+  
+  .actionButton {
     padding: 5px 10px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-
-.actionButton:hover {
+  }
+  
+  
+  .actionButton:hover {
     background-color: #0056b3;
-}
-
-
-.footer {
+  }
+  
+  
+  .footer {
     margin-top: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.leaveButton {
+  }
+  
+  .leaveButton {
     background-color: #ff6666;
     color: white;
     padding: 10px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-}
-
-.leaveButton:hover {
+  }
+  
+  .leaveButton:hover {
     background-color: #ff3333;
-}
-
-.titleContainer {
+  }
+  
+  .titleContainer {
     display: flex;
     justify-content: space-between;
     /* 화살표는 왼쪽, 제목은 중앙 */
     align-items: center;
     width: 100%;
     position: relative;
-
+  
     /* 위 아래 공백 추가 */
     padding-bottom: 10%;
-    padding-top: 5%;
-}
-
-.goBackButton {
+    padding-top:10%;
+  }
+  
+  .goBackButton {
     cursor: pointer;
     margin-left: 10px;
     margin-top: -40px;
-    height: 1.5rem;
-}
-
-.menuButton {
+    height: 2rem;
+    width:auto;
+  }
+  
+  .menuButton {
     cursor: pointer;
     height: 2rem;
     position: absolute;
@@ -134,15 +135,15 @@
     /* 오른쪽에서 30px 떨어진 위치로 설정 */
     transform: translateY(-120%);
     /* 버튼을 상단바 중앙에 수직 정렬 */
-}
-
-.menuWrapper {
+  }
+  
+  .menuWrapper {
     position: relative;
-}
-
-.dropdownMenu {
+  }
+  
+  .dropdownMenu {
     position: absolute;
-    top: 11.8rem;
+    top: 9rem;
     /* 버튼 아래에 위치 */
     margin-right: 2rem;
     right: 0;
@@ -152,44 +153,44 @@
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 100;
     /* 다른 요소 위에 보이게 */
-}
-
-.menuItem {
+  }
+  
+  .menuItem {
     padding: 10px;
     cursor: pointer;
     border-bottom: 1px solid #ddd;
-}
-
-.menuItem:hover {
+  }
+  
+  .menuItem:hover {
     background-color: #f5f5f5;
-}
-
-.menuItem:last-child {
+  }
+  
+  .menuItem:last-child {
     border-bottom: none;
-}
-
-/* 참여하기 버튼 서식*/
-.joinButton {
+  }
+  
+  /* 참여하기 버튼 서식*/
+  .joinButton {
     padding: 5px 10px;
     background-color: #244A95;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.joinButton:hover {
+  }
+  
+  .joinButton:hover {
     background-color: #0056b3;
-}
-
-.roomIcon {
+  }
+  
+  .roomIcon {
     width: 38px;
     height: 35px;
     margin-right: 15px;
-}
-
-/* 하단바 */
-.bottomNav {
+  }
+  
+  /* 하단바 */
+  .bottomNav {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -200,24 +201,24 @@
     justify-content: space-around;
     /* 아이콘들을 균등하게 배치 */
     padding: 10px;
-}
-
-.navItem {
+  }
+  
+  .navItem {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     /* 세로 중앙 정렬 */
-}
-
-.navIcon {
+  }
+  
+  .navIcon {
     width: 57px;
     height: 50px;
     cursor: pointer;
     transition: transform 0.3s ease;
-}
-
-.navText {
+  }
+  
+  .navText {
     margin-bottom: 5px;
     font-size: 1rem;
     color: black;
@@ -226,35 +227,35 @@
     /* 기본 상태에서는 normal */
     transition: color 0.3s ease, font-weight 0.3s ease;
     /* 색상 및 굵기 전환 효과 */
-}
-
-/* 호버 효과: 아이콘에 마우스를 올리면 텍스트도 굵어짐 */
-.navItem:hover .navIcon {
+  }
+  
+  /* 호버 효과: 아이콘에 마우스를 올리면 텍스트도 굵어짐 */
+  .navItem:hover .navIcon {
     transform: scale(1.2);
     /* 마우스 올렸을 때 아이콘 확대 */
-}
-
-.navItem:hover .navText {
+  }
+  
+  .navItem:hover .navText {
     color: black;
     /* 마우스 올렸을 때 텍스트 색상 변경 */
     font-weight: bold;
     /* 마우스 올렸을 때 텍스트 굵기 변경 */
-}
-
-/* 신고 모드에서 사용하는 체크박스 스타일 */
-.reportCheckbox {
+  }
+  
+  /* 신고 모드에서 사용하는 체크박스 스타일 */
+  .reportCheckbox {
     margin-right: 15px;
     /* 체크박스와 방 정보 간의 간격 설정 */
     width: 20px;
     /* 체크박스 너비 */
     height: 20px;
     /* 체크박스 높이 */
-}
-
-/* 신고하기 버튼 스타일 */
-.reportButton {
+  }
+  
+  /* 신고하기 버튼 스타일 */
+  .reportButton {
     margin-top: 20px;
-    padding: 10px 20px;
+    padding: 8px 16px;
     background-color: #ff4c4c;
     color: white;
     border: none;
@@ -265,18 +266,18 @@
     right: 38px;
     bottom: 250px;
     font-weight: bold;
-}
-
-.reportButton:hover {
+  }
+  
+  .reportButton:hover {
     background-color: #d43d3d;
     /* 마우스를 올렸을 때 색상 변경 */
-}
-
-
-/* 신고 모드에서 사용하는 취소 버튼 스타일 */
-.cancelButton {
+  }
+  
+  
+  /* 신고 모드에서 사용하는 취소 버튼 스타일 */
+  .cancelButton {
     margin-left: 10px;
-    padding: 10px 20px;
+    padding: 8px 16px;
     background-color: #495057;
     color: white;
     border: none;
@@ -287,24 +288,24 @@
     position: absolute;
     bottom: 250px;
     left: 40px;
-}
-
-.cancelButton:hover {
+  }
+  
+  .cancelButton:hover {
     background-color: #999999;
     /* 마우스를 올렸을 때 색상 변경 */
-}
-
-/* 신고 모드에서 버튼들을 감싸는 컨테이너 */
-.reportActions {
+  }
+  
+  /* 신고 모드에서 버튼들을 감싸는 컨테이너 */
+  .reportActions {
     display: flex;
     justify-content: center;
     gap: 10px;
     /* 버튼 사이의 간격 조정 */
     margin-top: 20px;
-}
-
-/* 모달 오버레이 스타일 */
-.modalOverlay {
+  }
+  
+  /* 모달 오버레이 스타일 */
+  .modalOverlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -317,10 +318,10 @@
     align-items: center;
     z-index: 1000;
     /* 다른 요소들보다 위에 위치하도록 설정 */
-}
-
-/* 모달 콘텐츠 스타일 */
-.modalContent {
+  }
+  
+  /* 모달 콘텐츠 스타일 */
+  .modalContent {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
@@ -328,66 +329,154 @@
     width: 400px;
     /* 모달 너비 */
     max-width: 80%;
-}
-
-.modalButtons {
-
+  }
+  
+  .modalButtons {
+  
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
-}
-
-.reportTextarea {
+  }
+  
+  .reportTextarea {
     margin-bottom: 15px;
     width: 91%;
-    height: 90px;
+    height: 60px;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
     resize: none;
     /* 사용자가 크기 조절 불가능하게 설정 */
-}
-
-/* 큰 화면용 스타일 */
-@media (min-width: 1024px) {
+  }
+  
+  /* 큰 화면용 스타일 */
+  @media (min-width: 1024px) {
     .desktopTitleContainer {
-        padding-top: 20px;
-        padding-bottom: 20px;
+      padding-top: 20px;
+      padding-bottom: 20px;
     }
-
+  
     .desktopPageTitle {
-        margin-top: -150px;
-        font-size: 2rem;
+      margin-top: -150px;
+      font-size: 1.5rem;
     }
-
+  
     .desktopRoomsList {
-        gap: 20px;
-        margin-top: 20px;
+      margin-top:10px;
+      position: absolute;
+      left: 100px;
+      right: 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
-
+  
     .desktopRoomItem {
-        padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px;
+      background-color: #B5DFFF;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 60%; 
+      margin: auto; /* 양쪽 간격을 균등하게 설정 */
+      transition: background-color 0.3s ease;
     }
-
+  
     .desktopRoomInfo {
-        flex-direction: row;
+      flex-direction: row;
     }
-
+  
     .desktopRoomTitle {
-        font-size: 1.5rem;
+      font-size: 1.2rem;
     }
-
+  
     /* 큰 화면용 뒤로가기 버튼 */
     .desktopGoBackButton {
-        height: 3rem;
-        margin-left: 40px;
-        margin-top: 15px;
+      height: 3rem;
+      width:auto;
+      margin-left: 280px;
+      margin-top: 15px;
     }
-
+  
     /* 큰 화면용 메뉴 버튼 */
     .desktopMenuButton {
-        height: 3rem;
-        right: 50px;
-        margin-top: 10px;
+      height: 3rem;
+      margin-right: 280px;
+      margin-top: 10px;
     }
-}
+  
+    .desktopDropDownMenu{
+      position: absolute;
+      top: 12.5rem;
+      margin-right: 2rem;
+      right: 17rem;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+      /* 다른 요소 위에 보이게 */
+    }
+  
+    .desktopReportButton{
+      margin-top: 20px;
+      padding: 8px 16px;
+      background-color: #ff4c4c;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      position: absolute;
+      right: 19.5rem;
+      bottom: 250px;
+      font-weight: bold;
+    }
+  
+    .desktopCancelButton{
+      margin-left: 10px;
+      padding: 8px 16px;
+      background-color: #495057;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      position: absolute;
+      bottom: 250px;
+      left: 19rem;
+    }
+  
+    .desktopAnotherCancelButton{
+      margin-left: 10px;
+      padding: 8px 16px;
+      background-color: #495057;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      position: absolute;
+      bottom: 180px;
+      left: 25.5rem;
+    }
+  
+    .desktopAnotherReportButton{
+      margin-top: 20px;
+      padding: 8px 16px;
+      background-color: #ff4c4c;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      position: absolute;
+      right: 26rem;
+      bottom: 180px;
+      font-weight: bold;
+    }
+  }

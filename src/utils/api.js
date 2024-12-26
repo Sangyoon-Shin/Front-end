@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Axios 인스턴스 생성
-const BASE_URL = "https://119eddbfb3ba.ngrok.app"; // 실제 백엔드 URL
+const BASE_URL = "https://18a5fe61dbb7.ngrok.app"; // 실제 백엔드 URL
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,

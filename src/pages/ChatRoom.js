@@ -2,6 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from './ChatRoom.module.css';
 import Header from './_.js'; // 상단바 컴포넌트
+import axiosInstance from '../utils/api'; // Axios 인스턴스
+import { Client } from '@stomp/stompjs'; // STOMP 클라이언트 라이브러리 // npm install @stomp/stompjs
+import {jwtDecode} from 'jwt-decode';
 import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
 import sendIcon from '../images/메시지전송버튼.png'; // 메시지 전송 아이콘 이미지
 import heartIcon from '../images/하트횃불이.png';
@@ -9,65 +12,59 @@ import heartIcon from '../images/하트횃불이.png';
 const ChatRoom = () => {
     const { id } = useParams(); // URL에서 동적 방 ID를 가져옵니다.
     const navigate = useNavigate(); // 뒤로가기 버튼 동작을 위해 사용
-    const [roomData, setRoomData] = useState(null);
+    const [roomData, setRoomData] = useState(null); // 채팅방 정보 상태
     const [messages, setMessages] = useState([]); // 채팅 메시지 목록 상태 관리
     const [inputMessage, setInputMessage] = useState(''); // 입력한 메시지 상태 관리
-    const messageListRef = useRef(null);
+    const messageListRef = useRef(null); // 스크롤을 제어하기 위한 참조
+    const stompClientRef = useRef(null); // STOMP 클라이언트 참조
+
 
     useEffect(() => {
-        
-        // 하드코딩된 방 데이터 (나중에 백엔드와 연동할 때 교체)
-        const dummyData = {
-            1: { username: 'char1', lastMessage: '마지막 내용 1', title: '글 제목 1' },
-            2: { username: 'char4', lastMessage: '마지막 내용 2', title: '글 제목 2' },
-            3: { username: 'float2', lastMessage: '마지막 내용 3', title: '글 제목 3' },
-            4: { username: 'int2', lastMessage: '마지막 내용 4', title: '글 제목 4' },
-            5: { username: 'char3', lastMessage: '마지막 내용 5', title: '글 제목 5' },
-        };
-
-        // 방 ID에 해당하는 데이터 가져오기
-        const currentRoomData = dummyData[id];
-        setRoomData(currentRoomData);
-
-        // 임시 채팅 메시지 초기값 설정 (하드코딩된 값)
-        setMessages([
-            { id: 1, text: '안녕하세요', sender: 'char1', time: '01:01', type: 'received' },
-            { id: 2, text: '안녕하세요', sender: 'me', time: '01:01', type: 'sent' },
-            { id: 3, text: '전 임베짱입니다 ㅋ', sender: 'char1', time: '01:01', type: 'received' },
-        ]);
-
-        
-         /* 백엔드 연동용 코드 (주석 해제하여 사용)*/
-        /* const fetchRoomData = async () => {
+        const fetchRoomData = async () => {
             try {
-                const response = await fetch(`https://your-backend-api.com/api/chatrooms/${id}`);
-                if (!response.ok) {
-                    throw new Error('방 정보를 불러오는데 실패했습니다.');
+                const response = await axiosInstance.get(`/Room/${id}`);
+                if (response.data.code !== 200) {
+                    throw new Error('채팅방 정보를 불러오는데 실패했습니다.');
                 }
-                const data = await response.json();
-                setRoomData(data);
+                setRoomData(response.data.data);
             } catch (error) {
-                console.error('방 정보를 불러오는 중 오류가 발생했습니다:', error);
-            }
-        };
-
-        const fetchMessages = async () => {
-            try {
-                const response = await fetch(`https://your-backend-api.com/api/chatrooms/${id}/messages`);
-                if (!response.ok) {
-                    throw new Error('메시지 목록을 불러오는데 실패했습니다.');
-                }
-                const data = await response.json();
-                setMessages(data);
-            } catch (error) {
-                console.error('메시지 목록 불러오는 중 오류가 발생했습니다:', error);
+                console.error('채팅방 정보를 불러오는 중 오류가 발생했습니다:', error);
             }
         };
 
         fetchRoomData();
-        fetchMessages();
-        */
-    }, [id]); 
+
+        // STOMP 클라이언트 설정
+        const stompClient = new Client({
+            brokerURL: 'ws://your-backend-url/ws', // WebSocket 서버 URL
+            reconnectDelay: 5000, // 재연결 딜레이
+            heartbeatIncoming: 4000, // 서버로부터 heartbeat 수신 간격
+            heartbeatOutgoing: 4000, // 서버로 heartbeat 전송 간격
+        });
+
+        stompClient.onConnect = () => {
+            console.log('STOMP 연결 성공');
+
+            // 메시지 구독
+            stompClient.subscribe(`/topic/room/${id}`, (message) => {
+                const messageData = JSON.parse(message.body);
+                setMessages((prevMessages) => [...prevMessages, messageData]);
+            });
+        };
+
+        stompClient.onStompError = (frame) => {
+            console.error('STOMP 오류:', frame.headers['message']);
+        };
+
+        stompClient.activate();
+        stompClientRef.current = stompClient;
+
+        return () => {
+            if (stompClient) {
+              stompClient.deactivate();
+            }
+          };
+    }, [id]);
     
 
     useEffect(() => {
@@ -78,39 +75,28 @@ const ChatRoom = () => {
     }, [messages]);
 
     // 메시지 전송 핸들러
-    const handleSendMessage = async () => {
+    const handleSendMessage = () => {
         if (inputMessage.trim() !== '') {
-            const newMessage = {
+            const token = localStorage.getItem('authToken'); // JWT 토큰 가져오기
+            const decodedToken = jwtDecode(token); // JWT 디코딩
+
+            const messageData = {
+                roomId: id,
                 text: inputMessage,
+                userId: decodedToken.userId, // 사용자 ID
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                isSentByMe: true,
             };
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
-            setInputMessage('');
 
-            /* 백엔드 연동용 코드 (주석 해제하여 사용)*/
-            try {
-                const response = await fetch('https://your-backend-api.com/api/chatrooms/messages', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        roomId: id,
-                        text: inputMessage,
-                    }),
+            // STOMP 클라이언트를 통해 메시지 전송
+            if (stompClientRef.current && stompClientRef.current.connected) {
+                stompClientRef.current.publish({
+                    destination: `/app/chat/${id}`,
+                    body: JSON.stringify(messageData),
                 });
-
-                if (!response.ok) {
-                    throw new Error('메시지 전송에 실패했습니다.');
-                }
-
-                console.log('메시지가 성공적으로 전송되었습니다.');
-            } catch (error) {
-                console.error('메시지 전송 중 오류가 발생했습니다:', error);
-                alert('메시지 전송에 실패했습니다. 다시 시도해주세요.');
+                setInputMessage('');
+            } else {
+                console.error('STOMP 클라이언트 연결이 닫혀 있습니다.');
             }
-            
         }
     };
 
