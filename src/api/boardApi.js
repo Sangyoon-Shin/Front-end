@@ -14,7 +14,7 @@ export const fetchMainPageData = async () => {
 // 자유게시판 상위 3개 조회
 export const fetchFreeBoardData = async () => {
     try {
-      const response = await axiosInstance.get('/board/main/free'); // 자유게시판 엔드포인트 호출
+      const response = await axiosInstance.get('api/board/main/free'); // 자유게시판 엔드포인트 호출
       return response.data; // 응답 데이터를 반환
     } catch (error) {
       console.error('Error fetching free board data:', error);
@@ -27,7 +27,7 @@ export const fetchFreeBoardData = async () => {
 // 질문 게시판 데이터 가져오기
 export const fetchQuestBoardData = async () => {
     try {
-        const response = await axiosInstance.get('/board/main/quest'); // 질문 게시판 엔드포인트 호출
+        const response = await axiosInstance.get('api/board/main/quest'); // 질문 게시판 엔드포인트 호출
         return response.data; // 응답 데이터 반환
     } catch (error) {
         console.error('Error fetching quest board data:', error);
@@ -37,7 +37,7 @@ export const fetchQuestBoardData = async () => {
 
 export const fetchCompetitionBoardData = async () => {
     try {
-        const response = await axiosInstance.get('/board/main/competition'); // 대회게시판 엔드포인트 호출
+        const response = await axiosInstance.get('api/board/main/competition'); // 대회게시판 엔드포인트 호출
         return response.data; // 응답 데이터를 반환
     } catch (error) {
         console.error('Error fetching competition board data:', error);
@@ -48,7 +48,7 @@ export const fetchCompetitionBoardData = async () => {
 //코딩게시판
 export const fetchCodingBoardData = async () => {
     try {
-      const response = await axiosInstance.get('/api/board/main/coding'); // 코딩 게시판 엔드포인트 호출
+      const response = await axiosInstance.get('api/board/main/coding'); // 코딩 게시판 엔드포인트 호출
       return response.data; // 응답 데이터를 반환
     } catch (error) {
       console.error('Error fetching coding board data:', error);
@@ -62,7 +62,7 @@ export const fetchCodingBoardData = async () => {
 
 export const fetchStudyBoardData = async () => {
     try {
-        const response = await axiosInstance.get('/api/board/main/study'); // 스터디 게시판 API 호출
+        const response = await axiosInstance.get('api/board/main/study'); // 스터디 게시판 API 호출
         return response.data; // 응답 데이터 반환
     } catch (error) {
         console.error('Error fetching study board data:', error);
