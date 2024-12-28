@@ -7,7 +7,7 @@ import LoginPage from './pages/LoginPage'; // .의 의미: 현재 디렉토리(s
 // 내가속한방 추가
 import RoomPage from './pages/RoomPage';
 
-// 게시판 메인 페이지
+// 자유게시판
 import BoardPage from './pages/BoardPage';
 
 // 질문게시판
@@ -19,10 +19,10 @@ import Message from './pages/Message';
 // 채팅방 컴포넌트 추가
 import ChatRoom from './pages/ChatRoom';
 
-// 정보 게시판 - 코드 질문방
+// 코드 정보 게시판 - 코드 질문방
 import InformationCode from './pages/InformationCode';
 
-// 코드 질문방 본문
+// 코드 질문방 글쓰기
 import QuestionCode from './pages/QuestionCode';
 
 // 대회 정보게시판

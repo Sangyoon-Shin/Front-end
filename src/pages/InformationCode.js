@@ -10,17 +10,14 @@ import SearchIcon from '../images/돋보기아이콘.png';  // 돋보기 아이�
 import IconScrap from '../images/횃불이스크랩.png';
 import IconUnscrap from '../images/횃불이스크랩X.png';
 
-// import { useLocation } from 'react-router-dom';
-// const location = useLocation();
-// const { postId } = location.state || {};
-
-
 const InformationCode = () => {
   const [menuOpen, setMenuOpen] = useState(false);  // 드롭다운 상태 관리
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
   const [scrapStatus, setScrapStatus] = useState({}); // 각 게시물의 스크랩 상태 관리
+  const [topLikedPosts, setTopLikedPosts] = useState([]); // 좋아요 10개 이상 게시물
   const [posts, setPosts] = useState([]); // 게시물 목록 상태 관리
   const [sortType, setSortType] = useState('latest'); // 초기 정렬 상태는 'latest'
+  const [initialPosts, setInitialPosts] = useState([]); // 최초 데이터 로드한 거 저장시키기
   const [selectedLanguage, setSelectedLanguage] = useState('전체'); // 선택된 언어 필터
 
 
@@ -44,7 +41,7 @@ const InformationCode = () => {
     const fetchPosts = async () => {
       setIsLoading(true); // 로딩 시작
       try {
-        const response = await axiosInstance.get('https://e937-106-101-137-133.ngrok-free.app/api/board/coding', {
+        const response = await axiosInstance.get('https://cdae-2406-5900-10f0-c886-d1f8-d6cb-d0b5-db04.ngrok-free.app/api/board/coding', {
           params: { page, size }, // 페이지와 사이즈를 쿼리 파라미터로 추가
           headers: {
             'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
@@ -60,6 +57,7 @@ const InformationCode = () => {
         }
 
         setPosts(data.content); // 게시물 데이터 설정
+        setInitialPosts(response.data.content); // 초기 데이터 저장
         setTotalPages(data.totalPages); // 전체 페이지 수 설정
         console.log('게시물 데이터:', data);
       } catch (error) {
@@ -69,8 +67,26 @@ const InformationCode = () => {
         setIsLoading(false); // 로딩 종료
       }
     };
-
+    // 좋아요 10개 이상 게시물 가져오기
+    const fetchTopLikedPosts = async () => {
+      try {
+        const response = await axiosInstance.get('https://cdae-2406-5900-10f0-c886-d1f8-d6cb-d0b5-db04.ngrok-free.app/api/board/coding/top-liked', {
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+          },
+        });
+        if (response.status === 200) {
+          console.log(response)
+          setTopLikedPosts(response.data.map((post) => post.id)); // 좋아요 10개 이상 게시물의 ID만 저장
+        } else {
+          setTopLikedPosts([]); // 데이터가 없는 경우 빈 배열로 초기화
+        }
+      } catch (error) {
+        console.error('좋아요 상위 게시물을 불러오는 중 오류가 발생했습니다:', error);
+      }
+    };
     fetchPosts();
+    fetchTopLikedPosts();
   }, [page, size]); // page와 size 변경 시 재호출
 
 
@@ -79,7 +95,7 @@ const InformationCode = () => {
     setPage(pageNumber); // 페이지 번호 업데이트
 
     try {
-      const response = await axiosInstance.get('https://e937-106-101-137-133.ngrok-free.app/api/board/coding', {
+      const response = await axiosInstance.get('https://cdae-2406-5900-10f0-c886-d1f8-d6cb-d0b5-db04.ngrok-free.app/api/board/coding', {
         params: {
           page: pageNumber,
           size: 10,
@@ -107,9 +123,31 @@ const InformationCode = () => {
     setMenuOpen(false); // 메뉴 닫기
 
     try {
-      const response = await axiosInstance.get('https://e937-106-101-137-133.ngrok-free.app/api/board/coding', {
+      const response = await axiosInstance.get('https://cdae-2406-5900-10f0-c886-d1f8-d6cb-d0b5-db04.ngrok-free.app/api/board/coding', {
         params: {
           typeKeyword: language, // 선택된 언어 전달
+          page: 0,
+          size: 10,
+        },
+        headers: {
+          'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+        },
+      });
+
+      const data = response.data;
+      setPosts(data.content); // 필터링된 게시물 업데이트
+    } catch (error) {
+      console.error('언어별 게시물 필터링 중 오류 발생:', error);
+    }
+  };
+
+  const handleFixedLanguageChange = async () => {
+    console.log("데이터를 불러왔습니다.")
+    setMenuOpen(false); // 메뉴 닫기
+
+    try {
+      const response = await axiosInstance.get('https://cdae-2406-5900-10f0-c886-d1f8-d6cb-d0b5-db04.ngrok-free.app/api/board/coding', {
+        params: {
           page: 0,
           size: 10,
         },
@@ -128,7 +166,7 @@ const InformationCode = () => {
 
   const toggleScrap = async (id) => {
     try {
-      const response = await axiosInstance.post(`https://e937-106-101-137-133.ngrok-free.app/api/board/coding/${id}/scrap`, {
+      const response = await axiosInstance.post(`https://cdae-2406-5900-10f0-c886-d1f8-d6cb-d0b5-db04.ngrok-free.app/api/board/coding/${id}/scrap`, {
         headers: {
           'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
         },
@@ -149,13 +187,14 @@ const InformationCode = () => {
   };
 
 
+  //
   // 검색 입력값을 변경하는 함수
   const handleSearch = async () => {
     console.log('검색 버튼 클릭됨');
     if (searchTerm.trim() !== '') {
       try {
         console.log(`검색어: ${searchTerm}`);
-        const response = await axiosInstance.get('https://e937-106-101-137-133.ngrok-free.app/api/board/coding', {
+        const response = await axiosInstance.get('https://cdae-2406-5900-10f0-c886-d1f8-d6cb-d0b5-db04.ngrok-free.app/api/board/coding', {
           params: {
             searchKeyword: searchTerm, // 검색어 전달
             page: 0,
@@ -197,6 +236,11 @@ const InformationCode = () => {
   const handleSort = async (type) => {
     setSortType(type); // 정렬 상태 업데이트
 
+    if (type === 'latest') {
+      setPosts(initialPosts); // 초기 데이터로 복원
+      return;
+  }
+  
     try {
       const params = {
         page: 0,
@@ -206,8 +250,8 @@ const InformationCode = () => {
         hashtagKeyword: '', // 필요 시 값 설정
         typeKeyword: '', // 필요 시 값 설정
       };
-      
-      const response = await axiosInstance.get('https://e937-106-101-137-133.ngrok-free.app/api/board/coding/sort-by-likes',{
+
+      const response = await axiosInstance.get('https://cdae-2406-5900-10f0-c886-d1f8-d6cb-d0b5-db04.ngrok-free.app/api/board/coding/sort-by-likes', {
         params,
         headers: {
           'ngrok-skip-browser-warning': 'true', // 필요 시 유지
@@ -219,7 +263,7 @@ const InformationCode = () => {
       if (!data || !data.content) {
         throw new Error('API 응답이 올바르지 않습니다.');
       }
-      
+
       setPosts(data.content); // 정렬된 데이터로 게시물 목록 업데이트
     } catch (error) {
       console.error('정렬 데이터 로드 중 오류 발생:', error);
@@ -263,7 +307,10 @@ const InformationCode = () => {
                 className={`${styles.menuItem} ${isDesktop ? styles.desktopMenuItem : ''} ${selectedLanguage === language ? styles.activeMenuItem : '' // 선택된 언어 강조
                   }`}
                 onClick={() => {
-                  if (selectedLanguage !== language) {
+                  if (language === '전체') {
+                    handleFixedLanguageChange(); // '전체'를 선택했을 때 즉시 함수 실행
+                    console.log("바뀌었습니다");
+                  } else if (selectedLanguage !== language) {
                     handleLanguageChange(language); // 선택된 언어가 달라질 때만 함수 호출
                   }
                 }}
@@ -324,10 +371,12 @@ const InformationCode = () => {
 
         {/* 게시물 목록 */}
         <div className={styles.postList}>
-          {posts.map((post, index) => (
+          {posts.map((post) => (
             <div key={post.id} className={styles.postItem}>
-              {/* HOT 표시 (상단 3개의 게시물) */}
-              {index < 3 && <span className={styles.hotTag}>HOT</span>} {/* index를 사용해 상단 3개 표시 */}
+              {/* HOT 표시 (좋아요 10개 이상 게시물) */}
+              {topLikedPosts.includes(post.id) && (
+                <span className={styles.hotTag}>HOT</span>
+              )}
 
               {/* 게시물 제목 및 정보 */}
               <div className={styles.postInfo}>
