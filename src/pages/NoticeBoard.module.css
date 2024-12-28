@@ -62,10 +62,10 @@
   /*게시판*/
   font-size: 1.6rem;
   color: #000000;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   /* 텍스트를 아래로 살짝 내림 */
   margin-top: 0px;
-  margin-left: 30px;
+  margin-left: 10px;
   /* 텍스트를 아래로 살짝 내림 */
 }
 
@@ -247,7 +247,7 @@ h2 {
 }
 
 .comment-item {
-  width: 90%;
+  width: 95%;
   /* 댓글의 너비를 100%로 설정 */
   height: auto;
   /* 댓글 박스의 고정된 높이 설정 */
@@ -424,7 +424,7 @@ button:hover {
 }
 
 .textarea_reply {
-  width: 90%;
+  width: 100%;
   /* 너비를 적절히 조정 */
   height: 50px;
   padding: 10px;
@@ -439,11 +439,12 @@ button:hover {
 }
 
 .reply-container {
+  width:100%;
   display: flex;
   /* Flexbox로 설정 */
   justify-content: center;
   /* 오른쪽 정렬 */
-  margin-top: -30px;
+  margin-top: -20px;
   /* 위쪽 여백 추가 */
   margin-right: 20px;
 }
