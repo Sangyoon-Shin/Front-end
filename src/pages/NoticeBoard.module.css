@@ -344,7 +344,7 @@ h2 {
 /* 대댓글 입력창 스타일 */
 .reply-input {
   margin-top: 10px;
-  margin-left: 20px;
+  margin-left: 10px;
   /* 대댓글 입력창을 댓글보다 살짝 오른쪽으로 이동 */
 }
 
@@ -464,5 +464,5 @@ button:hover {
   /* 모서리를 둥글게 */
   cursor: pointer;
   /* 커서 변경 */
-  margin-left: 270px;
+  margin-left: 330px;
 }
