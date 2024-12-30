@@ -13,6 +13,19 @@ import bar from '../images/bar.png';
 import Header from './G_.js';  // 상단바 컴포넌트
 // import Header from './Header'; // import the Header component
 
+const BASE_URL = 'http://<your-domain>/api/board';  // 백엔드 API URL 설정
+
+// 인증 헤더 가져오는 함수
+const getAuthHeaders = () => {
+  const userId = localStorage.getItem('userId');  // 저장된 userId 가져오기
+  const accessToken = localStorage.getItem('accessToken'); // accessToken 가져오기
+  return {
+    'Authorization': `Bearer ${accessToken}`,
+    'X-USER-ID': userId,  // 요청 헤더에 userId 추가
+    'Content-Type': 'application/json',
+  };
+};
+
 const G_questionpostingPage = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -25,49 +38,34 @@ const G_questionpostingPage = () => {
   const [nicknameCount, setNicknameCount] = useState({ int: 0, short: 0, double: 0, char: 0 });
   const [isHeartFilled, setIsHeartFilled] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [replyVisible, setReplyVisible] = useState(''); // 신고 내용 저장
-
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-  const day = String(currentDate.getDate()).padStart(2, '0');
-  const formattedDate = `${year}.${month}.${day}`;
   const [reportContent, setReportContent] = useState('');
   const [isAlertOpen, setIsAlertOpen] = useState(false);
-  const handleBackClick = () => navigate(-1);
+  const [replyVisible, setReplyVisible] = useState({});  // 대댓글 가시성 상태 관리
 
-  // 새로고침 시 로컬 스토리지에서 상태를 불러옵니다.
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.getFullYear()}.${String(currentDate.getMonth() + 1).padStart(2, '0')}.${String(currentDate.getDate()).padStart(2, '0')}`;
+
+  // API 호출해서 퀘스트 작성시 필요한 기본 폼 정보 가져오기
   useEffect(() => {
-    const savedComments = localStorage.getItem('comments');
-    const savedHeartStatus = localStorage.getItem('isHeartFilled');
-    const savedNicknameCount = localStorage.getItem('nicknameCount');
-    const savedReplyVisible = localStorage.getItem('replyVisible');
+    const fetchHeartStatus = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/quest/save`, {
+          method: 'GET',
+          headers: getAuthHeaders(),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          // 데이터를 처리할 수 있으면 여기에 로직 추가
+        } else {
+          console.error('퀘스트 폼 데이터 불러오기 실패');
+        }
+      } catch (error) {
+        console.error('퀘스트 폼 데이터 불러오는 중 오류 발생:', error);
+      }
+    };
 
-    if (savedComments) setComments(JSON.parse(savedComments));
-    if (savedHeartStatus) setIsHeartFilled(JSON.parse(savedHeartStatus));
-    if (savedNicknameCount) setNicknameCount(JSON.parse(savedNicknameCount));
-    if (savedReplyVisible) setReplyVisible(JSON.parse(savedReplyVisible));
+    fetchHeartStatus();
   }, []);
-
-  // 댓글 상태가 변경될 때마다 로컬 스토리지에 저장합니다.
-  useEffect(() => {
-    localStorage.setItem('comments', JSON.stringify(comments));
-  }, [comments]);
-
-  // 좋아요 상태가 변경될 때마다 로컬 스토리지에 저장합니다.
-  useEffect(() => {
-    localStorage.setItem('isHeartFilled', JSON.stringify(isHeartFilled));
-  }, [isHeartFilled]);
-
-  // 닉네임 카운트가 변경될 때마다 로컬 스토리지에 저장합니다.
-  useEffect(() => {
-    localStorage.setItem('nicknameCount', JSON.stringify(nicknameCount));
-  }, [nicknameCount]);
-
-  // 대댓글 입력창 가시성 상태가 변경될 때마다 로컬 스토리지에 저장합니다.
-  useEffect(() => {
-    localStorage.setItem('replyVisible', JSON.stringify(replyVisible));
-  }, [replyVisible]);
 
   useEffect(() => {
     if (!nickname) {
@@ -77,204 +75,111 @@ const G_questionpostingPage = () => {
     }
   }, [nickname]);
 
-  useEffect(() => {
-    const fetchHeartStatus = async () => {
-      try {
-        const response = await fetch('/api/like-status');
-        if (response.ok) {
-          const data = await response.json();
-          setIsHeartFilled(data.liked); // 서버로부터 불러온 좋아요 상태 반영
-        } else {
-          console.error('좋아요 상태 불러오기에 실패했습니다.');
-        }
-      } catch (error) {
-        console.error('좋아요 상태 불러오는 중 오류 발생:', error);
-      }
-    };
-
-    fetchHeartStatus();
-  }, []);
-
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await fetch('/api/comments'); // 서버에서 댓글 가져오기
-        if (response.ok) {
-          const data = await response.json();
-          setComments(data.comments); // 서버에서 가져온 댓글을 상태로 설정
-        } else {
-          console.error('댓글 불러오기에 실패했습니다.');
-        }
-      } catch (error) {
-        console.error('댓글 불러오는 중 오류 발생:', error);
-      }
-    };
-
-    fetchComments();
-  }, []);
-
-  const handleContentChange = (e) => {
-    setContent(e.target.value);
-  };
-
-  const handleCommentChange = (e) => {
-    setCommentContent(e.target.value);
-  };
-
+  const handleContentChange = (e) => setContent(e.target.value);
+  const handleCommentChange = (e) => setCommentContent(e.target.value);
   const handleReplyChange = (index, e) => {
     const newReplyContents = [...replyContents];
     newReplyContents[index] = e.target.value;
     setReplyContents(newReplyContents);
   };
 
-  const handleAddComment = () => {
+  const handleAddComment = async () => {
     if (commentContent.trim() !== '') {
       const newNicknameCount = { ...nicknameCount };
       newNicknameCount[nickname] += 1;
       setNicknameCount(newNicknameCount);
 
-      setComments([...comments, { nickname: `${nickname}${newNicknameCount[nickname]}`, content: commentContent, replies: [] }]);
-      setReplyContents([...replyContents, '']);
-      setCommentContent('');
+      const newComment = { nickname: `${nickname}${newNicknameCount[nickname]}`, content: commentContent, replies: [] };
+      
+      try {
+        const response = await fetch(`${BASE_URL}/quest/save`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify(newComment),
+        });
+
+        if (response.ok) {
+          const savedComment = await response.json();
+          setComments([...comments, savedComment]);
+          setNicknameCount((prev) => ({ ...prev, [nickname]: prev[nickname] + 1 }));
+          setCommentContent('');
+        } else {
+          console.error('댓글 추가에 실패했습니다.');
+        }
+      } catch (error) {
+        console.error('댓글 추가 중 오류 발생:', error);
+      }
     }
   };
-  // const handleAddComment = async () => {
-  //   if (commentContent.trim() !== '') {
-  //     const newComment = {
-  //       nickname: `${nickname}${nicknameCount[nickname] + 1}`,
-  //       content: commentContent,
-  //       replies: []
-  //     };
 
-  //     try {
-  //       const response = await fetch('/api/comments', {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify(newComment),
-  //       });
-
-  //       if (response.ok) {
-  //         const savedComment = await response.json(); // 서버에서 저장된 댓글 데이터 반환
-  //         setComments([...comments, savedComment]);
-  //         setNicknameCount((prev) => ({ ...prev, [nickname]: prev[nickname] + 1 }));
-  //         setCommentContent('');
-  //       } else {
-  //         console.error('댓글 추가에 실패했습니다.');
-  //       }
-  //     } catch (error) {
-  //       console.error('댓글 추가 중 오류 발생:', error);
-  //     }
-  //   }
-  // };
-
-  const handleAddReply = (index) => {
+  const handleAddReply = async (index) => {
     if (replyContents[index].trim() !== '') {
       const updatedComments = [...comments];
       const newNicknameCount = { ...nicknameCount };
       newNicknameCount[nickname] += 1;
       setNicknameCount(newNicknameCount);
 
-      updatedComments[index].replies.push({ nickname: `${nickname}${newNicknameCount[nickname]}`, content: replyContents[index] });
-      setComments(updatedComments);
+      const newReply = {
+        nickname: `${nickname}${newNicknameCount[nickname]}`,
+        content: replyContents[index],
+      };
 
-      const newReplyContents = [...replyContents];
-      newReplyContents[index] = '';
-      setReplyContents(newReplyContents);
-      setReplyVisible((prev) => ({ ...prev, [index]: false }));
+      try {
+        const response = await fetch(`${BASE_URL}/quest/${comments[index].id}/replies`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify(newReply),
+        });
+
+        if (response.ok) {
+          const savedReply = await response.json();
+          updatedComments[index].replies.push(savedReply);
+          setComments(updatedComments);
+          setNicknameCount((prev) => ({ ...prev, [nickname]: prev[nickname] + 1 }));
+
+          const newReplyContents = [...replyContents];
+          newReplyContents[index] = '';
+          setReplyContents(newReplyContents);
+          setReplyVisible((prev) => ({ ...prev, [index]: false }));
+        } else {
+          console.error('대댓글 추가에 실패했습니다.');
+        }
+      } catch (error) {
+        console.error('대댓글 추가 중 오류 발생:', error);
+      }
     }
   };
-  // const handleAddReply = async (index) => {
-  //   if (replyContents[index].trim() !== '') {
-  //     const newReply = {
-  //       nickname: `${nickname}${nicknameCount[nickname] + 1}`,
-  //       content: replyContents[index],
-  //     };
-
-  //     try {
-  //       const response = await fetch(`/api/comments/${index}/replies`, {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify(newReply),
-  //       });
-
-  //       if (response.ok) {
-  //         const savedReply = await response.json(); // 서버에서 저장된 대댓글 데이터 반환
-  //         const updatedComments = [...comments];
-  //         updatedComments[index].replies.push(savedReply);
-  //         setComments(updatedComments);
-  //         setNicknameCount((prev) => ({ ...prev, [nickname]: prev[nickname] + 1 }));
-
-  //         const newReplyContents = [...replyContents];
-  //         newReplyContents[index] = '';
-  //         setReplyContents(newReplyContents);
-  //         setReplyVisible((prev) => ({ ...prev, [index]: false }));
-  //       } else {
-  //         console.error('대댓글 추가에 실패했습니다.');
-  //       }
-  //     } catch (error) {
-  //       console.error('대댓글 추가 중 오류 발생:', error);
-  //     }
-  //   }
-  // };
-
 
   const handleToggleReply = (index) => {
     setReplyVisible((prev) => ({ ...prev, [index]: !prev[index] }));
   };
 
-
-  const handleHeartClick = () => {
+  const handleHeartClick = async () => {
     setIsHeartFilled(!isHeartFilled);
-  };
+    try {
+      const response = await fetch(`${BASE_URL}/quest/like`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ isHeartFilled }),
+      });
 
-  // const handleHeartClick = async () => {
-  //   // 현재 좋아요 상태를 토글
-  //   const newHeartStatus = !isHeartFilled;
-  //   setIsHeartFilled(newHeartStatus);
-
-  //   try {
-  //     // 서버에 좋아요 상태 업데이트 요청
-  //     const response = await fetch('/api/like', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ isHeartFilled: newHeartStatus }), // 좋아요 상태 전달
-  //     });
-
-  //     if (!response.ok) {
-  //       console.error('좋아요 요청에 실패했습니다.');
-  //       // 요청 실패 시 좋아요 상태를 되돌림
-  //       setIsHeartFilled(!newHeartStatus);
-  //     }
-  //   } catch (error) {
-  //     console.error('좋아요 요청 중 오류 발생:', error);
-  //     // 오류 발생 시 좋아요 상태를 되돌림
-  //     setIsHeartFilled(!newHeartStatus);
-  //   }
-  // };
-
-  const togglePopup = () => {
-    setIsPopupOpen(!isPopupOpen);
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      console.log("선택된 파일:", file);
+      if (!response.ok) {
+        console.error('좋아요 상태 업데이트에 실패했습니다.');
+        setIsHeartFilled(!isHeartFilled);
+      }
+    } catch (error) {
+      console.error('좋아요 요청 중 오류 발생:', error);
+      setIsHeartFilled(!isHeartFilled);
     }
   };
+
+  const togglePopup = () => setIsPopupOpen(!isPopupOpen);
+
   const submitReport = async () => {
     try {
-      const response = await fetch('/api/report', {
+      const response = await fetch(`${BASE_URL}/report`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ content: reportContent }),
       });
 
@@ -282,7 +187,6 @@ const G_questionpostingPage = () => {
         setReportContent('');
         togglePopup();
         setIsAlertOpen(true);
-
         setTimeout(() => {
           setIsAlertOpen(false);
         }, 3000);
@@ -298,12 +202,10 @@ const G_questionpostingPage = () => {
     <div>
       <Header />
       <div className={styles["content"]}>
-
         <img src={arrow} className={styles["app-arrow"]} alt="back_arrow" onClick={() => navigate(-1)} />
         <h1 className={styles["title-text2"]}>질문게시판</h1>
 
         <img src={bar} className={styles["app-bar"]} alt="bar" />
-
         <h1 className={styles["title-text3"]}>게시판 제목</h1>
 
         <div className={styles["right-section"]}>
@@ -312,22 +214,17 @@ const G_questionpostingPage = () => {
         </div>
 
         <h2 className={styles["title-text4"]}>작성일: {formattedDate}</h2>
-
         <div className={styles["report"]}>
-          <button onClick={togglePopup} className={styles["report-button"]}>
-          신고하기
-          </button>
+          <button onClick={togglePopup} className={styles["report-button"]}>신고하기</button>
         </div>
-        
       </div>
+
       {isPopupOpen && (
         <div className={styles["popup"]}>
           <div className={styles["popup-inner"]}>
             <h3>신고하기</h3>
             <p>신고 내용을 입력하세요:</p>
-
-            <textarea className={styles["popup-textarea"]} />
-
+            <textarea className={styles["popup-textarea"]} onChange={(e) => setReportContent(e.target.value)} />
             <div className={styles["popup-button-container"]}>
               <button onClick={togglePopup} className={styles["popup-close"]}>닫기</button>
               <button onClick={submitReport} className={styles["popup-receive"]}>제출</button>
@@ -337,9 +234,7 @@ const G_questionpostingPage = () => {
       )}
 
       {isAlertOpen && (
-        <div className={styles["alert-popup"]}>
-          제출이 완료되었습니다.
-        </div>
+        <div className={styles["alert-popup"]}>제출이 완료되었습니다.</div>
       )}
 
       <div className={styles["content-input"]}>
@@ -356,18 +251,20 @@ const G_questionpostingPage = () => {
         ref={fileInputRef}
         style={{ display: 'none' }}
         accept="image/*"
-        onChange={handleFileChange}
+        onChange={(e) => {
+          const file = e.target.files[0];
+          if (file) console.log("선택된 파일:", file);
+        }}
       />
 
       <div className={styles["heart"]}>
-      <img
-        src={isHeartFilled ? filledHeart : heart}
-        className={styles["app-heart"]}
-        alt="heart"
-        onClick={handleHeartClick}
-      />
+        <img
+          src={isHeartFilled ? filledHeart : heart}
+          className={styles["app-heart"]}
+          alt="heart"
+          onClick={handleHeartClick}
+        />
       </div>
-
 
       <div className={styles["content-input2"]}>
         <textarea
@@ -378,19 +275,14 @@ const G_questionpostingPage = () => {
         />
       </div>
 
-
-
       <div className={styles["reply-button"]}>
-        <button onClick={handleAddComment}>
-          댓글 달기
-        </button>
+        <button onClick={handleAddComment}>댓글 달기</button>
       </div>
 
       <div className={styles["comments-section"]}>
         {comments.map((comment, index) => (
           <div key={index} className={styles["comment-item"]}>
             <strong>{comment.nickname}:</strong> {comment.content}
-
             <div className={styles["reply-container"]}>
               <button className={styles["toggle-reply-button"]} onClick={() => handleToggleReply(index)}>
                 {replyVisible[index] ? '대댓글 숨기기' : '대댓글 달기'}
@@ -421,7 +313,6 @@ const G_questionpostingPage = () => {
           </div>
         ))}
       </div>
-
     </div>
   );
 };

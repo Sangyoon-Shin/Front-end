@@ -10,6 +10,19 @@ import bar from '../images/bar.png';
 import Header from './G_.js';  // 상단바 컴포넌트
 
 
+const BASE_URL = 'http://<your-domain>/api/board';  // 백엔드 API URL 설정
+
+// 인증 헤더 가져오는 함수
+const getAuthHeaders = () => {
+  const userId = localStorage.getItem('userId');  // 저장된 userId 가져오기
+  const accessToken = localStorage.getItem('accessToken'); // accessToken 가져오기
+  return {
+    'Authorization': `Bearer ${accessToken}`,
+    'X-USER-ID': userId,  // 요청 헤더에 userId 추가
+    'Content-Type': 'application/json',
+  };
+};
+
 const G_questionwritePage = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
@@ -22,11 +35,9 @@ const G_questionwritePage = () => {
     const postData = { title, startDate, endDate, hashtag, content };
 
     try {
-      const response = await fetch('https://your-backend-api.com/api/posts', {
+      const response = await fetch(`${BASE_URL}/quest/save`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(postData),
       });
 
@@ -60,7 +71,6 @@ const G_questionwritePage = () => {
           placeholder="제목을 입력하세요."
         />
       </div>
-
 
       <div className={styles["input-group"]}>
         <h2 className={styles["title-text5"]}>해시태그</h2>

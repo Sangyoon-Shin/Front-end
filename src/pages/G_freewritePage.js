@@ -9,6 +9,18 @@ import arrow from '../images/arrow.png';
 import bar from '../images/bar.png';
 import Header from './G_.js';  // 상단바 컴포넌트
 
+// API에서 사용할 기본 URL과 헤더 설정
+const BASE_URL = 'https://your-backend-api.com/api/board';
+const getAuthHeaders = () => {
+  const accessToken = localStorage.getItem('accessToken');
+  const userId = localStorage.getItem('userId'); // 이 부분이 사용자 ID를 가져옵니다.
+  return {
+    'Authorization': `Bearer ${accessToken}`,
+    'X-USER-ID': userId, // 사용자 ID를 X-USER-ID로 추가
+    'Content-Type': 'application/json',
+  };
+};
+
 
 const G_freewritePage = () => {
   const navigate = useNavigate();
@@ -22,11 +34,9 @@ const G_freewritePage = () => {
     const postData = { title, startDate, endDate, hashtag, content };
 
     try {
-      const response = await fetch('https://your-backend-api.com/api/posts', {
+      const response = await fetch(`${BASE_URL}/free`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(), // 토큰을 포함한 헤더
         body: JSON.stringify(postData),
       });
 
@@ -60,7 +70,6 @@ const G_freewritePage = () => {
           placeholder="제목을 입력하세요."
         />
       </div>
-
 
       <div className={styles["input-group"]}>
         <h2 className={styles["title-text5"]}>해시태그</h2>

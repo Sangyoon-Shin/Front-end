@@ -2,63 +2,114 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
 import Header from './_.js';  // 상단바 컴포넌트
+import axiosInstance from '../utils/api'; // Axios 인스턴스
+import {jwtDecode} from 'jwt-decode'; // default가 아닌 named import 사용. authToken에서 사용자 ID 추출하기. npm install jwt-decode
 import styles from './Message.module.css';
 import menuIcon from '../images/메뉴버튼.png';
 import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
 
 const Message = () => {
 
-    // 하드코딩된 방 목록 (백엔드 연동 시 주석 처리)
-    const [messages, setMessages] = useState([
-        { id: 1, username: 'char1', title: '글 제목 1', lastMessage: '마지막 내용 1' },
-        { id: 2, username: 'char4', title: '글 제목 2', lastMessage: '마지막 내용 2' },
-        { id: 3, username: 'float2', title: '글 제목 3', lastMessage: '마지막 내용 3' },
-        { id: 4, username: 'int2', title: '글 제목 4', lastMessage: '마지막 내용 4' },
-        { id: 5, username: 'char3', title: '글 제목 5', lastMessage: '마지막 내용 5' },
-        { id: 6, username: 'char3', title: '글 제목 5', lastMessage: '마지막 내용 5' }
-    ]); // 하드코딩된 메시지 목록
-    
-    /*
-    // 백엔드와 연동할 때 사용할 초기 상태
-    const [messages, setMessages] = useState([]); // 메시지 목록 상태 관리 
-    */
+    const [messages, setMessages] = useState([]); // 메시지 목록 상태 관리
     const [visibleMessages, setVisibleMessages] = useState(4); // 처음에는 4개의 메시지만 표시
-    const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
+    const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
     const navigate = useNavigate();
 
-    /*
-     // 백엔드와 연동할 때 사용할 코드
     useEffect(() => {
-        const fetchMessages = async () => { 
+        const fetchMessages = async () => {
             try {
-                const id = 'subibi21'
-                const response = await fetch(`http://192.168.165.161:8080/Room/userId/${id}`);
-                if (!response.ok) {
+                // 로컬 스토리지에서 JWT 토큰 가져오기
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                    throw new Error('로그인 토큰이 없습니다.'); // 로그인되지 않은 상태
+                }
+    
+                // JWT 디코딩을 통해 사용자 ID 추출
+                const decodedToken = jwtDecode(token);
+                // const userId = decodedToken.userId; // JWT에 포함된 userId 키 확인 (예: "subibi21")
+                const userID = '1234'; // 테스트용 임시 고정 ID
+    
+                // 백엔드 API 호출
+                // 테스트 아닐때 url: https://e08d-61-84-64-212.ngrok-free.app/Room/userId/${userId}
+                const response = await axiosInstance.get(`https://e08d-61-84-64-212.ngrok-free.app/Room/OpenedRoom`, {
+
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true', // 필요 시 유지
+                      },
+                });
+                if (response.data.code !== 200) {
                     throw new Error('메시지 목록을 불러오는데 실패했습니다.');
                 }
-                const data = await response.json();
-                if(data.code!=200){
-                    throw new Error('메시지 목록을 불러오는데 실패했습니다.')
-                }
-                setMessages(data.data); // 메시지 목록 상태 업데이트
+                console.log(response);
+    
+                // 응답 데이터 상태에 저장
+                setMessages(response.data.data);
             } catch (error) {
                 console.error('메시지 목록 불러오는 중 오류가 발생했습니다:', error);
             }
         };
+    
         fetchMessages();
-    }, []); 
-    */
+    }, []);
    
 
     // 방 클릭 시 해당 채팅방으로 이동하는 함수
-    const handleRoomClick = (id) => {
-        navigate(`/chatroom/${id}`); // 방 ID를 기반으로 동적 경로로 이동
+    const handleRoomClick = async (id) => {
+        try {
+            // 사용자 정보 가져오기 (JWT 토큰에서 디코딩하거나 상태에서 가져오기)
+            const token = localStorage.getItem('authToken');
+            const decodedToken = jwtDecode(token); // JWT 디코딩
+            const userId = decodedToken.userId;
+            const userName = decodedToken.userName;
+    
+            // 방 입장 API 호출
+            await axiosInstance.post('/JoinRoom', {
+                roomId: id,
+                userId: userId,
+                userName: userName,
+            });
+    
+            // 성공 시 채팅방으로 이동
+            navigate(`/chatroom/${id}`);
+        } catch (error) {
+            console.error('방 입장 중 오류가 발생했습니다:', error);
+            alert('채팅방에 입장할 수 없습니다. 다시 시도해주세요.');
+        }
     };
+    
+    
 
     // 더보기 버튼 클릭 시 화면에 보이는 메시지 수를 증가시키는 함수
-    const handleLoadMore = () => {
-        setVisibleMessages((prevVisibleMessages) => prevVisibleMessages + 4);
+    const handleLoadMore = async () => {
+        try {
+            const nextPage = Math.ceil(visibleMessages / 4); // 현재 페이지 계산
+            const token = localStorage.getItem('authToken'); // JWT 토큰 가져오기
+            const decodedToken = jwtDecode(token); // JWT 디코딩
+            const userId = decodedToken.userId;
+    
+            // 백엔드에서 다음 페이지 메시지 요청
+            const response = await axiosInstance.get(`https://e08d-61-84-64-212.ngrok-free.app/Room/userId/${userId}`, {
+                params: { page: nextPage, size: 4 }, // 다음 페이지와 크기 설정
+                headers: {
+                    'ngrok-skip-browser-warning': 'true', // 필요 시 유지
+                  },
+            });
+    
+            if (response.data.code !== 200) {
+                throw new Error('메시지를 불러오는 데 실패했습니다.');
+            }
+    
+            // 기존 메시지에 새로운 데이터 추가
+            setMessages((prevMessages) => [...prevMessages, ...response.data.data]);
+    
+            // 화면에 표시되는 메시지 수 증가
+            setVisibleMessages((prevVisibleMessages) => prevVisibleMessages + 4);
+        } catch (error) {
+            console.error('메시지를 더 불러오는 중 오류가 발생했습니다:', error);
+            alert('메시지를 불러오는 데 실패했습니다.');
+        }
     };
+    
 
     // 메뉴 버튼 클릭 시 삭제 메뉴 표시
     const [menuOpenId, setMenuOpenId] = useState(null);
@@ -77,10 +128,22 @@ const Message = () => {
     };
 
     // 삭제 확인 모달에서 삭제 버튼 클릭 시
-    const handleConfirmDelete = () => {
-        setMessages((prevMessages) => prevMessages.filter((message) => message.id !== selectedMessageId));
-        setShowDeleteModal(false);
-        setSelectedMessageId(null);
+    const handleConfirmDelete = async () => {
+        try {
+            // 백엔드로 메시지 삭제 요청
+            await axiosInstance.delete(`/Room/message/${selectedMessageId}`); // API 호출
+    
+            // 로컬 상태에서 삭제된 메시지 제거
+            setMessages((prevMessages) =>
+                prevMessages.filter((message) => message.id !== selectedMessageId)
+            );
+    
+            setShowDeleteModal(false); // 모달 닫기
+            setSelectedMessageId(null); // 선택된 메시지 ID 초기화
+        } catch (error) {
+            console.error('메시지를 삭제하는 중 오류가 발생했습니다:', error);
+            alert('메시지를 삭제할 수 없습니다. 다시 시도해주세요.');
+        }
     };
 
     // 삭제 확인 모달에서 취소 버튼 클릭 시
@@ -158,4 +221,3 @@ const Message = () => {
 };
 
 export default Message;
-

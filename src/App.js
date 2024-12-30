@@ -27,12 +27,12 @@ import BoardPage from './pages/BoardPage';// 게시판 메인 페이지
 import QuestionCode from './pages/QuestionCode';// 코드 질문방 본문
 import RoomPage from './pages/RoomPage'; // 내가속한방 추가
 import Message from './pages/Message'; // 쪽지방
-import ChatRoom from './pages/ChatRoom'; // 채팅방 컴포넌트 추가
 import InformationCode from './pages/InformationCode'; // 정보 게시판 - 코드 질문방
 import InformationContest from './pages/InformationContest'; // 대회 정보게시판
 import ContestWrite from './pages/ContestWrite'; // 대회 글쓰기
 import AlarmPage from './pages/AlarmPage'; // 알림페이지
 import Announcement from './pages/Announcement'; // 공지사항
+
 
 // 지민이가 만든 채팅방 페이지
 import ClassChatRoom from './pages/ClassChatRoom'
@@ -50,61 +50,96 @@ import NoticeBoot from './pages/NoticeBoot';
 import Scrap from './pages/Scrap';
 import My_board from './pages/My_board';
 import My_message from './pages/My_message';
+import ChatRoom from './pages/ChatRoom'; // 정확한 경로로 ChatRoom 컴포넌트 import
+
+// 영현이 페이지
+import Class_Room from './pages/Class_Room'
+import FreeRoom from './pages/FreeRoom'
+import Profileedit from './pages/Profileedit'
+import Myprofile from './pages/Myprofile'
+import ChatPreview from './pages/ChatPreview'
+import Otherprofile from './pages/Otherprofile'
+import { UserProvider } from './pages/UserContext'; //유저 프로필
+import User_auth from './pages/User_auth'
+import Chat from './pages/Chat'
+import G_HomePage from './pages/G_HomePage'
+
+import HomePage from './pages/HomePage'; // 정확한 경로로 import 추가
+
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<StartPage />} />
-        <Route path="/StartPage" element={<StartPage />} />
-        <Route path="/_" element={<_ />} /> {/* 두 번째 페이지 라우팅 */}
-        <Route path="/LoginPage" element={<LoginPage />} />
-        <Route path="/FindIDPage" element={<FindIDPage />} />
-        <Route path="/FindPWPage" element={<FindPWPage />} />
-        <Route path="/JoinPage" element={<JoinPage />} />
+    <UserProvider>
+      <BrowserRouter>
+        <Routes>
 
-        <Route path="FreepostingPage" element={<FreepostingPage />} />
-        <Route path="QuestionpostingPage" element={<QuestionpostingPage />} />
-        <Route path="FreewritePage" element={<FreewritePage />} />
-        <Route path="QuestionwritePage" element={<QuestionwritePage />} />
-        <Route path="FreeboardPage" element={<FreeboardPage />} />
-        <Route path="QuestionboardPage" element={<QuestionboardPage />} />
+          {/* 쏘유니 */}
+          <Route path="/" element={<StartPage />} />
+          <Route path="/StartPage" element={<StartPage />} />
+          <Route path="/_" element={<_ />} /> {/* 두 번째 페이지 라우팅 */}
+          <Route path="/LoginPage" element={<LoginPage />} />
+          <Route path="/FindIDPage" element={<FindIDPage />} />
+          <Route path="/FindPWPage" element={<FindPWPage />} />
+          <Route path="/JoinPage" element={<JoinPage />} />
 
-        <Route path="G_freepostingPage" element={<G_freepostingPage />} />
-        <Route path="G_questionpostingPage" element={<G_questionpostingPage />} />
-        <Route path="G_freewritePage" element={<G_freewritePage />} />
-        <Route path="G_questionwritePage" element={<G_questionwritePage />} />
-        <Route path="G_freeboardPage" element={<G_freeboardPage />} />
-        <Route path="G_questionboardPage" element={<G_questionboardPage />} />
+          <Route path="FreepostingPage/:id" element={<FreepostingPage />} />
+          <Route path="QuestionpostingPage" element={<QuestionpostingPage />} />
+          <Route path="FreewritePage" element={<FreewritePage />} />
+          <Route path="QuestionwritePage" element={<QuestionwritePage />} />
+          <Route path="FreeboardPage" element={<FreeboardPage />} />
+          <Route path="QuestionboardPage" element={<QuestionboardPage />} />
+
+          <Route path="G_freepostingPage" element={<G_freepostingPage />} />
+          <Route path="G_questionpostingPage" element={<G_questionpostingPage />} />
+          <Route path="G_freewritePage" element={<G_freewritePage />} />
+          <Route path="G_questionwritePage" element={<G_questionwritePage />} />
+          <Route path="G_freeboardPage" element={<G_freeboardPage />} />
+          <Route path="G_questionboardPage" element={<G_questionboardPage />} />
 
 
-        {/* 상윤님 */}
-        <Route path="/BoardPage" element={<BoardPage />} /> {/*게시판 메인 페이지 */}
-        <Route path="/QuestionCode" element={<QuestionCode />} /> {/* 코드 질문방 본문 */}
-        <Route path="/RoomPage" element={<RoomPage />} />
-        <Route path="/Message" element={<Message />} />
-        <Route path="/InformationCode" element={<InformationCode />} /> {/* InformationCode 라우트 추가 */}
-        <Route path="/InformationContest" element={<InformationContest />} />
-        <Route path="/ContestWrite" element={<ContestWrite />} />
-        <Route path="/AlarmPage" element={<AlarmPage />} />
-        <Route path="/Announcement" element={<Announcement />} />
-        <Route path="/ClassChatRoom" element={<ClassChatRoom />} />
-        <Route path="/ClassChat" element={<ClassChat />} />
+          {/* 상윤님 */}
+          <Route path="/BoardPage" element={<BoardPage />} /> {/*게시판 메인 페이지 */}
+          <Route path="/QuestionCode" element={<QuestionCode />} /> {/* 코드 질문방 본문 */}
+          <Route path="/RoomPage" element={<RoomPage />} />
+          <Route path="/Message" element={<Message />} />
+          <Route path="/InformationCode" element={<InformationCode />} /> {/* InformationCode 라우트 추가 */}
+          <Route path="/InformationContest" element={<InformationContest />} />
+          <Route path="/ContestWrite" element={<ContestWrite />} />
+          <Route path="/AlarmPage" element={<AlarmPage />} />
+          <Route path="/Announcement" element={<Announcement />} />
+          <Route path="/ClassChatRoom" element={<ClassChatRoom />} />
+          <Route path="/ClassChat" element={<ClassChat />} />
 
-        {/* 석진이 형 페이지*/}
-        <Route path="/Noticeboard" element={<NoticeBoard />} />
-        <Route path="/chatroom/:id" element={<ChatRoom />} /> {/* 동적 라우팅을 통한 채팅방 페이지 */}
-        <Route path="/Write" element={<WritePage />} />
-        <Route path="/Classroom" element={<Classroom />} />
-        <Route path="/Bootcamp" element={<BootCamp />} />
-        <Route path="/Industry" element={<Industry />} />
-        <Route path="/Study" element={<Study />} />
-        <Route path="/NoticeBoot" element={<NoticeBoot />} />
-        <Route path="/Scrap" element={<Scrap />} />
-        <Route path="/My_board" element={<My_board />} />
-        <Route path="/My_message" element={<My_message />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="/ChatRoom/:id" element={<ChatRoom />} /> {/* 동적 라우팅을 통한 채팅방 페이지 */}
+
+          {/* 석진님 페이지*/}
+          <Route path="/Noticeboard" element={<NoticeBoard />} />
+          <Route path="/Write" element={<WritePage />} />
+          <Route path="/Classroom" element={<Classroom />} />
+          <Route path="/Bootcamp" element={<BootCamp />} />
+          <Route path="/Industry" element={<Industry />} />
+          <Route path="/Study" element={<Study />} />
+          <Route path="/NoticeBoot" element={<NoticeBoot />} />
+          <Route path="/Scrap" element={<Scrap />} />
+          <Route path="/My_board" element={<My_board />} />
+          <Route path="/My_message" element={<My_message />} />
+
+          {/* 영현 페이지*/}
+          <Route path="/HomePage" element={<HomePage />} />
+          <Route path="/Class_Room" element={<Class_Room />} />
+          <Route path="/FreeRoom" element={<FreeRoom />} />
+          <Route path="/Profileedit" element={<Profileedit />} />
+          <Route path="/Myprofile" element={<Myprofile />} />
+          <Route path="/ChatPreview" element={<ChatPreview />} />
+          <Route path="/Otherprofile" element={<Otherprofile />} />
+          <Route path="/User_auth" element={<User_auth />} />
+          <Route path="/G_HomePage" element={<G_HomePage />} />
+          <Route path="/Chat/" element={<Chat />} />
+
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
+
   );
 }
 
