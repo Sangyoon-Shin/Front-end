@@ -15,6 +15,7 @@ import BoardPage from './pages/BoardPage';
 import Scrap from './pages/Scrap';
 import My_board from './pages/My_board';
 import My_message from './pages/My_message';
+import ChatRoom from './pages/ChatRoom';
 
 
 
@@ -37,6 +38,7 @@ function App() {
             <Route path="/Scrap" element={<Scrap />} />
             <Route path="/My_board" element={<My_board />} />
             <Route path="/My_message" element={<My_message />} />
+            <Route path="/ChatRoom" element={<ChatRoom />} />
             
 
     </Routes>

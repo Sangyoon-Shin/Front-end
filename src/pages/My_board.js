@@ -28,18 +28,21 @@ const My_board = () => {
                         'Content-Type': 'application/json',
                     },
                 });
-
+    
                 if (response.ok) {
                     const data = await response.json();
-
-                    // data.codings 배열에서 필요한 정보만 추출하여 상태에 저장
-                    const extractedMessages = data.codings.map(item => ({
-                        id: item.id,
-                        userID: item.userID,
-                        codingTitle: item.codingTitle,
-                        codingCreatedTime: item.codingCreatedTime,
-                    }));
-                    setMessages(extractedMessages); // 필요한 데이터만 상태에 저장
+    
+                    // 기존 데이터 구조 변경
+                    const reformattedData = {
+                        posts: data.codings.map(item => ({
+                            id: item.id,
+                            title: item.title, // title로 매핑
+                            createTime: item.createTime, // createTime으로 매핑
+                            type: item.type, 
+                        })),
+                    };
+    
+                    setMessages(reformattedData.posts); // 상태에 posts를 저장
                 } else {
                     console.error('메시지 목록을 가져오는 데 실패했습니다.');
                 }
@@ -47,7 +50,7 @@ const My_board = () => {
                 console.error('API 호출 중 오류 발생:', error);
             }
         };
-
+    
         fetchMessages();
     }, []);
 
@@ -103,9 +106,9 @@ const My_board = () => {
                         <div className={styles.messageInfo}>
                             <div className={styles.headerInfo}>
                                 <span className={styles.nickname}>{message.userID}</span>
-                                <span className={styles.title}>{message.codingTitle || '제목 없음'}</span>
+                                <span className={styles.title}>{message.title || '제목 없음'}</span>
                             </div>
-                            <span className={styles.Time}>{new Date(message.codingCreatedTime).toLocaleString()}</span>
+                            <span className={styles.Time}>{new Date(message.createTime).toLocaleString()}</span>
                         </div>
                         <img
                             src={menuIcon}
