@@ -16,6 +16,9 @@ import Scrap from './pages/Scrap';
 import My_board from './pages/My_board';
 import My_message from './pages/My_message';
 import ChatRoom from './pages/ChatRoom';
+import IndustryBoard from './pages/IndustryBoard';
+import StudyBoard from './pages/StudyBoard';
+import BootBoard from './pages/BootBoard';
 
 
 
@@ -39,6 +42,9 @@ function App() {
             <Route path="/My_board" element={<My_board />} />
             <Route path="/My_message" element={<My_message />} />
             <Route path="/ChatRoom" element={<ChatRoom />} />
+            <Route path="/BootBoard" element={<BootBoard />} />
+            <Route path="/StudyBoard" element={<StudyBoard />} />
+            <Route path="/IndustryBoard" element={<IndustryBoard />} />
             
 
     </Routes>
