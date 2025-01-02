@@ -1,0 +1,272 @@
+    /* 태블릿 크기 대응 */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .container {
+    padding: 24px;
+    font-size: 16px;
+  }
+
+  .titleContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .writeButton {
+    font-size: 18px;
+    padding: 10px 20px;
+  }
+}
+  /* 텍스트 스타일 (아래로 살짝 내림) */
+  .title-text {
+    font-size: 0.9rem ;
+    color: #000000;
+    margin-bottom: 20px;
+    /* 텍스트를 아래로 살짝 내림 */
+    /*margin-top: 50px;  /* 텍스트를 아래로 살짝 내림 */
+  }
+  
+  .title-text2 {
+    margin-top: -40px;
+    font-size: 1.3rem;
+    color: #000000;
+    text-align: center;
+    flex-grow: 1;
+    /* 제목이 가능한 넓은 공간을 차지하도록 설정 */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    /* 제목을 정확히 중앙으로 이동 */
+  }
+  
+  .title-text3 {
+    font-size: 1.2rem ;
+    color: #000000;
+    margin-bottom: 10px;
+    margin-top: 0px;
+    /* 텍스트를 아래로 살짝 내림 */
+    margin-left: 10px;
+  }
+  
+  .title-text4 {
+    font-size: 1.2rem ;
+    color: #000000;
+    margin-bottom: 10px;
+    margin-left: 8px;
+    margin-top: 10px;
+
+    /* 텍스트를 아래로 살짝 내림 */
+    margin-right: 260px;
+  }
+
+  .title-text5 {
+    font-size: 1.2rem ;
+    color: #000000;
+    margin-bottom: 5px;
+    /* 텍스트를 아래로 살짝 내림 */
+    margin-right: 5px;
+    margin-top: 10px;
+
+  }
+
+  .title-text6 {
+    font-size: 1.2rem ;
+    color: #000000;
+    margin-bottom: 10px;
+    /* 텍스트를 아래로 살짝 내림 */
+    margin-top: 10px;
+    margin-right: 300px;
+  }
+  
+  .app-main_message2 {
+    height: 25px;
+    margin-top: -25px;
+    margin-left: 300px;
+  }
+  
+  .app-main_message3 {
+    height: 35px;
+    margin-top: -29px;
+    margin-left: 355px;
+  }
+  
+  /* INFO 텍스트 */
+  h2 {
+    font-size: 2.4rem;
+    color: #0056A0;
+    margin-bottom: 0px;
+    margin-right: 5px;
+    /* 텍스트를 아래로 살짝 내림 */
+  
+  }
+  
+  .app-arrow {
+    height: 35px;
+    margin-top: 20px;
+    margin-right: 380px;
+    cursor: pointer;
+    /* 커서를 손 모양으로 변경 */
+    transition: transform 0.3s ease;
+    /* 부드러운 확대 효과 추가 */
+  }
+  
+  .app-bar {
+    height: 3px;
+    width: 100%; /* 부모 요소 기준이 아닌 화면 전체 기준 */
+    margin: 20px auto; /* 세로 가운데 정렬 및 여백 */
+    background-color: #000; /* 배경 색 지정 */
+  }
+  
+ /* 입력 필드 */
+.input {
+  width: 90%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* 내용 입력란 (큰 텍스트 영역) */
+.textarea {
+  width: 80%;
+  height: 200px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none; /* 크기 조절 불가능 */
+}
+
+.app {
+  margin-top: 0px;
+    /* 상단바도 하나의 그룹이라 내가 원하는 항목 만들면 아래로 밀림.*/
+    padding: 20px;
+    background-color: white;
+    /* 배경색 설정 */
+    height: 100vh;
+    overflow-y: auto;
+    /* 스크롤 가능 */
+}
+
+.classroomContainer {
+  width: 100%;
+}
+
+.floorNav {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.floor {
+  font-size: 16px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.mascotIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pageNumber {
+  margin: 0 5px;
+  cursor: pointer;
+}
+.floor {
+  font-size: 16px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.activeFloor {
+  font-weight: bold;
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+.subTabNav {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.subTab {
+  margin: 0 10px;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.activeSubTab {
+  font-weight: bold;
+  color: blue;
+}
+
+
+/* 게시물 목록 */
+.postList {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /* 각 게시물 사이 간격 */
+}
+
+/* 개별 게시물 항목 */
+.postItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #ffffff;
+  /* 게시물의 배경색 */
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  /* 약간의 그림자 */
+}
+
+/* HOT 태그 */
+.hotTag {
+  color: red;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* 게시물 정보 */
+.postInfo {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* 게시물 제목 */
+.postTitle {
+  cursor: pointer;
+  /* 마우스를 올리면 손가락 커서로 변경 */
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.postTitle:hover {
+  color: black;
+  text-decoration: underline;
+  font-weight: 1000;
+}
+
+/* 게시물 날짜 */
+.postDate {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* 스크랩 아이콘 */
+.scrapIcon {
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+}
