@@ -1,0 +1,148 @@
+/* 전체 화면 스타일 */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: white;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.logoSection {
+  text-align: center;
+}
+
+.group-info {
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  margin-left: -200px; /* 왼쪽으로 20px 이동 */
+  gap: 10px;  
+  margin-top: -180px; /* 왼쪽으로 220px 이동 */
+}
+
+h1 {
+  font-size: 1.5rem;
+  color: #000000;
+  margin-bottom: px;
+}
+
+
+.loginBox {
+  background-color: #73B3E3;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 100px; /* 왼쪽으로 220px 이동 */
+    display: flex;           /* 부모 요소에 flexbox 적용 */
+  flex-direction: column;  /* 수직 정렬 */
+  align-items: center;     /* 자식 요소(버튼)를 가로 중앙 정렬 */
+  margin-bottom: 25px;
+
+}
+
+
+
+.loginButton {
+  background-color: #0056a0;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  width: 40%;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.loginButton:hover {
+  background-color: #004080;
+}
+
+.footerLinks {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.footerLinks a {
+  color: #0056a0;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.footerLinks a:hover {
+  text-decoration: underline;
+}
+
+/* INFO 텍스트 */
+h2 {
+  font-size: 2.7rem;
+  color: #0056A0;
+  margin-bottom: 30px;
+  margin-right: 100px;
+}
+
+.app-back_logo {
+  height: 90px;
+  margin-bottom: 80px;
+  margin-right: -120px;
+}
+
+
+.form-group {
+  margin-bottom: 20px;
+  position: relative; /* 부모 요소에 상대적 위치 설정 */
+
+}
+
+.form-group label {
+  display: block;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #333;
+  text-align: left; /* 입력한 텍스트도 왼쪽 정렬 */
+  
+
+}
+.inputWrapper {
+  position: relative; /* 버튼의 절대 위치를 설정할 기준 */
+  width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box; /* input 내부 패딩이 너비에 포함되도록 설정 */
+
+}
+
+.inputBtn {
+  position: relative; /* 원래 위치에서 10px 아래로 이동 */
+ 
+  /*position: absolute; /* 버튼을 절대 위치로 설정 */
+  right: -200px; /* 오른쪽으로 10px 간격 */
+  top: 50%; /* 수직 중앙으로 설정 */
+  transform: translateY(-109%); /* 수직 중앙 정렬 보정 */
+  padding: 8px;
+  background-color: #0056A0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.inputBtn:hover {
+  background-color: #004080;
+}
