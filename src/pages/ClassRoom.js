@@ -20,11 +20,7 @@ import Icon4 from '../images/내가속한방 횃불이.png';
 import Icon5 from '../images/수업소통방 횃불이.png';
 import Icon6 from '../images/자유소통방 횃불이.png';
 
-const roomsData = [
-  { id: 1, title: '데이터 베이스', lastMessage: '마지막 내용', icon: Icon7, selected: false },
-  { id: 2, title: 'C언어 프로그래밍(2)', lastMessage: '마지막 내용', icon: Icon7, selected: false },
-  { id: 3, title: '영상 처리', lastMessage: '마지막 내용', icon: Icon7, selected: false },
-];
+const roomsData = [];
 
 const ClassRoom = () => {
   const [rooms, setRooms] = useState(roomsData);
@@ -38,10 +34,24 @@ const ClassRoom = () => {
   const navigate = useNavigate();
 
   const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
-
+  const baseUrl = 'https://e757-61-84-64-212.ngrok-free.app'
   useEffect(() => {
+    const fetchRooms = async () => {
+        fetch(`${baseUrl}/Room/RoomList`, {
+            headers: {  "ngrok-skip-browser-warning": "abc",
+                'Content-Type': 'application/json' },
+            method: 'GET',
+        }).then((res)=> {return res.json()})
+        .then((data) => {
+            console.log(data);
+            setRooms(data.data);
+        });
+    };
+
+    fetchRooms();
+    
     // 웹소켓 서버와 연결 (서버 URL을 실제 백엔드 주소로 변경)
-    const newSocket = io('http://localhost:5000');  // 실제 백엔드 URL로 변경
+    const newSocket = io(`${baseUrl}`);  // 실제 백엔드 URL로 변경
     setSocket(newSocket);
 
     // 채팅 메시지 수신 이벤트 처리
@@ -53,25 +63,25 @@ const ClassRoom = () => {
     // 컴포넌트 언마운트 시 웹소켓 연결 종료
     return () => newSocket.close();
   }, []);
-
+  
   const handleRoomClick = (roomId) => {
     // 채팅방 입장 API 호출 (백엔드 URL로 변경)
-    fetch('http://localhost:5000/JoinRoom', {  // 백엔드 엔드포인트로 변경
+    fetch(`${baseUrl}/JoinRoom`, {  // 백엔드 엔드포인트로 변경
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {  "ngrok-skip-browser-warning": "abc",
+                'Content-Type': 'application/json' },
       body: JSON.stringify({
         roomId: roomId,
-        userName: 'John Doe', // 실제 사용자 이름으로 변경
-        userId: 'user123',  // 실제 사용자 ID로 변경
-        profileUrl: 'https://profile-url.com',  // 프로필 이미지 URL
+        userName: '김수빈', // 실제 사용자 이름으로 변경
+        userId: '202301641',  // 실제 사용자 ID로 변경  // 프로필 이미지 URL
       }),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.code === 200) {
           // 서버에서 'join-room' 이벤트를 처리하도록 설정
-          socket.emit('join-room', roomId);  
-          navigate(`/room/${roomId}`);
+          //socket.emit('join-room', roomId);  
+          navigate(`/Room/${roomId}`);
         }
       });
   };
@@ -112,15 +122,15 @@ const ClassRoom = () => {
                   isDesktop ? styles.desktopRoomItem : ''
                 }`}
               >
-                <img src={room.icon} alt={`방 아이콘 ${room.id}`} className={`${styles.roomIcon} ${isDesktop ? styles.desktopRoomIcon : ''}`} />
+                <img src={room.icon} alt={`방 아이콘 ${room.roomId}`} className={`${styles.roomIcon} ${isDesktop ? styles.desktopRoomIcon : ''}`} />
                 <div className={`${styles.roomInfo} ${isDesktop ? styles.desktopRoomInfo : ''}`}>
-                  <div className={`${styles.roomTitle} ${isDesktop ? styles.desktopRoomTitle : ''}`}>{room.title}</div>
+                  <div className={`${styles.roomTitle} ${isDesktop ? styles.desktopRoomTitle : ''}`}>{room.roomName}</div>
                   <div className={`${styles.roomMessage} ${isDesktop ? styles.desktopRoomMessage : ''}`}>{room.lastMessage}</div>
                 </div>
 
                 <button
                   className={`${styles.joinButton} ${isDesktop ? styles.desktopJoinButton : ''}`}
-                  onClick={() => handleRoomClick(room.id)}
+                  onClick={() => handleRoomClick(room.roomId)}
                 >
                   참여하기
                 </button>

@@ -28,6 +28,7 @@ const roomsData = [
 
 const FreeRoom = () => {
   const [rooms, setRooms] = useState(roomsData);
+  const [filteredRooms, setFilteredRooms] = useState(roomsData); // 필터된 방 목록
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState('재학생');
@@ -69,7 +70,12 @@ const FreeRoom = () => {
 
   // 검색 기능 처리 함수
   const handleSearch = () => {
-    console.log('검색어:', searchTerm);
+    const filtered = rooms.filter(
+      (room) =>
+        room.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        room.lastMessage.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredRooms(filtered);
   };
 
   // 필터링 처리 함수
@@ -78,7 +84,7 @@ const FreeRoom = () => {
     console.log('필터 선택:', filter);
   };
 
-  //프로필로 이동
+  // 프로필로 이동
   const handleProfileClick = () => {
     navigate('/myprofile');
   };
@@ -95,6 +101,11 @@ const FreeRoom = () => {
       socketRef.current.send(JSON.stringify(messageData));
     }
   };
+
+  // 검색어가 변경될 때마다 검색 실행
+  useEffect(() => {
+    handleSearch();
+  }, [searchTerm]);
 
   return (
     <div className={styles.app}>
@@ -143,7 +154,7 @@ const FreeRoom = () => {
           </div>
 
           <div className={styles.roomsList}>
-            {rooms.map((room) => (
+            {filteredRooms.map((room) => (
               <div key={room.id} className={`${styles.roomItem} ${room.selected ? styles.selected : ''}`}>
                 <img src={room.icon} alt={`방 아이콘 ${room.id}`} className={styles.roomIcon} />
                 <div className={styles.roomInfo}>

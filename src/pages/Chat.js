@@ -24,11 +24,12 @@ const Chat = () => {
     const [userCount, setUserCount] = useState(0); // 채팅방 인원 수
     const [users, setUsers] = useState([]); // 채팅방 사용자 목록
     const messageListRef = useRef(null);
-
+    const [room, setRoom] = useState([]); // 채팅방 정보
     const token = localStorage.getItem('token'); // 로컬 스토리지에서 JWT 토큰 가져오기
 
-    const roomId = classId; // 채팅방 ID는 classId로 설정
+    const roomId = '91f3411b-1433-4fdd-b3ac-c0a594b5f407'; // 채팅방 ID는 classId로 설정
     const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
+    const baseUrl = ' https://e757-61-84-64-212.ngrok-free.app'; // 백엔드 서버 URL
     // 웹소켓 초기화 함수
     const initializeWebSocket = () => {
         if (!token) {
@@ -36,7 +37,7 @@ const Chat = () => {
             return;
         }
 
-        const socketUrl = `ws://your-backend-server.com/ws/chat/${roomId}`; // WebSocket 서버 URL
+        const socketUrl = `ws://${baseUrl}/ws/chat/${roomId}`; // WebSocket 서버 URL
         websocketRef.current = new WebSocket(socketUrl, [], { 
             headers: { Authorization: `Bearer ${token}` }  // JWT 토큰을 헤더에 추가
         });
@@ -103,13 +104,14 @@ const Chat = () => {
     // 채팅방 입장 API 호출
     const joinRoom = async () => {
         try {
-            const response = await axios.post('http://your-backend-server.com/JoinRoom', {
+            const response = await axios.post(`${baseUrl}/JoinRoom`, {
                 roomId: roomId,
-                userName: 'John Doe', // 예시로 고정된 이름, 실제 사용자 이름을 사용
-                userId: 'user123', // 예시로 고정된 사용자 ID, 실제 사용자 ID를 사용
+                userName: '김수빈', // 예시로 고정된 이름, 실제 사용자 이름을 사용
+                userId: '202301641', // 예시로 고정된 사용자 ID, 실제 사용자 ID를 사용
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    "ngrok-skip-browser-warning": "abc",
+                    Authorization: `Bearer ${token}`
                 }
             });
             if (response.data.code === 200) {
@@ -123,20 +125,31 @@ const Chat = () => {
     // 채팅방 정보 및 사용자 목록 조회
     const fetchRoomInfo = async () => {
         try {
-            const [roomData, userList] = await Promise.all([
-                axios.get(`http://your-backend-server.com/Room/${roomId}`, {
-                    headers: { Authorization: `Bearer ${token}` }
+            const [roomData, userList, chatData] = await Promise.all([
+                axios.get(`${baseUrl}/Room/${roomId}`, {
+                    headers: { Authorization: `Bearer ${token}`,"ngrok-skip-browser-warning": "abc" }
                 }),
-                axios.get(`http://your-backend-server.com/Room/GetUserList/${roomId}`, {
-                    headers: { Authorization: `Bearer ${token}` }
+                axios.get(`${baseUrl}/Room/GetUserList/${roomId}`, {
+                    headers: {"ngrok-skip-browser-warning": "abc", Authorization: `Bearer ${token}` }
+                }),
+                axios.get(`${baseUrl}/GetChatData/${roomId}`, {
+                    headers: {"ngrok-skip-browser-warning": "abc", Authorization: `Bearer ${token}` }
                 })
             ]);
+
             if (roomData.data.code === 200) {
+                console.log(roomData);
+                console.log(userList);
+                setRoom(roomData.data.data);
                 setUserCount(roomData.data.data.userCount);
             }
             if (userList.data.code === 200) {
                 setUsers(userList.data.data);
             }
+            if(chatData.data.code === 200) {
+                console.log(chatData.data.data); 
+                setMessages(chatData.data.data.data); }
+                
         } catch (error) {
             console.error('채팅방 정보 또는 사용자 목록 조회 실패:', error);
         }
@@ -206,14 +219,14 @@ const Chat = () => {
                 </div>
 
                 <div className={`${styles.classInfo} ${isDesktop ? styles.desktopClassInfo : styles.mobileClassInfo}`}>
-                    <span>데이터 베이스</span>
+                    <span>{room.roomName}</span>
                     <span>인원 : {userCount}</span>
                 </div>
 
                 <div className={styles.messageList} ref={messageListRef}>
                     {messages.map((msg, index) => (
-                        <div key={index} className={msg.sender === 'me' ? styles.sentMessage : styles.receivedMessage}>
-                            <span className={styles.messageText}>{msg.text}</span>
+                        <div key={index} className={msg.userId === '202201659' ? styles.sentMessage : styles.receivedMessage}>
+                            <span className={styles.messageText}>{msg.message}</span>
                             <span className={styles.messageTime}>{msg.time}</span>
                         </div>
                     ))}

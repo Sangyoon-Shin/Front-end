@@ -42,7 +42,8 @@ function App() {
 
             
             <Route path="/ClassRoom" element={<ClassRoom />} />
-    
+            <Route path="/Room/:roomId" element={<Chat />} />
+
             <Route path="/FreeRoom" element={<FreeRoom />} />
 
 

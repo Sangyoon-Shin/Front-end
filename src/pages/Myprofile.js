@@ -13,37 +13,43 @@ import UserContext from './UserContext'; // 유저 프로필
 const Myprofile = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const [profileData, setProfileData] = useState({ nickname: '', userId: '' });
+  const [profileData, setProfileData] = useState({ userName: '', userId: '' });
 
   // API 호출로 프로필 데이터 로드
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const userId = user?.userId; // 현재 로그인된 사용자 ID
-        if (!userId) return;
+        const userId = '202301641'; // 현재 로그인된 사용자 ID user?.userId
+      //  if (!userId) return;
 
         // 사용자 채팅방 목록 조회
-        const response = await fetch(`/Room/userId/${userId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch user rooms.');
-        }
-
+        const response = await fetch(`https://ed75-61-84-64-212.ngrok-free.app/Room/userId/${userId}`, {
+          headers: {
+              contentType: 'application/json',
+              'ngrok-skip-browser-warning': 'abc',
+              
+          },
+          method: 'GET',
+      });
+        
         const data = await response.json();
+        
         const userRooms = data.data;
 
+        console.log(userRooms);
         if (userRooms && userRooms.length > 0) {
           // 필요한 데이터만 추출해 저장
           setProfileData({
-            nickname: userRooms[0]?.username || '닉네임 없음',
+            userName: userRooms[0]?.userName || '닉네임 없음',
             userId,
           });
         } else {
           console.error('No rooms found for this user.');
-          setProfileData({ nickname: '채팅방 없음', userId });
+          setProfileData({ userName: '채팅방 없음', userId });
         }
       } catch (error) {
         console.error('Error fetching profile data:', error);
-        setProfileData({ nickname: '오류 발생', userId: user?.userId || '' });
+        setProfileData({ userName: '오류 발생', userId: user?.userId || '' });
       }
     };
 
@@ -147,7 +153,7 @@ const Myprofile = () => {
             }`}
           >
             <div className={styles.nickname}>
-              {profileData.nickname || '로딩 중...'}
+              {profileData.userName || '로딩 중...'}
             </div>
             <button
               className={`${styles.editButton} ${
