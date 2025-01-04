@@ -23,7 +23,7 @@ const AlarmPage = () => {
     const [messages, setMessages] = useState([]); // 메시지 목록 상태 관리 
     */
     const [visibleMessages, setVisibleMessages] = useState(5); // 처음에는 4개의 메시지만 표시
-    const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
+    const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
     const navigate = useNavigate();
 
     /*
@@ -93,7 +93,16 @@ const AlarmPage = () => {
         <div className={styles.container}>
             <Header />
             <div className={styles.content}>
-                
+                <div className={`${styles.titleContainer} ${isDesktop ? styles.desktopTitleContainer : ''}`}>
+                    <img
+                        src={CommunicationRoom_goBack}
+                        className={`${styles.goBackButton} ${isDesktop ? styles.desktopGoBackButton : ''}`}
+                        alt="뒤로가기"
+                        onClick={() => navigate(-1)}  /* 뒤로 가기 동작 추가 */
+                    />
+
+                </div>
+
                 <div className={`${styles.messageList} ${isDesktop ? styles.desktopmessageList : ''}`}>
                     {messages.slice(0, visibleMessages).map((message) => (
                         <div

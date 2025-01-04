@@ -62,10 +62,10 @@
   /*게시판*/
   font-size: 1.6rem;
   color: #000000;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   /* 텍스트를 아래로 살짝 내림 */
   margin-top: 0px;
-  margin-left: 30px;
+  margin-left: 10px;
   /* 텍스트를 아래로 살짝 내림 */
 }
 
@@ -116,6 +116,21 @@
   margin-top: 5px;
   /* margin-top을 적은 값으로 설정 */
   margin-left: 10px;
+}
+
+.hover-image {
+  display: inline-block;
+  cursor: pointer;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.hover-image img {
+  width: 25px; /* 이미지 크기 조정 */
+}
+
+.hover-image:hover {
+  transform: scale(1.1); /* 호버 시 확대 */
+  opacity: 0.8; /* 호버 시 투명도 변경 */
 }
 
 .app-camera {
@@ -247,7 +262,7 @@ h2 {
 }
 
 .comment-item {
-  width: 90%;
+  width: 95%;
   /* 댓글의 너비를 100%로 설정 */
   height: auto;
   /* 댓글 박스의 고정된 높이 설정 */
@@ -344,7 +359,7 @@ h2 {
 /* 대댓글 입력창 스타일 */
 .reply-input {
   margin-top: 10px;
-  margin-left: 20px;
+  margin-left: 10px;
   /* 대댓글 입력창을 댓글보다 살짝 오른쪽으로 이동 */
 }
 
@@ -424,7 +439,7 @@ button:hover {
 }
 
 .textarea_reply {
-  width: 90%;
+  width: 100%;
   /* 너비를 적절히 조정 */
   height: 50px;
   padding: 10px;
@@ -439,11 +454,12 @@ button:hover {
 }
 
 .reply-container {
+  width:100%;
   display: flex;
   /* Flexbox로 설정 */
   justify-content: center;
   /* 오른쪽 정렬 */
-  margin-top: -30px;
+  margin-top: -20px;
   /* 위쪽 여백 추가 */
   margin-right: 20px;
 }
@@ -463,5 +479,5 @@ button:hover {
   /* 모서리를 둥글게 */
   cursor: pointer;
   /* 커서 변경 */
-  margin-left: 270px;
+  margin-left: 330px;
 }

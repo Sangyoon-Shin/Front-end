@@ -39,20 +39,26 @@ const LoginPage = () => {
       console.log('Headers:', response.headers); // 응답 헤더 확인
       console.log('Data:', response.data); // 응답 데이터 확인
 
-      const jwtToken = response.headers['authorization']?.split(' ')[1];
+      // 디버깅 코드 추가
+      console.log('Response:', response); // 전체 응답 객체 확인
+      console.log('Headers:', response.headers); // 응답 헤더 확인
+      console.log('Data:', response.data); // 응답 데이터 확인
+
+      const jwtToken = response.headers["authorization"]?.split(" ")[1]; // Bearer 뒤의 토큰 부분
       const refreshToken = response.headers["refreshtoken"]; // RefreshToken 헤더 값
 
-      if (!jwtToken) {
-        throw new Error("Authorization token missing in response");
+      if (!jwtToken || !refreshToken) {
+        throw new Error("토큰이 응답에 없습니다.");
       }
 
-      localStorage.setItem('accessToken', jwtToken);
+      // 로컬 스토리지에 토큰 저장
+      localStorage.setItem("authToken", jwtToken);
       localStorage.setItem("refreshToken", refreshToken);
 
-
-      setError('');
-      setUsername('');
-      setPassword('');
+      // 상태 초기화
+      setError("");
+      setUsername("");
+      setPassword("");
 
       // 로그인 성공 시 메인 페이지로 이동
       navigate('/HomePage'); // 이동할 페이지 경로 설정

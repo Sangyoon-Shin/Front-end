@@ -13,7 +13,7 @@ import bar from '../images/bar.png';
 import Header from './_.js';  // 상단바 컴포넌트
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'http://info-rmation.kro.kr/';
+const BASE_URL = 'http://info-rmation.kro.kr/board';
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
   const userId = localStorage.getItem('userId'); // 이 부분이 사용자 ID를 가져옵니다.
@@ -303,39 +303,79 @@ const FreepostingPage = () => {
     <div>
       <Header />
       <div className={styles["content"]}>
-        <img src={arrow} className={styles["app-arrow"]} alt="back_arrow" onClick={() => navigate(-1)} />
-        <h1 className={styles["title-text2"]}>자유게시판</h1>
+        <img
+          src={arrow}
+          className={styles["app-arrow"]}
+          alt="back_arrow"
+          onClick={handleBackClick}
+        />
+        <h1 className={styles["title-text2"]}>자유 게시판</h1>
         <img src={bar} className={styles["app-bar"]} alt="bar" />
-        <h1 className={styles["title-text3"]}>{title}</h1>
+  
+        <h1 className={styles["title-text3"]}>{title || "게시판 제목"}</h1>
+  
         <div className={styles["right-section"]}>
-          <img src={main_message} className={styles["app-main_message2"]} alt="main_message" />
-          <img src={scrab} className={styles["app-main_message3"]} alt="main_message" />
+          {/* 첫 번째 이미지 */}
+          <div
+            className={styles["hover-image"]}
+            onClick={() => navigate("/ChatRoom")} // 원하는 페이지로 이동
+          >
+            <img
+              src={main_message}
+              className={styles["app-main_message2"]}
+              alt="main_message"
+            />
+          </div>
+  
+          {/* 두 번째 이미지 */}
+          <div
+            className={styles["hover-image"]}
+            onClick={() => navigate("/scrap")} // 스크랩 페이지로 이동
+          >
+            <img
+              src={scrab}
+              className={styles["app-main_message3"]}
+              alt="scrab"
+            />
+          </div>
         </div>
+  
         <h2 className={styles["title-text4"]}>작성일: {formattedDate}</h2>
+  
         <div className={styles["report"]}>
           <button onClick={togglePopup} className={styles["report-button"]}>
             신고하기
           </button>
         </div>
       </div>
+  
       {isPopupOpen && (
         <div className={styles["popup"]}>
           <div className={styles["popup-inner"]}>
             <h3>신고하기</h3>
             <p>신고 내용을 입력하세요:</p>
-            <textarea className={styles["popup-textarea"]} onChange={(e) => setReportContent(e.target.value)} />
+            <textarea
+              className={styles["popup-textarea"]}
+              value={reportContent}
+              onChange={(e) => setReportContent(e.target.value)}
+            />
             <div className={styles["popup-button-container"]}>
-              <button onClick={togglePopup} className={styles["popup-close"]}>닫기</button>
-              <button onClick={submitReport} className={styles["popup-receive"]}>제출</button>
+              <button onClick={togglePopup} className={styles["popup-close"]}>
+                닫기
+              </button>
+              <button onClick={submitReport} className={styles["popup-receive"]}>
+                제출
+              </button>
             </div>
           </div>
         </div>
       )}
+  
       {isAlertOpen && (
-        <div className={styles["alert-popup"]}>
-          제출이 완료되었습니다.
-        </div>
+        <div className={styles["alert-popup"]}>제출이 완료되었습니다.</div>
       )}
+  
+      {/* 자유게시판 내용(수정 가능 시) */}
       <div className={styles["content-input"]}>
         <textarea
           className={styles["textarea"]}
@@ -344,13 +384,17 @@ const FreepostingPage = () => {
           placeholder="내용을 입력하세요."
         />
       </div>
+  
+      {/* 파일 업로드 */}
       <input
         type="file"
         ref={fileInputRef}
-        style={{ display: 'none' }}
+        style={{ display: "none" }}
         accept="image/*"
         onChange={handleFileChange}
       />
+  
+      {/* 좋아요 하트 */}
       <div className={styles["heart"]}>
         <img
           src={isHeartFilled ? filledHeart : heart}
@@ -359,6 +403,8 @@ const FreepostingPage = () => {
           onClick={handleHeartClick}
         />
       </div>
+  
+      {/* 댓글 입력 */}
       <div className={styles["content-input2"]}>
         <textarea
           className={styles["textarea2"]}
@@ -370,27 +416,36 @@ const FreepostingPage = () => {
       <div className={styles["reply-button"]}>
         <button onClick={handleAddComment}>댓글 달기</button>
       </div>
+  
+      {/* 댓글 목록 */}
       <div className={styles["comments-section"]}>
         {comments.map((comment, index) => (
           <div key={index} className={styles["comment-item"]}>
+            {/* 서버에서 nickname 대신 userId로 넘길 수도 있음 */}
             <strong>{comment.nickname}:</strong> {comment.content}
             <div className={styles["reply-container"]}>
-              <button className={styles["toggle-reply-button"]} onClick={() => handleToggleReply(index)}>
-                {replyVisible[index] ? '대댓글 숨기기' : '대댓글 달기'}
+              <button
+                className={styles["toggle-reply-button"]}
+                onClick={() => handleToggleReply(index)}
+              >
+                {replyVisible[index] ? "대댓글 숨기기" : "대댓글 달기"}
               </button>
             </div>
+  
             {replyVisible[index] && (
               <div className={styles["reply-input"]}>
                 <textarea
                   className={styles["textarea_reply"]}
-                  value={replyContents[index] || ''}
+                  value={replyContents[index] || ""}
                   onChange={(e) => handleReplyChange(index, e)}
                   placeholder="대댓글을 입력하세요."
                 />
                 <button onClick={() => handleAddReply(index)}>대댓글 달기</button>
               </div>
             )}
-            {comment.replies.length > 0 && (
+  
+            {/* 대댓글 목록 */}
+            {comment.replies && comment.replies.length > 0 && (
               <div className={styles["replies-section"]}>
                 {comment.replies.map((reply, replyIndex) => (
                   <div key={replyIndex} className={styles["reply-item"]}>

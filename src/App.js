@@ -33,10 +33,7 @@ import ContestWrite from './pages/ContestWrite'; // 대회 글쓰기
 import AlarmPage from './pages/AlarmPage'; // 알림페이지
 import Announcement from './pages/Announcement'; // 공지사항
 
-
-// 지민이가 만든 채팅방 페이지
-import ClassChatRoom from './pages/ClassChatRoom'
-import ClassChat from './pages/ClassChat'
+import BoardCode from './pages/BoardCode';
 
 
 // 석진이형 페이지
@@ -66,6 +63,10 @@ import G_HomePage from './pages/G_HomePage'
 
 import HomePage from './pages/HomePage'; // 정확한 경로로 import 추가
 
+
+// 지민이가 만든 채팅방 페이지
+import ClassChatRoom from './pages/ClassChatRoom'
+import ClassChat from './pages/ClassChat'
 
 function App() {
   return (
