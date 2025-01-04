@@ -226,14 +226,7 @@ const BoardPage = () => {
           {/* 페이지 타이틀 */}
           <h1 className={`${styles.pageTitle} ${isDesktop ? styles.desktopPageTitle : ''}`}>
             정보 게시판
-          </h1>
-          {/* 드롭다운 버튼 (이미지로 표시) */}
-          <img
-            src={DownMenu}
-            className={`${styles.downMenuButton} ${isDesktop ? styles.desktopDownMenuButton : ''}`}
-            alt="게시판 선택"
-            onClick={toggleMenu}
-          />
+          </h1>          
         </div>
         <div className={styles.categoryContainer}>
           {['부트캠프', '산업 연계', '스터디'].map((category) => (
