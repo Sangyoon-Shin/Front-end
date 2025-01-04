@@ -13,7 +13,7 @@ import bar from '../images/bar.png';
 import Header from './_.js';  // 상단바 컴포넌트
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'https://bcefb2d9d162.ngrok.app/';
+const BASE_URL = 'http://info-rmation.kro.kr/';
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
   const userId = localStorage.getItem('userId'); // 이 부분이 사용자 ID를 가져옵니다.
@@ -135,7 +135,7 @@ const FreepostingPage = () => {
     const getBoard = async () => {
       const accessToken = localStorage.getItem('accessToken');
       console.log(id);
-      fetch(`https://bcefb2d9d162.ngrok.app/api/board/free/${id}`, {
+      fetch(`http://info-rmation.kro.kr/api/board/free/${id}`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'ngrok-skip-browser-warning': 1
