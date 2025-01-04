@@ -37,6 +37,7 @@ import AlarmPage from './pages/AlarmPage';
 // 공지사항
 import Announcement from './pages/Announcement';
 
+import BoardCode from './pages/BoardCode';
 
 
 // 석진이형 페이지
@@ -66,6 +67,7 @@ function App() {
         <Route path="/ClassChatRoom" element={<ClassChatRoom />} />
         <Route path="/ClassChat" element={<ClassChat />} />
         <Route path="/QuestionboardPage" element={<QuestionboardPage />} />
+        <Route path="/BoardCode" element={<BoardCode />} />
 
 
         {/* 석진이 형 페이지*/}
