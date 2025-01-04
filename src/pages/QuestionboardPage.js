@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
+import axiosInstance from '../utils/api';
 import Header from './_.js';  // 상단바 컴포넌트
 import styles from './QuestionboardPage.module.css';  // BoardPage용 CSS 파일
 import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
@@ -9,82 +10,94 @@ import SearchIcon from '../images/돋보기아이콘.png';  // 돋보기 아이�
 import IconScrap from '../images/횃불이스크랩.png';
 import IconUnscrap from '../images/횃불이스크랩X.png';
 
-// API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'http://<your-domain>/api/board';
-const getAuthHeaders = () => {
-  const accessToken = localStorage.getItem('accessToken');  // accessToken을 로컬스토리지에서 가져옴
-  const userId = localStorage.getItem('userId');  // 저장된 userId 가져오기
-  return {
-    'Authorization': `Bearer ${accessToken}`,
-    'X-USER-ID': userId,
-    'Content-Type': 'application/json',
-  };
-};
-
 const QuestionboardPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);  // 드롭다운 상태 관리
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
   const [scrapStatus, setScrapStatus] = useState({}); // 각 게시물의 스크랩 상태 관리
+  const [topLikedPosts, setTopLikedPosts] = useState([]); // 좋아요 10개 이상 게시물
   const [posts, setPosts] = useState([]); // 게시물 목록 상태 관리
+  const [initialPosts, setInitialPosts] = useState([]); // 최초 데이터 로드한 거 저장시키기
   const [sortType, setSortType] = useState('latest'); // 초기 정렬 상태는 'latest'
+
+  // 페이징 및 추가 필터링 상태
+  const [page, setPage] = useState(0); // 현재 페이지 번호
+  const [size, setSize] = useState(10); // 페이지당 항목 수
+  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
+  const [hashtagKeyword, setHashtagKeyword] = useState(''); // 해시태그 필터
+  const [typeKeyword, setTypeKeyword] = useState(''); // 타입 필터
+
+  // 로딩 상태 관리
+  const [isLoading, setIsLoading] = useState(false); // 데이터 로딩 상태
 
   const navigate = useNavigate();  // useNavigate 훅을 컴포넌트 내부에서 호출
 
-  // 반응형 처리를 위한 useMediaQuery 사용
-  const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
+  const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
 
-  // 게시물 목록 불러오기
   useEffect(() => {
     const fetchPosts = async () => {
+      setIsLoading(true); // 로딩 시작
       try {
-        const response = await fetch(`${BASE_URL}/quest`, {
-          method: 'GET',
-          headers: getAuthHeaders(),
+        const response = await axiosInstance.get('https://bcefb2d9d162.ngrok.app/api/board/quest', {
+          params: { page, size }, // 페이지와 사이즈를 쿼리 파라미터로 추가
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+          },
         });
-        if (!response.ok) {
-          throw new Error('게시물 목록을 불러오는데 실패했습니다.');
+
+        const data = response.data; // Axios는 자동으로 JSON을 파싱합니다.
+
+        if (!data.content || data.content.length === 0) {
+          console.warn('게시물이 없습니다.');
+          setPosts([]); // 빈 데이터로 상태 초기화
+          return;
         }
-        const data = await response.json();
-        setPosts(data.content);  // 게시물 목록 상태 업데이트
-        const initialScrapStatus = {};
-        data.content.forEach((post) => {
-          initialScrapStatus[post.id] = post.scrap;  // 게시물의 초기 스크랩 상태 설정
-        });
-        setScrapStatus(initialScrapStatus);  // 스크랩 상태 설정
+
+        setPosts(data.content); // 게시물 데이터 설정
+        setInitialPosts(response.data.content); // 초기 데이터 저장
+        setTotalPages(data.totalPages); // 전체 페이지 수 설정
+        console.log('게시물 데이터:', data);
       } catch (error) {
-        console.error('게시물 목록 불러오는 중 오류가 발생했습니다:', error);
+        console.error('게시물 목록을 불러오는 중 오류가 발생했습니다:', error);
+        alert('게시물 데이터를 불러오는데 문제가 발생했습니다. 다시 시도해주세요.');
+      } finally {
+        setIsLoading(false); // 로딩 종료
+      }
+    };
+    // 좋아요 10개 이상 게시물 가져오기
+    const fetchTopLikedPosts = async () => {
+      try {
+        const response = await axiosInstance.get('https://bcefb2d9d162.ngrok.app/api/board/quest/top-liked', {
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+          },
+        });
+        if (response.status === 200) {
+          console.log(response)
+          setTopLikedPosts(response.data.map((post) => post.id)); // 좋아요 10개 이상 게시물의 ID만 저장
+        } else {
+          setTopLikedPosts([]); // 데이터가 없는 경우 빈 배열로 초기화
+        }
+      } catch (error) {
+        console.error('좋아요 상위 게시물을 불러오는 중 오류가 발생했습니다:', error);
       }
     };
     fetchPosts();
-  }, []);
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);  // 드롭다운 토글
-  };
-
-  const handleBoardChange = (boardName) => {
-    if (boardName === '자유 게시판') {
-      navigate('/G_freeboardPage/'); // 자유게시판으로 이동
-    }
-    setMenuOpen(false);  // 메뉴 닫기
-  };
+    fetchTopLikedPosts();
+  }, [page, size]); // page와 size 변경 시 재호출
 
   const toggleScrap = async (id) => {
-    // 백엔드에 스크랩 상태를 업데이트하는 요청 보내기
     try {
-      const response = await fetch(`${BASE_URL}/quest/${id}/scrap`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
+      const response = await axiosInstance.post(`https://bcefb2d9d162.ngrok.app/api/board/quest/${id}/scrap`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+        },
+
       });
 
-      if (!response.ok) {
-        throw new Error('스크랩 상태 업데이트에 실패했습니다.');
-      }
-
-      // 서버 응답이 성공적일 경우 상태 업데이트
+      // 성공적으로 응답을 받은 경우 상태를 업데이트
       setScrapStatus((prevState) => ({
         ...prevState,
-        [id]: !prevState[id],  // 기존 상태를 반대로 변경
+        [id]: !prevState[id], // 현재 상태를 토글
       }));
 
       console.log('스크랩 상태가 성공적으로 업데이트되었습니다.');
@@ -94,8 +107,20 @@ const QuestionboardPage = () => {
     }
   };
 
+  const toggleMenu = () => {
+    setMenuOpen((prevMenuOpen) => !prevMenuOpen); // 드롭다운 메뉴 열기/닫기 토글
+  };
+
+  const handleBoardChange = (boardName) => {
+    if (boardName === '자유 게시판') {
+      navigate('/BoardPage/');
+    }
+    setMenuOpen(false);  // 메뉴 닫기
+  };
+
+
   // 검색 입력값을 변경하는 함수
-  const handleSearchInputChange = (event) => {
+  const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
@@ -105,18 +130,23 @@ const QuestionboardPage = () => {
     if (searchTerm.trim() !== '') {
       try {
         console.log(`검색어: ${searchTerm}`);
-        const response = await fetch(`${BASE_URL}/quest?searchKeyword=${encodeURIComponent(searchTerm)}`, {
-          method: 'GET',
-          headers: getAuthHeaders(),
+        const response = await axiosInstance.get('https://bcefb2d9d162.ngrok.app/api/board/quest', {
+          params: {
+            searchKeyword: searchTerm, // 검색어 전달
+            page: 0,
+            size: 10,
+          },
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+          },
         });
 
-        if (!response.ok) {
-          throw new Error('검색 결과를 불러오는데 실패했습니다.');
-        }
-
-        const data = await response.json();
+        const data = response.data;
         console.log('검색 결과:', data);
-        setPosts(data.content);  // 검색 결과를 게시물 목록으로 업데이트
+
+        // 검색 결과를 게시물 목록으로 업데이트 (명세서에 따른 구조 반영)
+        setPosts(data.content); // 'content' 필드가 검색 결과로 가정
+
         alert('검색이 완료되었습니다. 결과가 화면에 표시됩니다.');
       } catch (error) {
         console.error('검색 결과를 불러오는 중 오류가 발생했습니다:', error);
@@ -131,19 +161,43 @@ const QuestionboardPage = () => {
     navigate(`/post/${postId}`);  // 해당 게시물 상세 페이지로 이동
   };
 
+
   // 정렬 버튼 클릭 시 정렬 상태 업데이트
-  const handleSort = (type) => {
-    setSortType(type);
+  const handleSort = async (type) => {
+    setSortType(type); // 정렬 상태 업데이트
+
     if (type === 'latest') {
-      // 최신순으로 정렬
-      setPosts((prevPosts) =>
-        [...prevPosts].sort((a, b) => new Date(b.questCreatedTime) - new Date(a.questCreatedTime))
-      );
-    } else if (type === 'recommend') {
-      // 추천순으로 정렬 (좋아요 개수 기준)
-      setPosts((prevPosts) =>
-        [...prevPosts].sort((a, b) => b.questLike - a.questLike)
-      );
+      setPosts(initialPosts); // 초기 데이터로 복원
+      return;
+    }
+
+    try {
+      const params = {
+        page: 0,
+        size: 10,
+        searchKeyword: '', // 필요 시 값 설정
+        contentKeyword: '', // 필요 시 값 설정
+        hashtagKeyword: '', // 필요 시 값 설정
+        typeKeyword: '', // 필요 시 값 설정
+      };
+
+      const response = await axiosInstance.get('https://bcefb2d9d162.ngrok.app/api/board/quest/sort-by-likes', {
+        params,
+        headers: {
+          'ngrok-skip-browser-warning': 'true', // 필요 시 유지
+        },
+      });
+
+      const data = response.data;
+
+      if (!data || !data.content) {
+        throw new Error('API 응답이 올바르지 않습니다.');
+      }
+
+      setPosts(data.content); // 정렬된 데이터로 게시물 목록 업데이트
+    } catch (error) {
+      console.error('정렬 데이터 로드 중 오류 발생:', error);
+      alert('정렬된 데이터를 가져오는 중 오류가 발생했습니다.');
     }
   };
 
@@ -201,7 +255,7 @@ const QuestionboardPage = () => {
             <input
               type="text"
               value={searchTerm}
-              onChange={handleSearchInputChange}
+              onChange={handleSearchChange}
               className={`${styles.searchInput} ${isDesktop ? styles.desktopSearchInput : ''}`}
               placeholder="검색어 입력"
             />
@@ -216,13 +270,13 @@ const QuestionboardPage = () => {
           {/* 정렬 버튼들 */}
           <div className={`${styles.sortButtons} ${isDesktop ? styles.desktopSortButtons : ''}`}>
             <button
-              className={`${styles.sortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''}`}
+              className={`${styles.latestSortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''} ${sortType === 'latest' ? styles.activeSortButton : ''}`}
               onClick={() => handleSort('latest')}
             >
               최신순
             </button>
             <button
-              className={`${styles.sortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''}`}
+              className={`${styles.recommendSortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''} ${sortType === 'recommend' ? styles.activeSortButton : ''}`}
               onClick={() => handleSort('recommend')}
             >
               추천순
@@ -232,20 +286,28 @@ const QuestionboardPage = () => {
 
         {/* 게시물 목록 */}
         <div className={styles.postList}>
-          {posts.map((post) => (
+        {posts.map((post) => (
             <div key={post.id} className={styles.postItem}>
-              {/* HOT 표시 (상단 3개의 게시물) */}
-              {post.questLike > 10 && <span className={styles.hotTag}>HOT</span>}
+              {/* HOT 표시 (좋아요 10개 이상 게시물) */}
+              {topLikedPosts.includes(post.id) && (
+                <span className={styles.hotTag}>HOT</span>
+              )}
+
               {/* 게시물 제목 및 정보 */}
               <div className={styles.postInfo}>
                 <span
                   className={styles.postTitle}
                   onClick={() => handlePostClick(post.id)} // 게시물 제목 클릭 시 상세 페이지로 이동
                 >
-                  {post.questTitle}
+                  {post.questTitle || '제목 없음'} {/* 백엔드 데이터의 키에 맞춰 수정, 기본값 처리 */}
                 </span>
-                <span className={styles.postDate}>{new Date(post.questCreatedTime).toLocaleDateString()}</span>
+                <span className={styles.postDate}>
+                  {post.questCreatedTime
+                    ? new Date(post.questCreatedTime).toLocaleDateString() // 작성 날짜 표시
+                    : '날짜 없음'}
+                </span>
               </div>
+
               {/* 스크랩 버튼 */}
               <img
                 src={scrapStatus[post.id] ? IconScrap : IconUnscrap}
@@ -259,16 +321,17 @@ const QuestionboardPage = () => {
 
         {/* 페이지네이션 */}
         <div className={styles.pagination}>
-          {[1, 2, 3, 4, 5].map((pageNumber) => (
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
             <button
               key={pageNumber}
-              className={styles.pageButton}
-              onClick={() => navigate(`/board/page/${pageNumber}`)}
+              className={`${styles.pageButton} ${page === pageNumber - 1 ? styles.activePageButton : ''}`} // 현재 페이지 강조
+              onClick={() => setPage(pageNumber - 1)} // 페이지 번호 업데이트
             >
               {pageNumber}
             </button>
           ))}
         </div>
+
       </div>
     </div>
   );

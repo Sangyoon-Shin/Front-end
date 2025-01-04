@@ -23,6 +23,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "https://8d48-117-16-196-138.ngrok-free.app",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -40,5 +41,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "http-proxy-middleware": "^3.0.3"
   }
 }
