@@ -118,7 +118,7 @@ const InformationCode = () => {
     setMenuOpen(!menuOpen);  // 드롭다운 토글
   };
 
-  const handleLanguageChange = (language) => {
+  const handleLanguageChange = async (language) => {
     setSelectedLanguage(language);
     setMenuOpen(false); // 메뉴 닫기
 
