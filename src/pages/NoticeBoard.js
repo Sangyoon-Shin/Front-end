@@ -14,7 +14,7 @@ import Header from './_.js';  // 상단바 컴포넌트
 
 // API에서 사용할 기본 URL과 헤더 설정
 // 필요하다면 뒤쪽 슬래시(/)는 빼도 되고, 그에 따라 경로에 '/'를 붙여줄 수 있음
-const BASE_URL = 'https://bcefb2d9d162.ngrok.app/api/board';
+const BASE_URL = 'http://info-rmation.kro.kr/board';
 
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
