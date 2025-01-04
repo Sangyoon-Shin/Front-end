@@ -55,7 +55,7 @@ const LoginPage = () => {
       setPassword('');
 
       // 로그인 성공 시 메인 페이지로 이동
-      navigate('/'); // 이동할 페이지 경로 설정
+      navigate('/HomePage'); // 이동할 페이지 경로 설정
     }catch (error) {
       console.error("로그인 실패:", error.response?.data || error.message);
       if (error.response && error.response.status === 401) {

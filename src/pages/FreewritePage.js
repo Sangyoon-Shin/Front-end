@@ -12,7 +12,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'https://67c8-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board';
+const BASE_URL = 'https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board';
 
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
@@ -56,7 +56,6 @@ const FreewritePage = () => {
       setContent(freeContents);
       setHashtag(freeHashtag);
       setFiles(freeFile);
-
     } catch (error) {
       console.error('Error fetching post data:', error);
       alert('게시글 정보를 불러오는 데 실패했습니다.');
@@ -72,10 +71,12 @@ const FreewritePage = () => {
     formData.append('freeTitle', title);
     formData.append('freeContents', content);
     formData.append('freeHashtag', hashtag);
+
     // 파일이 있을 경우에만 추가
     if (files && files.length > 0) {
-      files.forEach((file) => formData.append('files', file)); // 'files'는 서버에서 요구하는 키 이름
+      files.forEach((file) => formData.append('freeFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
     }
+
     try {
       const url = isEditing ? `${BASE_URL}/free/update` : `${BASE_URL}/free/save`;
       const headers = { ...getAuthHeaders(), 'Content-Type': 'multipart/form-data' };
