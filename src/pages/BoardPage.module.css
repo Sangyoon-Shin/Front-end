@@ -17,18 +17,20 @@
 
 .titleContainer {
   display: flex;
+  justify-content: space-between;
+  /* 화살표는 왼쪽, 제목은 중앙 */
   align-items: center;
-  justify-content: center;
-  /* 중앙 정렬 */
   width: 100%;
   position: relative;
-  margin-top:20px;
+
+  /* 위 아래 공백 추가 */
+  padding-bottom: 10%;
+  padding-top:10%;
 }
 
 .pageTitle {
-  margin-left:10px;
-  margin-top: 20px;
-  font-size: 1.2rem;
+  margin-top: -200px;
+  font-size: 1.3rem;
   text-align: center;
   flex-grow: 1;
   /* 제목이 가능한 넓은 공간을 차지하도록 설정 */
@@ -40,28 +42,30 @@
 
 .goBackButton {
   cursor: pointer;
+  margin-left: 10px;
+  margin-top: -40px;
   height: 2rem;
-  position: absolute;
-  left: 10px;
-  /* 화면 왼쪽에 고정 */
+  width:auto;
 }
 
 .downMenuButton {
   cursor: pointer;
   height: 1rem;
   position: absolute;
-  right: 80px;
-  /* 화면 오른쪽에 고정 */
-  margin-left: 5px;
-  /* 제목과 메뉴 버튼 간격 */
+  /* 절대 위치 지정 */
+  margin-top: -10px;
+  right: 4.5rem;
+  /* 오른쪽에서 30px 떨어진 위치로 설정 */
+  transform: translateY(-120%);
+  /* 버튼을 상단바 중앙에 수직 정렬 */
 }
 
 .dropdownMenu {
   position: absolute;
-  top: 7rem;
+  top: 8rem;
   /* 버튼 아래에 위치 */
   margin-right: 2rem;
-  right: 60px;
+  right: 1rem;
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -76,15 +80,11 @@
 }
 
 .menuItem {
- 
-  padding: 10px 20px;
-  /* 각 항목의 크기를 적절히 조정 */
+  font-size:1.2rem;
+  padding: 10px;
   cursor: pointer;
-  list-style: none;
-  font-size: 1.1rem;
-  /* 텍스트 크기를 살짝 줄임 */
+  border-bottom: 1px solid #ddd;
   font-weight: bold;
-  /* 텍스트를 더 두껍게 표시 */
 }
 
 .controlPanel {
@@ -93,22 +93,22 @@
   align-items: center;
   gap: 10px;
   /* 간격을 조금 줄여 공간 확보 */
-  margin-top: 30px;
+  margin-top: -1rem;
   /* 상단과의 간격 줄이기 */
 }
 
 
 .writeButton {
-background-color: #244A95;
-color: white;
-padding: 5px 5px;
-/* 버튼의 패딩을 줄여 크기 조절 */
-border: none;
-border-radius: 15px;
-cursor: pointer;
-font-size: 0.8rem;
-width: 10%;
-/* 버튼의 너비를 줄여 균형 잡기 */
+  background-color: #244A95;
+  color: white;
+  padding: 5px 5px;
+  /* 버튼의 패딩을 줄여 크기 조절 */
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  width: 4rem;
+  /* 버튼의 너비를 줄여 균형 잡기 */
 }
 
 .writeButton:hover {
@@ -116,24 +116,24 @@ background-color: #1a3571;
 }
 
 .searchBar {
-width:80%;
-display: flex;
-align-items: center;
-background-color: #e0e0e0;
-border-radius: 5px;
-padding: 2px 10px;
-/* 패딩을 조정해 전체 크기를 줄임 */
-margin-left: 10px;
-
-/* 검색창을 살짝 오른쪽으로 이동 */
+  display: flex;
+  align-items: center;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  padding: 2px 10px;
+  /* 패딩을 조정해 전체 크기를 줄임 */
+  margin-left: 15px;
+  margin-right:15px;
+  /* 검색창을 살짝 오른쪽으로 이동 */
 }
 
 .searchInput {
-border: none;
-background: none;
-outline: none;
-width: 100%;
-align-items: center;
+  border: none;
+  background: none;
+  outline: none;
+  width: 90px;
+  /* 너비를 줄여 공간 확보 */
+  /* padding-left: 0px; */
 }
 
 .searchIcon {
@@ -142,17 +142,15 @@ cursor: pointer;
 }
 
 .sortButtons {
-display: flex;
-width: 20%;
-gap: 5px;
-/* 간격을 줄여 정렬 버튼 간의 공간 줄이기 */
+  display: flex;
+  gap: 5px;
+  /* 간격을 줄여 정렬 버튼 간의 공간 줄이기 */
 }
 
 /* 최신순 버튼 전용 스타일 */
 .latestSortButton, .recommendSortButton{
-font-size: 0.8rem;
-width:70px;
-margin-left:10px;
+  font-size: 0.8rem;
+  width:55px;
 }
 
 .activeSortButton {
@@ -296,32 +294,105 @@ color: #ffffff;
   background-color: #aaa;
 }
 
-.categoryContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 60px;
-  margin-top:20px;
-  margin-bottom: 20px;
-  font-size: 16px;
-  border-bottom: 2px solid #ddd;
-  padding-bottom: 10px;
-}
+/* 데스크탑 전용 CSS 설정 */
+@media (min-width: 1024px) {
+  .desktopTitleContainer {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
 
-.category {
-  cursor: pointer;
-  padding: 5px 10px;
-  color: #444;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  border-bottom: 2px solid transparent;
-}
+  .desktopGoBackButton {
+    height: 3rem;
+    width:auto;
+    margin-left: 280px;
+    margin-top: 15px;
+  }
 
-.category:hover {
-  color: #007bff;
-}
+  .desktopPageTitle {
+    margin-top: -150px;
+    font-size: 1.5rem;
+  }
 
-.activeCategory {
-  color: #007bff;
-  border-bottom: 2px solid #007bff;
+  /* 큰 화면용 메뉴 버튼 */
+  .desktopDownMenuButton {
+    height: 1rem;
+    right: 22rem;
+    margin-top: 3rem;
+  }
+
+  .desktopDropdownMenu {
+    position: absolute;
+    top: 11rem;
+    right: 18.4rem;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    /* 다른 요소 위에 보이게 */
+  }
+
+  .desktopControlPanel {
+    display: flex;
+    justify-content: center; /* 컨트롤 패널 내의 요소들을 중앙에 정렬 */
+    align-items: center;
+    gap: 0.3rem; /* 컨트롤 패널 내부의 간격을 넓혀 여유로운 디자인 */
+    margin-top: 0rem; /* 상단과의 간격 조정 */
+  }
+
+  .desktopWriteButton {
+    background-color: #244A95;
+    color: white;
+    padding: 0.5rem 0.5rem;
+    /* 버튼의 패딩을 줄여 크기 조절 */
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 5rem;
+    /* 버튼의 너비를 줄여 균형 잡기 */
+  }
+
+  .desktopSearchBar {
+    display: flex;
+    align-items: center;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    padding: 3px 30px;
+    /* 패딩을 조정해 전체 크기를 줄임 */
+    margin-left: 15px;
+    /* 검색창을 살짝 오른쪽으로 이동 */
+  }
+
+  .desktopSearchInput {
+    width: 7rem; /* 검색 입력 필드의 너비를 넓힘 */
+  }
+
+  .desktopSearchIcon {
+    height: 2rem; /* 돋보기 아이콘의 크기를 더 크게 조정 */
+    margin-left: 9rem; /* 입력 필드와 아이콘 사이의 간격을 조정 */
+  }
+  
+  /* 두 버튼의 공통 속성 */
+  .desktopSortButtons {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row; /* 정렬 버튼들을 가로 방향으로 배치 */
+    gap: 20px; /* 정렬 버튼 사이 간격 조정 */
+    margin-left: 10px; /* 정렬 버튼 그룹을 오른쪽으로 이동 */
+  }
+
+  .desktopLatestSortButton {
+    color: black; 
+  }
+  
+  .desktopRecommendSortButton {
+    color: black; /* 데스크탑에서 추천순 버튼의 색상 */
+  }
+
+  .desktopMenuItem{
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+  }
 }

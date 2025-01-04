@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
 import Header from './_.js';  // 상단바 컴포넌트
 import axiosInstance from '../utils/api'; // Axios 인스턴스
-import {jwtDecode} from 'jwt-decode'; // default가 아닌 named import 사용. authToken에서 사용자 ID 추출하기. npm install jwt-decode
+import { jwtDecode } from 'jwt-decode'; // default가 아닌 named import 사용. authToken에서 사용자 ID 추출하기. npm install jwt-decode
 import styles from './Message.module.css';
 import menuIcon from '../images/메뉴버튼.png';
 import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
@@ -14,44 +14,44 @@ const Message = () => {
     const [visibleMessages, setVisibleMessages] = useState(4); // 처음에는 4개의 메시지만 표시
     const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
     const navigate = useNavigate();
+    const [UserId, setUserId] = useState(); // 토큰에서 userid 추출하기
 
     useEffect(() => {
         const fetchMessages = async () => {
+            const userResponse = await axiosInstance.get('https://18a5fe61dbb7.ngrok.app/api/auth/get-username');
+                setUserId(userResponse.data.userId); // 올바른 데이터 추출
+
+                console.log(UserId);
+                
             try {
                 // 로컬 스토리지에서 JWT 토큰 가져오기
                 const token = localStorage.getItem('authToken');
                 if (!token) {
                     throw new Error('로그인 토큰이 없습니다.'); // 로그인되지 않은 상태
                 }
-    
-                // JWT 디코딩을 통해 사용자 ID 추출
-                const decodedToken = jwtDecode(token);
-                // const userId = decodedToken.userId; // JWT에 포함된 userId 키 확인 (예: "subibi21")
-                const userID = '1234'; // 테스트용 임시 고정 ID
-    
+
                 // 백엔드 API 호출
-                // 테스트 아닐때 url: https://e08d-61-84-64-212.ngrok-free.app/Room/userId/${userId}
-                const response = await axiosInstance.get(`https://e08d-61-84-64-212.ngrok-free.app/Room/OpenedRoom`, {
+                const response = await axiosInstance.get(`http://192.168.156.161:8080/Room/TelList`, {
 
                     headers: {
                         'ngrok-skip-browser-warning': 'true', // 필요 시 유지
-                      },
+                    },
                 });
                 if (response.data.code !== 200) {
                     throw new Error('메시지 목록을 불러오는데 실패했습니다.');
                 }
                 console.log(response);
-    
+
                 // 응답 데이터 상태에 저장
                 setMessages(response.data.data);
             } catch (error) {
                 console.error('메시지 목록 불러오는 중 오류가 발생했습니다:', error);
             }
         };
-    
+
         fetchMessages();
     }, []);
-   
+
 
     // 방 클릭 시 해당 채팅방으로 이동하는 함수
     const handleRoomClick = async (id) => {
@@ -59,16 +59,19 @@ const Message = () => {
             // 사용자 정보 가져오기 (JWT 토큰에서 디코딩하거나 상태에서 가져오기)
             const token = localStorage.getItem('authToken');
             const decodedToken = jwtDecode(token); // JWT 디코딩
-            const userId = decodedToken.userId;
-            const userName = decodedToken.userName;
-    
+            const userId = UserId;
+            const userName = '신상윤';
+
             // 방 입장 API 호출
-            await axiosInstance.post('/JoinRoom', {
+            await axiosInstance.post('http://192.168.156.161:8080/JoinRoom', {
+                headers: {
+                    'ngrok-skip-browser-warning': 'true', // 필요 시 유지
+                },
                 roomId: id,
                 userId: userId,
                 userName: userName,
             });
-    
+
             // 성공 시 채팅방으로 이동
             navigate(`/chatroom/${id}`);
         } catch (error) {
@@ -76,8 +79,8 @@ const Message = () => {
             alert('채팅방에 입장할 수 없습니다. 다시 시도해주세요.');
         }
     };
-    
-    
+
+
 
     // 더보기 버튼 클릭 시 화면에 보이는 메시지 수를 증가시키는 함수
     const handleLoadMore = async () => {
@@ -86,22 +89,22 @@ const Message = () => {
             const token = localStorage.getItem('authToken'); // JWT 토큰 가져오기
             const decodedToken = jwtDecode(token); // JWT 디코딩
             const userId = decodedToken.userId;
-    
+
             // 백엔드에서 다음 페이지 메시지 요청
-            const response = await axiosInstance.get(`https://e08d-61-84-64-212.ngrok-free.app/Room/userId/${userId}`, {
+            const response = await axiosInstance.get(`http://192.168.156.161:8080/Room/userId/${userId}`, {
                 params: { page: nextPage, size: 4 }, // 다음 페이지와 크기 설정
                 headers: {
                     'ngrok-skip-browser-warning': 'true', // 필요 시 유지
-                  },
+                },
             });
-    
+
             if (response.data.code !== 200) {
                 throw new Error('메시지를 불러오는 데 실패했습니다.');
             }
-    
+
             // 기존 메시지에 새로운 데이터 추가
             setMessages((prevMessages) => [...prevMessages, ...response.data.data]);
-    
+
             // 화면에 표시되는 메시지 수 증가
             setVisibleMessages((prevVisibleMessages) => prevVisibleMessages + 4);
         } catch (error) {
@@ -109,7 +112,7 @@ const Message = () => {
             alert('메시지를 불러오는 데 실패했습니다.');
         }
     };
-    
+
 
     // 메뉴 버튼 클릭 시 삭제 메뉴 표시
     const [menuOpenId, setMenuOpenId] = useState(null);
@@ -131,13 +134,17 @@ const Message = () => {
     const handleConfirmDelete = async () => {
         try {
             // 백엔드로 메시지 삭제 요청
-            await axiosInstance.delete(`/Room/message/${selectedMessageId}`); // API 호출
-    
+            await axiosInstance.delete(`https://8afb-211-216-139-144.ngrok-free.app/Room/message/${selectedMessageId}`,{
+                headers: {
+                    'ngrok-skip-browser-warning': 'true', // 필요 시 유지
+                },
+            }); // API 호출
+
             // 로컬 상태에서 삭제된 메시지 제거
             setMessages((prevMessages) =>
                 prevMessages.filter((message) => message.id !== selectedMessageId)
             );
-    
+
             setShowDeleteModal(false); // 모달 닫기
             setSelectedMessageId(null); // 선택된 메시지 ID 초기화
         } catch (error) {
@@ -162,12 +169,12 @@ const Message = () => {
                         <div
                             key={message.id}
                             className={styles.messageItem}
-                            onClick={() => handleRoomClick(message.id)} // 방 클릭 시 이동하도록 수정
+                            onClick={() => handleRoomClick(message.roomId)} // 방 클릭 시 이동하도록 수정
                         >
                             <div className={styles.messageInfo}>
                                 <div className={styles.headerInfo}>
-                                    <span className={styles.nickname}>{message.username}</span>
-                                    <span className={styles.title}>{message.title}</span>
+                                    <span className={styles.nickname}>{message.userName}</span>
+                                    <span className={styles.title}>{message.roomName}</span>
                                 </div>
                                 <span className={styles.lastMessage}>{message.lastMessage}</span>
                             </div>
@@ -177,14 +184,14 @@ const Message = () => {
                                 alt="메뉴"
                                 onClick={(e) => {
                                     e.stopPropagation(); // 메뉴 클릭 시 방 클릭 이벤트 무시
-                                    toggleMenu(message.id);
+                                    toggleMenu(message.roomId);
                                 }}
                             />
-                            {menuOpenId === message.id && (
+                            {menuOpenId === message.roomId && (
                                 <div className={styles.dropdownMenu}>
                                     <button
                                         className={styles.deleteButton}
-                                        onClick={(e) => handleDeleteClick(message.id, e)} // 삭제하기 클릭 시 이벤트 전파 방지
+                                        onClick={(e) => handleDeleteClick(message.roomId, e)} // 삭제하기 클릭 시 이벤트 전파 방지
                                     >
                                         삭제하기
                                     </button>
