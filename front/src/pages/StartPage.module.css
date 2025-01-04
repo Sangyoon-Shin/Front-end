@@ -1,0 +1,148 @@
+/* 전체 화면 스타일 */
+.app {
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding: 0 16px; /* 작은 화면에서 여백 추가 */
+}
+
+/* 헤더 스타일 */
+.app-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* 타이틀 그룹 스타일 */
+.title-group {
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  gap: 20px;
+  flex-wrap: wrap; /* 작은 화면에서 내용이 줄 바꿈 */
+  margin-bottom: -35px;
+}
+
+/* 여백 스타일 */
+.empty-space {
+  width: 50px;
+  height: 0;
+}
+
+/* 로고 이미지 크기 조절 */
+.app-ese_logo {
+  height: 230px;
+  margin-bottom: 2px;
+}
+
+.app-computer_logo {
+  height: 90px;
+  margin-left: 0px;
+}
+
+.app-computer_logo_ {
+  height: 90px;
+  margin-bottom: 0px;
+}
+
+/* 텍스트 스타일 */
+.title-text {
+  font-size: 1.5rem;
+  color: #000000;
+  margin-top: 50px;
+  text-align: center;
+}
+
+/* INFO 텍스트 */
+h2 {
+  font-size: 2rem;
+  color: #0056A0;
+  margin-bottom: 20px;
+}
+
+/* 서브텍스트 */
+.subtext {
+  font-size: 1.5rem;
+  color: #f29c19;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+/* 하단 설명 텍스트 */
+.footer-text {
+  font-size: 0.9rem;
+  color: gray;
+  margin-top: 20px;
+  font-family: 'Arial', sans-serif;
+  text-align: center; /* 하단 텍스트 중앙 정렬 */
+}
+
+/* 반응형 디자인: 화면 크기에 따라 텍스트와 이미지 크기 조정 */
+
+/* 화면이 768px 이하일 때 */
+@media (max-width: 768px) {
+  .title-text {
+    font-size: 1.2rem; /* 작은 화면에서 텍스트 크기 줄이기 */
+    margin-top: 20px;
+  }
+
+  .app-ese_logo {
+    height: 180px; /* 작은 화면에서 로고 크기 줄이기 */
+  }
+
+  .app-computer_logo {
+    height: 70px; /* 작은 화면에서 로고 크기 줄이기 */
+  }
+
+  .app-computer_logo_ {
+    height: 70px; /* 작은 화면에서 로고 크기 줄이기 */
+  }
+
+  .subtext {
+    font-size: 1.2rem; /* 작은 화면에서 서브텍스트 크기 줄이기 */
+  }
+
+  .footer-text {
+    font-size: 0.8rem; /* 작은 화면에서 하단 텍스트 크기 줄이기 */
+  }
+
+  .title-group {
+    gap: 10px; /* 작은 화면에서 로고들 간 간격 좁히기 */
+  }
+}
+
+/* 화면이 480px 이하일 때 */
+@media (max-width: 480px) {
+  .title-text {
+    font-size: 1rem; /* 더 작은 화면에서 텍스트 크기 더 줄이기 */
+    margin-top: 10px;
+  }
+
+  .app-ese_logo {
+    height: 150px; /* 더 작은 화면에서 로고 크기 줄이기 */
+  }
+
+  .app-computer_logo {
+    height: 60px; /* 더 작은 화면에서 로고 크기 줄이기 */
+  }
+
+  .app-computer_logo_ {
+    height: 60px; /* 더 작은 화면에서 로고 크기 줄이기 */
+  }
+
+  .subtext {
+    font-size: 1rem; /* 더 작은 화면에서 서브텍스트 크기 줄이기 */
+  }
+
+  .footer-text {
+    font-size: 0.7rem; /* 더 작은 화면에서 하단 텍스트 크기 줄이기 */
+  }
+
+  .title-group {
+    gap: 5px; /* 더 작은 화면에서 로고들 간 간격 더 좁히기 */
+  }
+}
