@@ -109,7 +109,7 @@ const FreeboardPage = () => {
     const accessToken = localStorage.getItem('accessToken'); 
     if (searchTerm.trim() !== '') {
       try {
-        const baseUrl = new URL('https://bcefb2d9d162.ngrok.app/api/board/free');
+        const baseUrl = new URL('http://info-rmation.kro.kr/api/board/free');
         baseUrl.searchParams.append('searchKeyword', searchTerm);
         baseUrl.searchParams.append('page', '0');
         baseUrl.searchParams.append('size', '10');

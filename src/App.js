@@ -33,10 +33,45 @@ import ContestWrite from './pages/ContestWrite'; // 대회 글쓰기
 import AlarmPage from './pages/AlarmPage'; // 알림페이지
 import Announcement from './pages/Announcement'; // 공지사항
 
+<<<<<<< HEAD
 
 // 지민이가 만든 채팅방 페이지
 import ClassChatRoom from './pages/ClassChatRoom'
 import ClassChat from './pages/ClassChat'
+
+=======
+// 자유게시판
+import BoardPage from './pages/BoardPage';
+
+// 질문게시판
+import QuestionboardPage from './pages/QuestionboardPage';
+
+// 쪽지방
+import Message from './pages/Message';
+
+// 채팅방 컴포넌트 추가
+import ChatRoom from './pages/ChatRoom';
+
+// 코드 정보 게시판 - 코드 질문방
+import InformationCode from './pages/InformationCode';
+
+// 코드 질문방 글쓰기
+import QuestionCode from './pages/QuestionCode';
+
+// 대회 정보게시판
+import InformationContest from './pages/InformationContest';
+
+// 대회 글쓰기
+import ContestWrite from './pages/ContestWrite';
+>>>>>>> origin/상윤
+
+// 알림페이지
+import AlarmPage from './pages/AlarmPage';
+
+// 공지사항
+import Announcement from './pages/Announcement';
+
+import BoardCode from './pages/BoardCode';
 
 
 // 석진이형 페이지
@@ -67,11 +102,38 @@ import G_HomePage from './pages/G_HomePage'
 import HomePage from './pages/HomePage'; // 정확한 경로로 import 추가
 
 
+// 지민이가 만든 채팅방 페이지
+import ClassChatRoom from './pages/ClassChatRoom'
+import ClassChat from './pages/ClassChat'
+
 function App() {
   return (
+<<<<<<< HEAD
     <UserProvider>
       <BrowserRouter>
         <Routes>
+=======
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<StartPage />} />
+        <Route path="/_" element={<_ />} /> {/* 두 번째 페이지 라우팅 */}
+        <Route path="/LoginPage" element={<LoginPage />} />
+        <Route path="/RoomPage" element={<RoomPage />} />
+        <Route path="/BoardPage" element={<BoardPage />} />
+        <Route path="/Message" element={<Message />} />
+        <Route path="/chatroom/:id" element={<ChatRoom />} /> {/* 동적 라우팅을 통한 채팅방 페이지 */}
+        <Route path="/InformationCode" element={<InformationCode />} /> {/* InformationCode 라우트 추가 */}
+        <Route path="/QuestionCode" element={<QuestionCode />} />
+        <Route path="/InformationContest" element={<InformationContest />} />
+        <Route path="/ContestWrite" element={<ContestWrite />} />
+        <Route path="/AlarmPage" element={<AlarmPage />} />
+        <Route path="/Announcement" element={<Announcement />} />
+        <Route path="/ClassChatRoom" element={<ClassChatRoom />} />
+        <Route path="/ClassChat" element={<ClassChat />} />
+        <Route path="/QuestionboardPage" element={<QuestionboardPage />} />
+        <Route path="/BoardCode" element={<BoardCode />} />
+
+>>>>>>> origin/상윤
 
           {/* 쏘유니 */}
           <Route path="/" element={<StartPage />} />
@@ -89,6 +151,7 @@ function App() {
           <Route path="FreeboardPage" element={<FreeboardPage />} />
           <Route path="QuestionboardPage" element={<QuestionboardPage />} />
 
+<<<<<<< HEAD
           <Route path="G_freepostingPage" element={<G_freepostingPage />} />
           <Route path="G_questionpostingPage" element={<G_questionpostingPage />} />
           <Route path="G_freewritePage" element={<G_freewritePage />} />
@@ -140,6 +203,10 @@ function App() {
       </BrowserRouter>
     </UserProvider>
 
+=======
+      </Routes>
+    </BrowserRouter>
+>>>>>>> origin/상윤
   );
 }
 

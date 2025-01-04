@@ -37,28 +37,6 @@ const FreewritePage = () => {
   const [hashtag, setHashtag] = useState('');
   const [files, setFiles] = useState(null);
   const [isEditing, setIsEditing] = useState(false); // 수정 모드 여부
-  const [serverStatus, setServerStatus] = useState(''); // 서버 상태 확인용
-
-  // 서버 연결 상태 확인
-  useEffect(() => {
-    const checkServerConnection = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/free/checkserver`, {
-          headers: { 'ngrok-skip-browser-warning': 1 },
-        });
-        if (response.status === 200) {
-          setServerStatus('서버와 연결되었습니다.');
-        } else {
-          setServerStatus('서버 상태를 확인할 수 없습니다.');
-        }
-      } catch (error) {
-        setServerStatus('서버와의 연결에 실패했습니다.');
-        console.error('Server connection error:', error);
-      }
-    };
-
-    checkServerConnection();
-  }, []);
 
   // 특정 게시글 데이터 가져오기 (수정 모드일 경우)
   useEffect(() => {

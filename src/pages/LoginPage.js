@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const BASE_URL = "http://info-rmation.kro.kr"; // 실제 URL로 변경
+  const BASE_URL = "https://18a5fe61dbb7.ngrok.app"; // 실제 URL로 변경
 
   // 페이지 이동을 위한 navigate 선언
   const navigate = useNavigate();
@@ -39,24 +39,30 @@ const LoginPage = () => {
       console.log('Headers:', response.headers); // 응답 헤더 확인
       console.log('Data:', response.data); // 응답 데이터 확인
 
-      const jwtToken = response.headers['authorization']?.split(' ')[1];
+      // 디버깅 코드 추가
+      console.log('Response:', response); // 전체 응답 객체 확인
+      console.log('Headers:', response.headers); // 응답 헤더 확인
+      console.log('Data:', response.data); // 응답 데이터 확인
+
+      const jwtToken = response.headers["authorization"]?.split(" ")[1]; // Bearer 뒤의 토큰 부분
       const refreshToken = response.headers["refreshtoken"]; // RefreshToken 헤더 값
 
-      if (!jwtToken) {
-        throw new Error("Authorization token missing in response");
+      if (!jwtToken || !refreshToken) {
+        throw new Error("토큰이 응답에 없습니다.");
       }
 
-      localStorage.setItem('accessToken', jwtToken);
+      // 로컬 스토리지에 토큰 저장
+      localStorage.setItem("authToken", jwtToken);
       localStorage.setItem("refreshToken", refreshToken);
 
+      // 상태 초기화
+      setError("");
+      setUsername("");
+      setPassword("");
 
-      setError('');
-      setUsername('');
-      setPassword('');
-
-      // 로그인 성공 시 메인 페이지로 이동
-      navigate('/'); // 이동할 페이지 경로 설정
-    }catch (error) {
+      // 로그인 성공 후 메인 페이지로 이동
+      navigate("/"); // 메인 페이지 경로로 변경
+    } catch (error) {
       console.error("로그인 실패:", error.response?.data || error.message);
       if (error.response && error.response.status === 401) {
         setError("로그인 실패: 아이디나 비밀번호를 확인해 주세요.");
