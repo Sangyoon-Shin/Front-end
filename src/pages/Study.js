@@ -28,7 +28,7 @@ const Study = () => {
     const postData = { title, startDate, endDate, hashtag, content };
 
     try {
-      const response = await fetch('https://your-backend-api.com/api/posts', {
+      const response = await fetch('http://info-rmation.kro.kr/api/posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

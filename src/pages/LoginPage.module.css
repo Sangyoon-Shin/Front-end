@@ -9,43 +9,6 @@
   padding: 0 20px;  /* 작은 화면에서 여백 추가 */
 }
 
-  /* 태블릿 크기 대응 */
-  @media (min-width: 768px) and (max-width: 1024px) {
-    .container {
-      padding: 24px;
-      font-size: 16px;
-    }
-  
-    .titleContainer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-  
-    .writeButton {
-      font-size: 18px;
-      padding: 10px 20px;
-    }
-  }
-  
-  .header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .logoSection {
-    text-align: center;
-  }
-  
-  .group-info {
-    display: flex;
-    justify-content: center; /* 가로 중앙 정렬 */
-    margin-left: -180px; /* 왼쪽으로 20px 이동 */
-    gap: 10px;  
-    margin-top: 50px; /* 왼쪽으로 220px 이동 */
-
 .header {
   display: flex;
   justify-content: center;
@@ -287,4 +250,3 @@ h4 {
 .changeBtn:hover {
   background-color: #004080;
 }
-  }

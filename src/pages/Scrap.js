@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Scrap.module.css';
 import Header from './_.js'; // 상단바 컴포넌트
@@ -8,56 +8,148 @@ import IconScrap from '../images/횃불이스크랩.png';
 import IconUnscrap from '../images/횃불이스크랩X.png';
 
 const Scrap = () => {
-    const [scrapStatus, setScrapStatus] = useState({
-        1: true,
-        2: false,
-        3: false,
-        4: true,
-        5: false,
-        6: false,
-        7: false,
-        8: false,
-    }); // 각 게시물의 스크랩 상태 관리
+    const [posts, setPosts] = useState([]); // 게시물 데이터를 관리
+    const [loading, setLoading] = useState(false); // 로딩 상태 관리
+    const [error, setError] = useState(null); // 에러 메시지 관리
+    const navigate = useNavigate();
 
-    const toggleScrap = async (id) => {
-        // 백엔드에 스크랩 상태를 업데이트하는 요청 보내기
+    const [selectedTab, setSelectedTab] = useState('대회정보'); // 현재 선택된 상위 탭
+    const [selectedSubTab, setSelectedSubTab] = useState('부트캠프'); // 자기개발방 하위 탭
+
+    // 엔드포인트 매핑
+    const endpoints = {
+        '대회정보': '/api/board/scraps/competition',
+        '코드 질문방': '/api/board/scraps/coding',
+        '자기 개발방': '/api/board/scraps/study',
+        '자유 게시판': '/api/board/scraps/free',
+    };
+
+    // 헤더에 토큰 추가를 위한 준비
+    const getHeaders = () => {
+        const accessToken = localStorage.getItem('accessToken');
+        const userId = localStorage.getItem('userId'); // 이 부분이 사용자 ID를 가져옵니다.
+        return {
+          Authorization: `Bearer ${accessToken}`,
+          'X-USER-ID': userId, // 사용자 ID를 X-USER-ID로 추가
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 1,
+        };
+      };
+
+    // 게시물 데이터 가져오기
+    const fetchPosts = async (tab, subTab, options = {}) => {
+        let url = '/api/board/scraps';
+      
+        // Main tab별 엔드포인트 처리
+        if (tab === '대회 정보') {
+          url = '/api/board/scraps/contest';
+        } else if (tab === '코드 질문방') {
+          url = '/api/board/scraps/quest';
+        } else if (tab === '자유 게시판') {
+          url = '/api/board/scraps/free';
+        } else if (tab === '자기 개발방') {
+          const studyIDMap = {
+            '부트캠프': 'bootcamp',
+            '스터디': 'study',
+            '산업 연계': 'industry',
+          };
+          const studyId = studyIDMap[subTab];
+      
+          if (studyId) {
+            url = `/api/board/scraps/study?studyId=${studyId}`;
+          } else {
+            console.error('잘못된 자기개발방 하위 탭입니다.');
+            return;
+          }
+        }
+      
+        // Optional query parameters 처리
+        const params = new URLSearchParams();
+        if (options.limit) params.append('limit', options.limit);
+        if (options.lastId) params.append('lastId', options.lastId);
+      
+        const finalUrl = params.toString() ? `${url}&${params.toString()}` : url;
+      
         try {
-            const response = await fetch('https://your-backend-api.com/api/scrap', {
+          const response = await fetch(finalUrl, {
+            method: 'GET',
+          });
+      
+          if (!response.ok) {
+            throw new Error('API 요청 실패');
+          }
+      
+          const result = await response.json();
+      
+          // 데이터 처리
+          if (tab === '자기 개발방' && result.studies) {
+            console.log('자기개발방 스크랩 데이터:', result.studies);
+            return result.studies;
+          } else if (result.data) {
+            console.log('스크랩 데이터:', result.data);
+            return result.data;
+          } else {
+            console.warn('데이터를 찾을 수 없습니다.');
+            return [];
+          }
+        } catch (error) {
+          console.error('API 요청 에러:', error);
+          return [];
+        }
+      };
+      
+
+    // 초기 데이터 가져오기
+    useEffect(() => {
+        if (selectedTab === '자기 개발방') {
+            fetchPosts(selectedTab, selectedSubTab);
+        } else {
+            fetchPosts(selectedTab);
+        }
+    }, [selectedTab, selectedSubTab]);
+
+    const handleTabChange = (tab) => {
+        setSelectedTab(tab);
+    };
+
+    const handleSubTabChange = (subTab) => {
+        setSelectedSubTab(subTab);
+    };
+
+    const handlePostClick = (postId) => {
+        navigate(`/post/${postId}`);
+    };
+
+    const toggleScrap = async (id, scrapped) => {
+        try {
+            const response = await fetch(`/api/board/scraps/${selectedTab}/${id}`, {
                 method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    postId: id,
-                    scrapStatus: !scrapStatus[id], // 새로운 스크랩 상태 전송
-                }),
+                headers: getHeaders(),
+                body: JSON.stringify({ scrapped: !scrapped }),
             });
 
             if (!response.ok) {
-                throw new Error('스크랩 상태 업데이트에 실패했습니다.');
+                throw new Error('스크랩 상태를 업데이트하는 데 실패했습니다.');
             }
 
-            // 서버 응답이 성공적일 경우 상태 업데이트
-            setScrapStatus((prevState) => ({
-                ...prevState,
-                [id]: !prevState[id],
-            }));
-
-            // 성공적으로 백엔드와 통신 완료
-            console.log('스크랩 상태가 성공적으로 업데이트되었습니다.');
-        } catch (error) {
-            console.error('스크랩 상태 업데이트 중 오류가 발생했습니다:', error);
+            setPosts((prevPosts) =>
+                prevPosts.map((post) =>
+                    post.id === id ? { ...post, scrapped: !scrapped } : post
+                )
+            );
+        } catch (err) {
+            console.error(err.message);
             alert('스크랩 상태 업데이트에 실패했습니다. 다시 시도해주세요.');
         }
     };
 
-    const navigate = useNavigate();
-    const [selectedTab, setSelectedTab] = useState('대회정보'); // 현재 선택된 상위 탭
-    const [selectedSubTab, setSelectedSubTab] = useState('부트캠프'); // 자기개발방 하위 탭
+    if (loading) {
+        return <div>로딩 중...</div>;
+    }
 
-    const handlePostClick = (postId) => {
-        navigate(`/post/${postId}`); // 해당 게시물 상세 페이지로 이동
-    };
+    if (error) {
+        return <div>오류 발생: {error}</div>;
+    }
 
     const mainTabs = ['대회정보', '코드 질문방', '자기 개발방', '자유 게시판'];
     const subTabs = ['부트캠프', '스터디', '산업 연계'];
@@ -78,7 +170,7 @@ const Scrap = () => {
                         <span
                             key={tab}
                             className={`${styles.floor} ${selectedTab === tab ? styles.activeFloor : ''}`}
-                            onClick={() => setSelectedTab(tab)}
+                            onClick={() => handleTabChange(tab)}
                         >
                             {tab}
                         </span>
@@ -92,7 +184,7 @@ const Scrap = () => {
                             <span
                                 key={subTab}
                                 className={`${styles.subTab} ${selectedSubTab === subTab ? styles.activeSubTab : ''}`}
-                                onClick={() => setSelectedSubTab(subTab)}
+                                onClick={() => handleSubTabChange(subTab)}
                             >
                                 {subTab}
                             </span>
@@ -100,28 +192,36 @@ const Scrap = () => {
                     </div>
                 )}
 
-                {/* 콘텐츠 영역 */}
+                {/* 게시물 목록 */}
                 <div className={styles.postList}>
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map((id) => (
-                        <div key={id} className={styles.postItem}>
-                            {/* HOT 표시 (상단 3개의 게시물) */}
-                            {id <= 3 && <span className={styles.hotTag}>HOT</span>}
-                            {/* 게시물 제목 및 정보 */}
+                    {posts.map((post) => (
+                        <div key={post.id} className={styles.postItem}>
                             <div className={styles.postInfo}>
                                 <span
                                     className={styles.postTitle}
-                                    onClick={() => handlePostClick(id)} // 게시물 제목 클릭 시 상세 페이지로 이동
+                                    onClick={() => handlePostClick(post.id)}
                                 >
-                                    게시판 제목 {id}
+                                    {selectedTab === '자기 개발방'
+                                        ? post.studyTitle
+                                        : selectedTab === '자유 게시판'
+                                        ? post.freeTitle
+                                        : post.questTitle}
                                 </span>
-                                <span className={styles.postDate}>2024.01.01</span>
+                                <span className={styles.postDate}>
+                                    {new Date(
+                                        selectedTab === '자기 개발방'
+                                            ? post.startTime
+                                            : selectedTab === '자유 게시판'
+                                            ? post.freeCreatedTime
+                                            : post.questCreatedTime
+                                    ).toLocaleDateString()}
+                                </span>
                             </div>
-                            {/* 스크랩 버튼 */}
                             <img
-                                src={scrapStatus[id] ? IconScrap : IconUnscrap}
-                                alt={scrapStatus[id] ? '스크랩됨' : '스크랩안됨'}
+                                src={post.scrap ? IconScrap : IconUnscrap}
+                                alt={post.scrap ? '스크랩됨' : '스크랩안됨'}
                                 className={styles.scrapIcon}
-                                onClick={() => toggleScrap(id)} // 스크랩 상태 변경 및 백엔드 전송
+                                onClick={() => toggleScrap(post.id, post.scrap)}
                             />
                         </div>
                     ))}
