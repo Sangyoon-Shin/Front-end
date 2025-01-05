@@ -1,136 +1,178 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './Classroom.module.css';
-import Header from './_.js'; // 상단바 컴포넌트
-import arrow from '../images/arrow.png';
-import bar from '../images/bar.png';
-import mainMascot from '../images/횃불이_빈강의.png';
-import emptytime from '../images/횃불이_빈.png';
+import io from 'socket.io-client';  // 웹소켓 클라이언트
 
-const Footer = () => {
-    return (
-      <footer>
-        <button>취소</button>
-        <button>예약 확인</button>
-      </footer>
-    );
-};
+import main_mascot from '../images/대학 심볼 횃불이.png';
+import main_bell from '../images/bell.png';
+import main_message from '../images/message.png';
+import main_my from '../images/my.png';
+import { useMediaQuery } from 'react-responsive';
 
-const Classroom = () => {
-    const navigate = useNavigate();
-    const [selectedFloor, setSelectedFloor] = useState(1); // 선택된 층
-    // 층별, 강의실별 시간 선택 상태 (5층 * 8강의실 * 10시간대)
-    const [selectedTimes, setSelectedTimes] = useState(
-        Array.from({ length: 5 }, () => Array.from({ length: 8 }, () => Array(10).fill(true))) // true = 사용 가능
-    );
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [reservationDetails, setReservationDetails] = useState({ date: '', people: '', time: '' });
+import styles from './ClassRoom.module.css';
+import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
+import menuIcon from '../images/메뉴버튼.png';
+import Icon1 from '../images/하트이모지.png';
+import Icon2 from '../images/눈이모지.png';
+import Icon3 from '../images/폭죽이모지.png';
 
-    // 층 선택 함수
-    const handleFloorClick = (floor) => {
-        setSelectedFloor(floor);
-    };
+import Icon7 from '../images/임베디드시스템공학과 횃불이.png';
+import Icon4 from '../images/내가속한방 횃불이.png';
+import Icon5 from '../images/수업소통방 횃불이.png';
+import Icon6 from '../images/자유소통방 횃불이.png';
 
-    // 층, 강의실, 시간대 선택 토글 함수
-    const toggleTimeSlot = (floorIndex, roomIndex, timeIndex) => {
-        // 선택된 시간대만 반전
-        setSelectedTimes(prevState => {
-            const newState = prevState.map((floorTimes, fIndex) =>
-                fIndex === floorIndex // 현재 층만 변경
-                    ? floorTimes.map((roomTimes, rIndex) =>
-                        rIndex === roomIndex
-                            ? roomTimes.map((time, tIndex) => tIndex === timeIndex ? !time : time) // 해당 시간만 반전
-                            : roomTimes
-                    )
-                    : floorTimes // 다른 층은 그대로 유지
-            );
-            return newState;
+const roomsData = [];
+
+const ClassRoom = () => {
+  const [rooms, setRooms] = useState(roomsData);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isSelectingForReport, setIsSelectingForReport] = useState(false);
+  const [isSelectingForEdit, setIsSelectingForEdit] = useState(false);
+  const [selectedRooms, setSelectedRooms] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reportReason, setReportReason] = useState('');
+  const [socket, setSocket] = useState(null);  // 웹소켓 연결 상태 관리
+  const navigate = useNavigate();
+
+  const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
+  const baseUrl = 'https://e757-61-84-64-212.ngrok-free.app'
+  useEffect(() => {
+    const fetchRooms = async () => {
+        fetch(`${baseUrl}/Room/RoomList`, {
+            headers: {  "ngrok-skip-browser-warning": "abc",
+                'Content-Type': 'application/json' },
+            method: 'GET',
+        }).then((res)=> {return res.json()})
+        .then((data) => {
+            console.log(data);
+            setRooms(data.data);
         });
-        setIsPopupOpen(true); // 시간대 클릭 시 팝업 열기
     };
 
-    // 예약 완료 함수
-    const handleReservationSubmit = () => {
-        // 예약 정보를 저장하거나 처리하는 로직 추가
-        setIsPopupOpen(false); // 팝업 닫기
-    };
+    fetchRooms();
+    
+    // 웹소켓 서버와 연결 (서버 URL을 실제 백엔드 주소로 변경)
+    const newSocket = io(`${baseUrl}`);  // 실제 백엔드 URL로 변경
+    setSocket(newSocket);
 
-    // 취소 버튼 클릭 시 상태 유지 (시간대 변경 안 함)
-    const handleCancel = () => {
-        setIsPopupOpen(false); // 팝업 닫기
-    };
+    // 채팅 메시지 수신 이벤트 처리
+    newSocket.on('chat-message', (message) => {
+      console.log('New message received:', message);
+      // 채팅방 리스트나 메시지 상태를 업데이트하는 로직을 추가해야 함
+    });
 
-    return (
-        <div className={styles.app}>
-            <Header />
-            <div className={styles.appHeader}>
-                <img src={arrow} className={styles['app-arrow']} alt="back_arrow" onClick={() => navigate(-1)} />
-                <h1 className={styles['title-text2']}>정보 게시판 - 빈 강의실</h1>
-                <img src={bar} className={styles['app-bar']} alt="bar" />
-            </div>
+    // 컴포넌트 언마운트 시 웹소켓 연결 종료
+    return () => newSocket.close();
+  }, []);
+  
+  const handleRoomClick = (roomId) => {
+    // 채팅방 입장 API 호출 (백엔드 URL로 변경)
+    fetch(`${baseUrl}/JoinRoom`, {  // 백엔드 엔드포인트로 변경
+      method: 'POST',
+      headers: {  "ngrok-skip-browser-warning": "abc",
+                'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        roomId: roomId,
+        userName: '김수빈', // 실제 사용자 이름으로 변경
+        userId: '202301641',  // 실제 사용자 ID로 변경  // 프로필 이미지 URL
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code === 200) {
+          // 서버에서 'join-room' 이벤트를 처리하도록 설정
+          //socket.emit('join-room', roomId);  
+          navigate(`/Room/${roomId}`);
+        }
+      });
+  };
 
-            <div className={styles.classroomContainer}>
-                {/* 층 네비게이션 */}
-                <div className={styles.floorNav}>
-                    {[1, 2, 3, 4, 5].map(floor => (
-                        <span
-                            key={floor}
-                            className={`${styles.floor} ${selectedFloor === floor ? styles.activeFloor : ''}`}
-                            onClick={() => handleFloorClick(floor)}
-                        >
-                            {floor}층
-                        </span>
-                    ))}
-                </div>
-
-                {/* 검색 바 */}
-                <div className={styles.searchContainer}>
-                    <input type="text" className={styles.searchInput} placeholder="Search" />
-                </div>
-
-                {/* 시간대 라벨 */}
-                <div className={styles.timeLabels}>
-                    {['9', '10', '11', '12', '13', '14', '15', '16', '17', '18'].map((time, index) => (
-                        <div key={index} className={styles.timeLabel}>{time}</div>
-                    ))}
-                </div>
-
-                {/* 빈 강의실 리스트 */}
-                <div className={styles.classroomList}>
-                    {[...Array(8).keys()].map(roomIndex => (
-                        <div className={styles.classroomRow} key={roomIndex}>
-                            <div className={styles.roomNumber}>{selectedFloor * 100 + (roomIndex + 1)}호</div>
-                            <div className={styles.availability}>
-                                {/* 사용 가능 시간대 렌더링 */}
-                                {[...Array(10).keys()].map(timeIndex => (
-                                    <div
-                                        key={timeIndex}
-                                        className={`${styles.timeSlot} 
-                                            ${selectedTimes[selectedFloor - 1][roomIndex][timeIndex] ? styles.available : styles.unavailable}`}
-                                        onClick={() => {
-                                            if (selectedTimes[selectedFloor - 1][roomIndex][timeIndex]) {
-                                                toggleTimeSlot(selectedFloor - 1, roomIndex, timeIndex);
-                                            }
-                                        }}
-                                    ></div>
-                                ))}
-                            </div>
-                            <img src={mainMascot} alt="Mascot" className={styles.mascotIcon} />
-                        </div>
-                    ))}
-                </div>
-
-                {/* 페이지 네비게이션 */}
-                <div className={styles.pagination}>
-                    {[1, 2, 3, 4, 5].map(page => (
-                        <span key={page} className={styles.pageNumber}>{page}</span>
-                    ))}
-                </div>
-
-                
-            </div>
+  return (
+    <div className={`${styles.app} ${isDesktop ? styles.desktopApp : ''}`}>
+      <header className={`${styles["app-header"]} ${isDesktop ? styles.desktopHeader : ''}`}>
+        <div className={`${styles["title-group"]} ${isDesktop ? styles.desktopTitleGroup : ''}`}>
+          <img src={main_mascot} className={`${styles["app-main_mascot"]} ${isDesktop ? styles.desktopMascot : ''}`} alt="main_mascot" />
+          <h2>INFO!</h2>
+          <div className={`${styles["right-section"]} ${isDesktop ? styles.desktopRightSection : ''}`}>
+            <div className={`${styles["mascot-logo"]} ${isDesktop ? styles.desktopLogo : ''}`}></div>
+            <h2 className={`${styles["title-text"]} ${isDesktop ? styles.desktopTitleText : ''}`}>공지사항</h2>
+            <img src={main_bell} className={`${styles["app-main_bell"]} ${isDesktop ? styles.desktopBell : ''}`} alt="main_bell" />
+            <img src={main_message} className={`${styles["app-main_message"]} ${isDesktop ? styles.desktopMessage : ''}`} alt="main_message" />
+            <img src={main_my} className={`${styles["app-main_my"]} ${isDesktop ? styles.desktopMy : ''}`} alt="main_my" />
+          </div>
         </div>
-    );
+      </header>
+
+      <div className={`${styles.container} ${isDesktop ? styles.desktopContainer : ''}`}>
+        <div className={`${styles.content} ${isDesktop ? styles.desktopContent : ''}`}>
+          <div className={`${styles.titleContainer} ${isDesktop ? styles.desktopTitleContainer : ''}`}>
+            <img
+              src={CommunicationRoom_goBack}
+              className={`${styles.goBackButton} ${isDesktop ? styles.desktopGoBackButton : ''}`}
+              alt="뒤로가기"
+              onClick={() => navigate(-1)}
+            />
+            <h1 className={`${styles.pageTitle} ${isDesktop ? styles.desktopPageTitle : ''}`}>수업 소통방</h1>
+          </div>
+
+          <div className={`${styles.roomsList} ${isDesktop ? styles.desktopRoomsList : ''}`}>
+            {rooms.map((room) => (
+              <div
+                key={room.id}
+                className={`${styles.roomItem} ${room.selected ? styles.selected : ''} ${
+                  isDesktop ? styles.desktopRoomItem : ''
+                }`}
+              >
+                <img src={room.icon} alt={`방 아이콘 ${room.roomId}`} className={`${styles.roomIcon} ${isDesktop ? styles.desktopRoomIcon : ''}`} />
+                <div className={`${styles.roomInfo} ${isDesktop ? styles.desktopRoomInfo : ''}`}>
+                  <div className={`${styles.roomTitle} ${isDesktop ? styles.desktopRoomTitle : ''}`}>{room.roomName}</div>
+                  <div className={`${styles.roomMessage} ${isDesktop ? styles.desktopRoomMessage : ''}`}>{room.lastMessage}</div>
+                </div>
+
+                <button
+                  className={`${styles.joinButton} ${isDesktop ? styles.desktopJoinButton : ''}`}
+                  onClick={() => handleRoomClick(room.roomId)}
+                >
+                  참여하기
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className={`${styles.bottomNav} ${isDesktop ? styles.desktopBottomNav : ''}`}>
+            <div className={`${styles.navItem} ${isDesktop ? styles.desktopNavItem : ''}`}>
+              <img
+                src={Icon4}
+                alt="내가 속한 방"
+                className={`${styles.navIcon} ${isDesktop ? styles.desktopNavIcon : ''}`}
+                onClick={() => handleRoomClick("RoomPage")}
+              />
+              <span className={`${styles.navText} ${isDesktop ? styles.desktopNavText : ''}`}>내가 속한 방</span>
+            </div>
+
+            <div className={`${styles.navItem} ${isDesktop ? styles.desktopNavItem : ''}`}>
+              <img
+                src={Icon5}
+                alt="수업 소통 방"
+                className={`${styles.navIcon} ${isDesktop ? styles.desktopNavIcon : ''}`}
+                onClick={() => handleRoomClick("ClassRoom")}
+              />
+              <span className={`${styles.navText} ${isDesktop ? styles.desktopNavText : ''}`}>수업 소통 방</span>
+            </div>
+
+            <div className={`${styles.navItem} ${isDesktop ? styles.desktopNavItem : ''}`}>
+              <img
+                src={Icon6}
+                alt="자유 소통 방"
+                className={`${styles.navIcon} ${isDesktop ? styles.desktopNavIcon : ''}`}
+                onClick={() => handleRoomClick("FreeRoom")}
+              />
+              <span className={`${styles.navText} ${isDesktop ? styles.desktopNavText : ''}`}>자유 소통 방</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export default Classroom;
+export default ClassRoom;
