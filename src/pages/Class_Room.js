@@ -1,64 +1,96 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-//import Header from './_.js';  // 상단바 컴포넌트
+import io from 'socket.io-client';  // 웹소켓 클라이언트
 
-import main_mascot from '../images/대학 심볼 횃불이.png';  // 로고 이미지 불러오기
-import main_bell from '../images/bell.png';  // 로고 이미지 불러오기
-import main_message from '../images/message.png';  // 로고 이미지 불러오기
-import main_my from '../images/my.png';  // 로고 이미지 불러오기
-import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
+import main_mascot from '../images/대학 심볼 횃불이.png';
+import main_bell from '../images/bell.png';
+import main_message from '../images/message.png';
+import main_my from '../images/my.png';
+import { useMediaQuery } from 'react-responsive';
 
-import styles from './Class_Room.module.css';
+import styles from './ClassRoom.module.css';
 import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
 import menuIcon from '../images/메뉴버튼.png';
-import Icon1 from '../images/하트이모지.png';  // 방 1의 아이콘
-import Icon2 from '../images/눈이모지.png';   // 방 2의 아이콘
-import Icon3 from '../images/폭죽이모지.png'; // 방 3의 아이콘
+import Icon1 from '../images/하트이모지.png';
+import Icon2 from '../images/눈이모지.png';
+import Icon3 from '../images/폭죽이모지.png';
 
 import Icon7 from '../images/임베디드시스템공학과 횃불이.png';
-
-import Icon4 from '../images/내가속한방 횃불이.png';  // 하단바 아이콘들
+import Icon4 from '../images/내가속한방 횃불이.png';
 import Icon5 from '../images/수업소통방 횃불이.png';
 import Icon6 from '../images/자유소통방 횃불이.png';
 
-const roomsData = [
-  { id: 1, title: '데이터 베이스', lastMessage: '마지막 내용', icon: Icon7, selected: false },
-  { id: 2, title: 'C언어 프로그래밍(2)', lastMessage: '마지막 내용', icon: Icon7, selected: false },
-  { id: 3, title: '영상 처리', lastMessage: '마지막 내용', icon: Icon7, selected: false },
-];
+const roomsData = [];
 
-const Class_Room = () => {
+const ClassRoom = () => {
   const [rooms, setRooms] = useState(roomsData);
-  const [menuOpen, setMenuOpen] = useState(false);  // 메뉴 열림/닫힘 상태
-  const [isSelectingForReport, setIsSelectingForReport] = useState(false); // 방 신고 모드 여부
-  const [isSelectingForEdit, setIsSelectingForEdit] = useState(false); // 방 편집 모드 여부
-  const [selectedRooms, setSelectedRooms] = useState([]); // 신고 및 편집을 위해 선택된 방 목록
-  const [isModalOpen, setIsModalOpen] = useState(false); // 신고 모달 열림/닫힘 상태
-  const [reportReason, setReportReason] = useState(''); // 신고 사유 상태
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isSelectingForReport, setIsSelectingForReport] = useState(false);
+  const [isSelectingForEdit, setIsSelectingForEdit] = useState(false);
+  const [selectedRooms, setSelectedRooms] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reportReason, setReportReason] = useState('');
+  const [socket, setSocket] = useState(null);  // 웹소켓 연결 상태 관리
   const navigate = useNavigate();
-// 반응형 페이지 처리를 위한 useMediaQuery 사용
+
   const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
-  // 방 ID에 맞는 페이지로 이동하기
-  const handleRoomClick = (path) => {
-    navigate(`/${path}`);  // 방 ID에 맞는 페이지로 이동
-  };
+  const baseUrl = 'https://e757-61-84-64-212.ngrok-free.app'
+  useEffect(() => {
+    const fetchRooms = async () => {
+        fetch(`${baseUrl}/Room/RoomList`, {
+            headers: {  "ngrok-skip-browser-warning": "abc",
+                'Content-Type': 'application/json' },
+            method: 'GET',
+        }).then((res)=> {return res.json()})
+        .then((data) => {
+            console.log(data);
+            setRooms(data.data);
+        });
+    };
 
+    fetchRooms();
+    
+    // 웹소켓 서버와 연결 (서버 URL을 실제 백엔드 주소로 변경)
+    const newSocket = io(`${baseUrl}`);  // 실제 백엔드 URL로 변경
+    setSocket(newSocket);
+
+    // 채팅 메시지 수신 이벤트 처리
+    newSocket.on('chat-message', (message) => {
+      console.log('New message received:', message);
+      // 채팅방 리스트나 메시지 상태를 업데이트하는 로직을 추가해야 함
+    });
+
+    // 컴포넌트 언마운트 시 웹소켓 연결 종료
+    return () => newSocket.close();
+  }, []);
   
-  /*const handleRoomClick = (id) => {
-    navigate(`${id}`);  // 방 ID에 맞는 페이지로 이동
-  }; */
-
+  const handleRoomClick = (roomId) => {
+    // 채팅방 입장 API 호출 (백엔드 URL로 변경)
+    fetch(`${baseUrl}/JoinRoom`, {  // 백엔드 엔드포인트로 변경
+      method: 'POST',
+      headers: {  "ngrok-skip-browser-warning": "abc",
+                'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        roomId: roomId,
+        userName: '김수빈', // 실제 사용자 이름으로 변경
+        userId: '202301641',  // 실제 사용자 ID로 변경  // 프로필 이미지 URL
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code === 200) {
+          // 서버에서 'join-room' 이벤트를 처리하도록 설정
+          //socket.emit('join-room', roomId);  
+          navigate(`/Room/${roomId}`);
+        }
+      });
+  };
 
   return (
     <div className={`${styles.app} ${isDesktop ? styles.desktopApp : ''}`}>
-      {/* 상단바 */}
       <header className={`${styles["app-header"]} ${isDesktop ? styles.desktopHeader : ''}`}>
         <div className={`${styles["title-group"]} ${isDesktop ? styles.desktopTitleGroup : ''}`}>
-          <img
-            src={main_mascot}
-            className={`${styles["app-main_mascot"]} ${isDesktop ? styles.desktopMascot : ''}`}
-            alt="main_mascot"
-          />
+          <img src={main_mascot} className={`${styles["app-main_mascot"]} ${isDesktop ? styles.desktopMascot : ''}`} alt="main_mascot" />
           <h2>INFO!</h2>
           <div className={`${styles["right-section"]} ${isDesktop ? styles.desktopRightSection : ''}`}>
             <div className={`${styles["mascot-logo"]} ${isDesktop ? styles.desktopLogo : ''}`}></div>
@@ -69,8 +101,7 @@ const Class_Room = () => {
           </div>
         </div>
       </header>
-  
-      {/* 컨테이너 */}
+
       <div className={`${styles.container} ${isDesktop ? styles.desktopContainer : ''}`}>
         <div className={`${styles.content} ${isDesktop ? styles.desktopContent : ''}`}>
           <div className={`${styles.titleContainer} ${isDesktop ? styles.desktopTitleContainer : ''}`}>
@@ -82,8 +113,7 @@ const Class_Room = () => {
             />
             <h1 className={`${styles.pageTitle} ${isDesktop ? styles.desktopPageTitle : ''}`}>수업 소통방</h1>
           </div>
-  
-          {/* 방 목록 */}
+
           <div className={`${styles.roomsList} ${isDesktop ? styles.desktopRoomsList : ''}`}>
             {rooms.map((room) => (
               <div
@@ -92,35 +122,22 @@ const Class_Room = () => {
                   isDesktop ? styles.desktopRoomItem : ''
                 }`}
               >
-                <img
-                  src={room.icon}
-                  alt={`방 아이콘 ${room.id}`}
-                  className={`${styles.roomIcon} ${isDesktop ? styles.desktopRoomIcon : ''}`}
-                />
+                <img src={room.icon} alt={`방 아이콘 ${room.roomId}`} className={`${styles.roomIcon} ${isDesktop ? styles.desktopRoomIcon : ''}`} />
                 <div className={`${styles.roomInfo} ${isDesktop ? styles.desktopRoomInfo : ''}`}>
-                  <div className={`${styles.roomTitle} ${isDesktop ? styles.desktopRoomTitle : ''}`}>{room.title}</div>
+                  <div className={`${styles.roomTitle} ${isDesktop ? styles.desktopRoomTitle : ''}`}>{room.roomName}</div>
                   <div className={`${styles.roomMessage} ${isDesktop ? styles.desktopRoomMessage : ''}`}>{room.lastMessage}</div>
                 </div>
-  
-                {(isSelectingForReport || isSelectingForEdit) ? (
-                  <input
-                    type="checkbox"
-                    checked={selectedRooms.includes(room.id)}
-                    className={`${styles.reportCheckbox} ${isDesktop ? styles.desktopReportCheckbox : ''}`}
-                  />
-                ) : (
-                  <button
-                    className={`${styles.joinButton} ${isDesktop ? styles.desktopJoinButton : ''}`}
-                    onClick={() => handleRoomClick(room.id)}
-                  >
-                    참여하기
-                  </button>
-                )}
+
+                <button
+                  className={`${styles.joinButton} ${isDesktop ? styles.desktopJoinButton : ''}`}
+                  onClick={() => handleRoomClick(room.roomId)}
+                >
+                  참여하기
+                </button>
               </div>
             ))}
           </div>
-  
-          {/* 하단바 */}
+
           <div className={`${styles.bottomNav} ${isDesktop ? styles.desktopBottomNav : ''}`}>
             <div className={`${styles.navItem} ${isDesktop ? styles.desktopNavItem : ''}`}>
               <img
@@ -131,7 +148,7 @@ const Class_Room = () => {
               />
               <span className={`${styles.navText} ${isDesktop ? styles.desktopNavText : ''}`}>내가 속한 방</span>
             </div>
-  
+
             <div className={`${styles.navItem} ${isDesktop ? styles.desktopNavItem : ''}`}>
               <img
                 src={Icon5}
@@ -141,7 +158,7 @@ const Class_Room = () => {
               />
               <span className={`${styles.navText} ${isDesktop ? styles.desktopNavText : ''}`}>수업 소통 방</span>
             </div>
-  
+
             <div className={`${styles.navItem} ${isDesktop ? styles.desktopNavItem : ''}`}>
               <img
                 src={Icon6}
@@ -156,7 +173,6 @@ const Class_Room = () => {
       </div>
     </div>
   );
+};
 
-}
-
-export default Class_Room;
+export default ClassRoom;
