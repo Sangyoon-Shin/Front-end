@@ -67,6 +67,7 @@ import HomePage from './pages/HomePage'; // 정확한 경로로 import 추가
 // 지민이가 만든 채팅방 페이지
 import ClassChatRoom from './pages/ClassChatRoom'
 import ClassChat from './pages/ClassChat'
+import BootBoardPage from './pages/BootBoardPage';
 
 function App() {
   return (
@@ -110,6 +111,7 @@ function App() {
           <Route path="/Announcement" element={<Announcement />} />
           <Route path="/ClassChatRoom" element={<ClassChatRoom />} />
           <Route path="/ClassChat" element={<ClassChat />} />
+          <Route path="/BootBoardPage" element={<BootBoardPage />} />
 
           <Route path="/ChatRoom/:id" element={<ChatRoom />} /> {/* 동적 라우팅을 통한 채팅방 페이지 */}
 
