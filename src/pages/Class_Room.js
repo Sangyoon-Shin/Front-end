@@ -8,7 +8,7 @@ import main_message from '../images/message.png';
 import main_my from '../images/my.png';
 import { useMediaQuery } from 'react-responsive';
 
-import styles from './ClassRoom.module.css';
+import styles from './Class_Room.module.css';
 import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
 import menuIcon from '../images/메뉴버튼.png';
 import Icon1 from '../images/하트이모지.png';
@@ -22,7 +22,7 @@ import Icon6 from '../images/자유소통방 횃불이.png';
 
 const roomsData = [];
 
-const ClassRoom = () => {
+const Class_Room = () => {
   const [rooms, setRooms] = useState(roomsData);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSelectingForReport, setIsSelectingForReport] = useState(false);
@@ -175,4 +175,4 @@ const ClassRoom = () => {
   );
 };
 
-export default ClassRoom;
+export default Class_Room;
