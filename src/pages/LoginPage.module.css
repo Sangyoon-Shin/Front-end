@@ -9,6 +9,43 @@
   padding: 0 20px;  /* 작은 화면에서 여백 추가 */
 }
 
+  /* 태블릿 크기 대응 */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .container {
+      padding: 24px;
+      font-size: 16px;
+    }
+  
+    .titleContainer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    .writeButton {
+      font-size: 18px;
+      padding: 10px 20px;
+    }
+  }
+  
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .logoSection {
+    text-align: center;
+  }
+  
+  .group-info {
+    display: flex;
+    justify-content: center; /* 가로 중앙 정렬 */
+    margin-left: -180px; /* 왼쪽으로 20px 이동 */
+    gap: 10px;  
+    margin-top: 50px; /* 왼쪽으로 220px 이동 */
+
 .header {
   display: flex;
   justify-content: center;
@@ -23,9 +60,9 @@
 .group-info {
   display: flex;
   justify-content: center;
-  margin-left: -100px;
-  gap: 30px;
-  margin-top: -165px;
+  margin-left: 0px;
+  gap: 0px;
+  margin-top: -100px;
 }
 
 /* 두 번째 경우에 대한 추가 스타일 */
@@ -43,15 +80,15 @@
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
-  width: 90%;
-  max-width: 400px;
+  width: 100%;
+  max-width: 350px;  /* 입력 칸을 로그인 박스 크기에 맞게 조정 */
   margin-bottom: -50px;
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.5rem;  /* 화면 크기에 맞춰서 크기 줄이기 */
   color: #000000;
-  margin-top: 5px;
+  margin-bottom: 30px;
 }
 
 h3 {
@@ -64,7 +101,7 @@ h3 {
   background-color: white;
   border-radius: 10px;
   padding: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 .inputGroup {
@@ -72,11 +109,11 @@ h3 {
 }
 
 input {
-  width: 90%;
+  width: 100%;  /* 입력칸을 박스 너비에 맞게 조정 */
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 14px;  /* 폰트 크기 줄이기 */
   margin-top: 5px;
 }
 
@@ -86,15 +123,10 @@ input {
   border: none;
   padding: 10px;
   border-radius: 5px;
-  width: 40%;
+  width: 100%;
   font-size: 16px;
   cursor: pointer;
   margin-top: 10px;
-  margin-left: 10px;
-}
-
-.loginButton:hover {
-  background-color: #004080;
 }
 
 .footerLinks {
@@ -114,7 +146,7 @@ input {
 }
 
 h2 {
-  font-size: 2.7rem;
+  font-size: 2rem;  /* 제목 크기 조정 */
   color: #0056A0;
   margin-top: 30px;
   margin-left: 0px;
@@ -129,13 +161,13 @@ h2 {
 .app-back_logo {
   height: 100px;
   margin-top: 18px;
-  margin-right: 40px;
+  margin-right: px;
 }
 
 .app-Q_logo {
   height: 60px;
   margin-top: 30px;
-  margin-right: -100px;
+  margin-right: 0px;
 }
 
 .footer-text {
@@ -143,7 +175,8 @@ h2 {
   color: rgb(60, 55, 55);
   margin-top: 45px;
   font-family: 'Arial', sans-serif;
-  margin-right: -20px;
+  margin-right: 10px;
+  margin-left: 100px;
 }
 
 /* 팝업 스타일 */
@@ -254,99 +287,4 @@ h4 {
 .changeBtn:hover {
   background-color: #004080;
 }
-
-/* 반응형 디자인: 화면 크기에 따라 텍스트와 이미지 크기 조정 */
-
-/* 화면이 768px 이하일 때 */
-@media (max-width: 768px) {
-  .loginBox {
-    width: 80%;
-    max-width: 350px;
-    padding: 20px;
   }
-
-  .app-telecom_logo {
-    height: 100px;
-  }
-
-  .app-back_logo {
-    height: 70px;
-  }
-
-  .app-Q_logo {
-    height: 50px;
-  }
-
-  h1 {
-    font-size: 1.5rem;
-  }
-
-  h3 {
-    font-size: 1rem;
-  }
-
-  .inputField {
-    font-size: 14px;
-  }
-
-  .loginButton {
-    width: 60%;
-  }
-
-  .footer-text {
-    font-size: 0.6rem;
-  }
-
-  h2 {
-    font-size: 2rem;
-  }
-}
-
-/* 화면이 480px 이하일 때 */
-@media (max-width: 480px) {
-  .loginBox {
-    width: 90%;
-    padding: 15px;
-  }
-
-  .app-telecom_logo {
-    height: 80px;
-  }
-
-  .app-back_logo {
-    height: 60px;
-  }
-
-  .app-Q_logo {
-    height: 40px;
-  }
-
-  h1 {
-    font-size: 1.2rem;
-  }
-
-  h3 {
-    font-size: 0.9rem;
-  }
-
-  .inputField {
-    font-size: 12px;
-  }
-
-  .loginButton {
-    width: 70%;
-  }
-
-  .footer-text {
-    font-size: 0.5rem;
-  }
-
-  h2 {
-    font-size: 1.8rem;
-  }
-
-  .footerLinks {
-    flex-direction: column;
-    gap: 10px;
-  }
-}

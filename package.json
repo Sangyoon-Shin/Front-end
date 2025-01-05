@@ -1,36 +1,28 @@
 {
-  "name": "project",
+  "name": "front",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "^7.26.0",
-    "@babel/preset-env": "^7.26.0",
-    "@babel/preset-react": "^7.26.3",
+    "@stomp/stompjs": "^7.0.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.7.7",
-
-    "babel-loader": "^9.2.1",
-    "bootstrap": "^5.3.3",
+    "axios": "^1.7.9",
+    "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
-    "react-bootstrap": "^2.10.5",
     "react-dom": "^18.3.1",
     "react-responsive": "^10.0.0",
-    "react-router-dom": "^6.28.0",
+    "react-router-dom": "^6.26.2",
     "react-scripts": "5.0.1",
-    "socket.io-client": "^4.8.1",
     "styled-components": "^6.1.13",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://f03a-116-45-67-236.ngrok-free.app",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -48,8 +40,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "http-proxy-middleware": "^3.0.3"
   }
 }

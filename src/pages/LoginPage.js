@@ -5,13 +5,13 @@ import styles from './LoginPage.module.css';
 
 import telecom_logo from '../images/정보통신공학과 횃불이.png';
 import back_logo from '../images/뒷모습 횃불이.png';
-import Q_logo from '../images/검색.png';
+import Q_logo from '../images/물음표.png';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const BASE_URL = "https://8d48-117-16-196-138.ngrok-free.app"; // 실제 URL로 변경
+  const BASE_URL = "https://18a5fe61dbb7.ngrok.app"; // 실제 URL로 변경
 
   // 페이지 이동을 위한 navigate 선언
   const navigate = useNavigate();
@@ -29,36 +29,39 @@ const LoginPage = () => {
         `${BASE_URL}/login`,
         { username, password },
         {
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json','ngrok-skip-browser-warning': 1 },
           withCredentials: true 
         }
       );
 
+      // 디버깅 코드 추가
+      console.log('Response:', response); // 전체 응답 객체 확인
+      console.log('Headers:', response.headers); // 응답 헤더 확인
+      console.log('Data:', response.data); // 응답 데이터 확인
+
       const jwtToken = response.headers['authorization']?.split(' ')[1];
+      const refreshToken = response.headers["refreshtoken"]; // RefreshToken 헤더 값
+
       if (!jwtToken) {
         throw new Error("Authorization token missing in response");
       }
 
-      localStorage.setItem('authToken', jwtToken);
+      localStorage.setItem('accessToken', jwtToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
+
       setError('');
       setUsername('');
       setPassword('');
 
       // 로그인 성공 시 메인 페이지로 이동
       navigate('/'); // 이동할 페이지 경로 설정
-    } catch (error) {
+    }catch (error) {
+      console.error("로그인 실패:", error.response?.data || error.message);
       if (error.response && error.response.status === 401) {
-        // 엑세스 토큰 만료 시 리프레시 토큰을 사용하여 새로운 엑세스 토큰 요청
-        const refreshedToken = await handleTokenRefresh();
-        if (refreshedToken) {
-          // 리프레시 토큰으로 새로운 엑세스 토큰을 받았으면, 로그인 요청 재시도
-          handleSubmit(event);
-        } else {
-          setError("로그인 실패: 아이디나 비밀번호를 확인해 주세요.");
-          alert("로그인 실패: 아이디나 비밀번호를 확인해 주세요.");
-        }
+        setError("로그인 실패: 아이디나 비밀번호를 확인해 주세요.");
       } else {
-        alert("네트워크 오류가 발생했습니다. 다시 시도해 주세요.");
+        setError("네트워크 오류가 발생했습니다. 다시 시도해 주세요.");
       }
     }
   };
