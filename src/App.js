@@ -23,7 +23,7 @@ import G_freeboardPage from './pages/G_freeboardPage'; // G_ 자유게시판 페
 import G_questionboardPage from './pages/G_questionboardPage'; // G_ 질문게시판 페이지
 
 //상윤님
-import BoardPage from './pages/BoardPage';// 게시판 메인 페이지
+// import BoardPage from './pages/BoardPage';// 게시판 메인 페이지
 import QuestionCode from './pages/QuestionCode';// 코드 질문방 본문
 import RoomPage from './pages/RoomPage'; // 내가속한방 추가
 import Message from './pages/Message'; // 쪽지방
@@ -103,7 +103,7 @@ function App() {
 
 
           {/* 상윤님 */}
-          <Route path="/BoardPage" element={<BoardPage />} /> {/*게시판 메인 페이지 */}
+          {/* <Route path="/BoardPage" element={<BoardPage />} /> 게시판 메인 페이지 */}
           <Route path="/QuestionCode" element={<QuestionCode />} /> {/* 코드 질문방 본문 */}
           <Route path="/RoomPage" element={<RoomPage />} />
           <Route path="/Message" element={<Message />} />

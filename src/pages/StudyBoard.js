@@ -226,12 +226,12 @@ const StudyBoard = () => {
       const requestData = {
         content: replyContents[index],
         userId: nickname,
-        targetType: 'Free',
+        targetType: 'study',
         targetId: id, // 게시글 ID
         parentCommentId: parentCommentId,
       };
 
-      const response = await fetch(`${BASE_URL}/free/${id}/comments/add`, {
+      const response = await fetch(`${BASE_URL}/study/${id}/comments/add`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(requestData),
@@ -274,7 +274,7 @@ const StudyBoard = () => {
     const boardType = 'StudyBoard'; // 고정값 설정
   
     try {
-      const response = await fetch(`${BASE_URL}/board/${boardType}/${id}/report`, {
+      const response = await fetch(`${BASE_URL}/${boardType}/${id}/report`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ content: reportContent }),

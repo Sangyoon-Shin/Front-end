@@ -229,10 +229,6 @@ const InformationCode = () => {
     navigate(`/post/${postId}`);  // 해당 게시물 상세 페이지로 이동
   };
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value); // 검색어 상태 업데이트
-  };
-
   // 정렬 버튼 클릭 시 정렬 상태 업데이트
   const handleSort = async (type) => {
     setSortType(type); // 정렬 상태 업데이트
