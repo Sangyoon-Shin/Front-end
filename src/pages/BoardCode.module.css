@@ -72,14 +72,13 @@
     }
     
     /* INFO 텍스트 */
-    h2 {
+    /* h2 {
       font-size: 2.4rem;
       color: #0056A0;
       margin-bottom: 0px;
       margin-right: 5px;
-      /* 텍스트를 아래로 살짝 내림 */
     
-    }
+    } */
     
     .app-arrow {
       height: 35px;
