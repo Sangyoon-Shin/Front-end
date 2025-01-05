@@ -5,7 +5,7 @@ import Header from './_.js'; // 상단바 컴포넌트
 import axiosInstance from '../utils/api'; // Axios 인스턴스
 import { Client } from '@stomp/stompjs'; // STOMP 클라이언트 라이브러리 // npm install @stomp/stompjs
 import {jwtDecode} from 'jwt-decode';
-import CommunicationRoom_goBack from '../images/arrow.png';
+import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
 import sendIcon from '../images/메시지전송버튼.png'; // 메시지 전송 아이콘 이미지
 import heartIcon from '../images/하트횃불이.png';
 
