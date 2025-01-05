@@ -12,11 +12,15 @@ import filledHeart from '../images/filledheart.png';
 import bar from '../images/bar.png';
 import Header from './_.js';  // 상단바 컴포넌트
 
+localStorage.setItem('userId', '200204263');
+
 // API에서 사용할 기본 URL과 헤더 설정
 const BASE_URL = 'http://info-rmation.kro.kr/board';
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
   const userId = localStorage.getItem('userId'); // 이 부분이 사용자 ID를 가져옵니다.
+  console.log(localStorage.getItem('userId'));
+
   return {
     'Authorization': `Bearer ${accessToken}`,
     'X-USER-ID': userId, // 사용자 ID를 X-USER-ID로 추가
@@ -62,26 +66,6 @@ const FreepostingPage = () => {
     if (savedReplyVisible) setReplyVisible(JSON.parse(savedReplyVisible));
   }, []);
 
-  // 댓글 상태가 변경될 때마다 로컬 스토리지에 저장합니다.
-  useEffect(() => {
-    localStorage.setItem('comments', JSON.stringify(comments));
-  }, [comments]);
-
-  // 좋아요 상태가 변경될 때마다 로컬 스토리지에 저장합니다.
-  useEffect(() => {
-    localStorage.setItem('isHeartFilled', JSON.stringify(isHeartFilled));
-  }, [isHeartFilled]);
-
-  // 닉네임 카운트가 변경될 때마다 로컬 스토리지에 저장합니다.
-  useEffect(() => {
-    localStorage.setItem('nicknameCount', JSON.stringify(nicknameCount));
-  }, [nicknameCount]);
-
-  // 대댓글 입력창 가시성 상태가 변경될 때마다 로컬 스토리지에 저장합니다.
-  useEffect(() => {
-    localStorage.setItem('replyVisible', JSON.stringify(replyVisible));
-  }, [replyVisible]);
-
   useEffect(() => {
     if (!nickname) {
       const types = ['int', 'short', 'double', 'char'];
@@ -93,7 +77,7 @@ const FreepostingPage = () => {
   useEffect(() => {
     const fetchHeartStatus = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/like-status`, {
+        const response = await fetch(`${BASE_URL}/free/${id}/like-status`, {
           method: 'GET',
           headers: getAuthHeaders(),
         });
@@ -115,7 +99,7 @@ const FreepostingPage = () => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/free/comments`, {
+        const response = await fetch(`${BASE_URL}/free/${id}/comments`, {
           method: 'GET',
           headers: getAuthHeaders(),
         });
@@ -255,7 +239,7 @@ const FreepostingPage = () => {
     setIsHeartFilled(newHeartStatus);
 
     try {
-      const response = await fetch(`${BASE_URL}/free/like`, {
+      const response = await fetch(`${BASE_URL}/free/${id}/like`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ isHeartFilled: newHeartStatus }),
@@ -277,7 +261,7 @@ const FreepostingPage = () => {
 
   const submitReport = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/free/report`, {
+      const response = await fetch(`${BASE_URL}/free/${id}}/report`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ content: reportContent }),

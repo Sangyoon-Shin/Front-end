@@ -48,6 +48,9 @@ import Scrap from './pages/Scrap';
 import My_board from './pages/My_board';
 import My_message from './pages/My_message';
 import ChatRoom from './pages/ChatRoom'; // 정확한 경로로 ChatRoom 컴포넌트 import
+import StudyBoard from './pages/StudyBoard'; // 정확한 경로로 ChatRoom 컴포넌트 import
+import BootBoard from './pages/BootBoard'; // 정확한 경로로 ChatRoom 컴포넌트 import
+import IndustryBoard from './pages/IndustryBoard'; // 정확한 경로로 ChatRoom 컴포넌트 import
 
 // 영현이 페이지
 import Class_Room from './pages/Class_Room'
@@ -124,6 +127,9 @@ function App() {
           <Route path="/Scrap" element={<Scrap />} />
           <Route path="/My_board" element={<My_board />} />
           <Route path="/My_message" element={<My_message />} />
+          <Route path="/StudyBoard" element={<StudyBoard />} />
+          <Route path="/BootBoard" element={<BootBoard />} />
+          <Route path="/IndustryBoard" element={<IndustryBoard />} />
 
           {/* 영현 페이지*/}
           <Route path="/HomePage" element={<HomePage />} />

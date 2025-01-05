@@ -19,6 +19,8 @@ const BASE_URL = 'http://info-rmation.kro.kr/api/board';
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
   const userId = localStorage.getItem('userId'); // 이 부분이 사용자 ID를 가져옵니다.
+  console.log(localStorage.getItem('userId'));
+
   return {
     Authorization: `Bearer ${accessToken}`,
     'X-USER-ID': userId, // 사용자 ID를 X-USER-ID로 추가
