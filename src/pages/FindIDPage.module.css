@@ -84,12 +84,12 @@ h1 {
 }
 
 /* INFO 텍스트 */
-h2 {
+/* h2 {
   font-size: 2.7rem;
   color: #0056A0;
   margin-bottom: 30px;
   margin-right: 100px;
-}
+} */
 
 .app-back_logo {
   height: 90px;

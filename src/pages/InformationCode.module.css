@@ -29,7 +29,7 @@
 }
 
 .pageTitle {
-    margin-top: -200px;
+    margin-top: -25px;
     font-size: 0.8rem;
     text-align: center;
     flex-grow: 1;
@@ -211,8 +211,9 @@
 }
 
 .pageButton {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
+    color:black;
+    background-color: white;
+    border: 1px solid black;
     border-radius: 5px;
     padding: 5px 10px;
     cursor: pointer;
