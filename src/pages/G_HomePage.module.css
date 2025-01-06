@@ -1,7 +1,7 @@
 /* 전체 화면 스타일 */
 .app {
     text-align: center;
-    height: 230vh;
+    height: 90vh;
     display: flex;
     flex-direction: column;
     justify-content: center;

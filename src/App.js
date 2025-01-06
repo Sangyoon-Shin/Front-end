@@ -23,7 +23,7 @@ import G_freeboardPage from './pages/G_freeboardPage'; // G_ 자유게시판 페
 import G_questionboardPage from './pages/G_questionboardPage'; // G_ 질문게시판 페이지
 
 //상윤님
-import BoardPage from './pages/BoardPage';// 게시판 메인 페이지
+// import BoardPage from './pages/BoardPage';// 게시판 메인 페이지
 import QuestionCode from './pages/QuestionCode';// 코드 질문방 본문
 import RoomPage from './pages/RoomPage'; // 내가속한방 추가
 import Message from './pages/Message'; // 쪽지방
@@ -48,6 +48,9 @@ import Scrap from './pages/Scrap';
 import My_board from './pages/My_board';
 import My_message from './pages/My_message';
 import ChatRoom from './pages/ChatRoom'; // 정확한 경로로 ChatRoom 컴포넌트 import
+import StudyBoard from './pages/StudyBoard'; // 정확한 경로로 ChatRoom 컴포넌트 import
+import BootBoard from './pages/BootBoard'; // 정확한 경로로 ChatRoom 컴포넌트 import
+import IndustryBoard from './pages/IndustryBoard'; // 정확한 경로로 ChatRoom 컴포넌트 import
 
 // 영현이 페이지
 import Class_Room from './pages/Class_Room'
@@ -67,6 +70,7 @@ import HomePage from './pages/HomePage'; // 정확한 경로로 import 추가
 // 지민이가 만든 채팅방 페이지
 import ClassChatRoom from './pages/ClassChatRoom'
 import ClassChat from './pages/ClassChat'
+import BootBoardPage from './pages/BootBoardPage';
 
 function App() {
   return (
@@ -99,7 +103,7 @@ function App() {
 
 
           {/* 상윤님 */}
-          <Route path="/BoardPage" element={<BoardPage />} /> {/*게시판 메인 페이지 */}
+          {/* <Route path="/BoardPage" element={<BoardPage />} /> 게시판 메인 페이지 */}
           <Route path="/QuestionCode" element={<QuestionCode />} /> {/* 코드 질문방 본문 */}
           <Route path="/RoomPage" element={<RoomPage />} />
           <Route path="/Message" element={<Message />} />
@@ -110,6 +114,7 @@ function App() {
           <Route path="/Announcement" element={<Announcement />} />
           <Route path="/ClassChatRoom" element={<ClassChatRoom />} />
           <Route path="/ClassChat" element={<ClassChat />} />
+          <Route path="/BootBoardPage" element={<BootBoardPage />} />
 
           <Route path="/ChatRoom/:id" element={<ChatRoom />} /> {/* 동적 라우팅을 통한 채팅방 페이지 */}
 
@@ -124,6 +129,9 @@ function App() {
           <Route path="/Scrap" element={<Scrap />} />
           <Route path="/My_board" element={<My_board />} />
           <Route path="/My_message" element={<My_message />} />
+          <Route path="/StudyBoard" element={<StudyBoard />} />
+          <Route path="/BootBoard" element={<BootBoard />} />
+          <Route path="/IndustryBoard" element={<IndustryBoard />} />
 
           {/* 영현 페이지*/}
           <Route path="/HomePage" element={<HomePage />} />

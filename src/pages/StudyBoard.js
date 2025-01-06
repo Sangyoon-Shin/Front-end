@@ -19,6 +19,8 @@ const BASE_URL = 'http://info-rmation.kro.kr/api/board';
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
   const userId = localStorage.getItem('userId'); // 이 부분이 사용자 ID를 가져옵니다.
+  console.log(localStorage.getItem('userId'));
+
   return {
     Authorization: `Bearer ${accessToken}`,
     'X-USER-ID': userId, // 사용자 ID를 X-USER-ID로 추가
@@ -224,12 +226,12 @@ const StudyBoard = () => {
       const requestData = {
         content: replyContents[index],
         userId: nickname,
-        targetType: 'Free',
+        targetType: 'study',
         targetId: id, // 게시글 ID
         parentCommentId: parentCommentId,
       };
 
-      const response = await fetch(`${BASE_URL}/free/${id}/comments/add`, {
+      const response = await fetch(`${BASE_URL}/study/${id}/comments/add`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(requestData),
@@ -272,7 +274,7 @@ const StudyBoard = () => {
     const boardType = 'StudyBoard'; // 고정값 설정
   
     try {
-      const response = await fetch(`${BASE_URL}/board/${boardType}/${id}/report`, {
+      const response = await fetch(`${BASE_URL}/${boardType}/${id}/report`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ content: reportContent }),

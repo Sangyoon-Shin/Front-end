@@ -58,14 +58,45 @@ const BoardPage = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch('https://your-backend-api.com/api/posts');
-        if (!response.ok) {
-          throw new Error('게시물 목록을 불러오는데 실패했습니다.');
+        const response = await axiosInstance.get('https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board/free', {
+          params: { page, size }, // 페이지와 사이즈를 쿼리 파라미터로 추가
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+          },
+        });
+
+        const data = response.data; // Axios는 자동으로 JSON을 파싱합니다.
+
+        if (!data.content || data.content.length === 0) {
+          console.warn('게시물이 없습니다.');
+          setPosts([]); // 빈 데이터로 상태 초기화
+          return;
         }
         const data = await response.json();
         setPosts(data); // 게시물 목록 상태 업데이트
       } catch (error) {
-        console.error('게시물 목록 불러오는 중 오류가 발생했습니다:', error);
+        console.error('게시물 목록을 불러오는 중 오류가 발생했습니다:', error);
+        alert('게시물 데이터를 불러오는데 문제가 발생했습니다. 다시 시도해주세요.');
+      } finally {
+        setIsLoading(false); // 로딩 종료
+      }
+    };
+    // 좋아요 10개 이상 게시물 가져오기
+    const fetchTopLikedPosts = async () => {
+      try {
+        const response = await axiosInstance.get('https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board/free/top-liked', {
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+          },
+        });
+        if (response.status === 200) {
+          console.log(response)
+          setTopLikedPosts(response.data.map((post) => post.id)); // 좋아요 10개 이상 게시물의 ID만 저장
+        } else {
+          setTopLikedPosts([]); // 데이터가 없는 경우 빈 배열로 초기화
+        }
+      } catch (error) {
+        console.error('좋아요 상위 게시물을 불러오는 중 오류가 발생했습니다:', error);
       }
     };
     fetchPosts();
@@ -127,13 +158,18 @@ const BoardPage = () => {
     if (searchTerm.trim() !== '') {
       try {
         console.log(`검색어: ${searchTerm}`);
-        const response = await fetch(`https://your-backend-api.com/api/posts/search?query=${encodeURIComponent(searchTerm)}`);
+        const response = await axiosInstance.get('https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board/free', {
+          params: {
+            searchKeyword: searchTerm, // 검색어 전달
+            page: 0,
+            size: 10,
+          },
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+          },
+        });
 
-        if (!response.ok) {
-          throw new Error('검색 결과를 불러오는데 실패했습니다.');
-        }
-
-        const data = await response.json();
+        const data = response.data;
         console.log('검색 결과:', data);
         setPosts(data); // 검색 결과를 게시물 목록으로 업데이트
         alert('검색이 완료되었습니다. 결과가 화면에 표시됩니다.');
@@ -181,16 +217,23 @@ const BoardPage = () => {
   const handleSort = async (type) => {
     setSortType(type); // 정렬 상태 업데이트
 
+    if (type === 'latest') {
+      setPosts(initialPosts); // 초기 데이터로 복원
+      return;
+    }
+
     try {
-      let url = 'https://ecc6-106-101-130-133.ngrok-free.app/api/board/coding';
+      const params = {
+        page: 0,
+        size: 10,
+        searchKeyword: '', // 필요 시 값 설정
+        contentKeyword: '', // 필요 시 값 설정
+        hashtagKeyword: '', // 필요 시 값 설정
+        typeKeyword: '', // 필요 시 값 설정
+      };
 
-      if (type === 'recommend') {
-        // 추천순 정렬 엔드포인트
-        url = 'https://ecc6-106-101-130-133.ngrok-free.app/api/board/coding/sort-by-likes';
-
-      }
-
-      const response = await fetch(url, {
+      const response = await axiosInstance.get('https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board/free/sort-by-likes', {
+        params,
         headers: {
           'ngrok-skip-browser-warning': 'true',
         },

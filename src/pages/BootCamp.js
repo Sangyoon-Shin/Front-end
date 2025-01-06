@@ -13,7 +13,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'https://c5631a38a6d5.ngrok.app/api/board';
+const BASE_URL = 'https://6387-2406-5900-10f0-c886-1516-1f0b-2678-cc12.ngrok-free.app/api/board';
 
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
@@ -33,14 +33,16 @@ const BootCamp = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // 게시글 ID를 URL에서 가져옴 (수정 시 사용)
 
+  const [ID, setID] = useState('');
   const [title, setTitle] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [content, setContent] = useState('');
   const [hashtag, setHashtag] = useState('');
-  const [files, setFiles] = useState(null);
   const [isEditing, setIsEditing] = useState(false); // 수정 모드 여부
-  const [images, setImages] = useState([]);  // 이미지 배열로 수정
+
+  const [files, setFiles] = useState(null);
+
 
   // 특정 게시글 데이터 가져오기 (수정 모드일 경우)
   useEffect(() => {
@@ -55,28 +57,42 @@ const BootCamp = () => {
       const response = await axios.get(`${BASE_URL}/studies/update/${postId}`, {
         headers: { ...getAuthHeaders(), 'ngrok-skip-browser-warning': 1 },
       });
-      const { studyTitle, studyContents, studyHashtag, studyCreatedTime, deadline } = response.data;
+      const { studyID, studyTitle, studyContents, studyHashtag, startTime, deadline, studyFile} = response.data;
+      setID(studyID);
       setTitle(studyTitle);
       setContent(studyContents);
       setHashtag(studyHashtag);
-      setStartDate(studyCreatedTime);
+      setStartDate(startTime);
       setEndDate(deadline);
+
+      setFiles(studyFile);
+
     } catch (error) {
       console.error('Error fetching post data:', error);
       alert('게시글 정보를 불러오는 데 실패했습니다.');
     }
   };
 
-  const handleFileChange = (e) => setFiles(e.target.files);
 
   const handleSubmit = async () => {
     const formData = new FormData();
+    formData.append('studyID', 'bootcamp');
     formData.append('studyTitle', title);
     formData.append('studyContents', content);
     formData.append('studyHashtag', hashtag);
-    formData.append('(studyCreatedTime', startDate);
-    formData.append('deadline', endDate);
-    if (files) Array.from(files).forEach((file) => formData.append('files', file));
+    // 날짜 형식을 'YYYY-MM-DDT00:00:00' 형식으로 변환하여 서버로 전송
+    const formattedStartDate = `${startDate}T00:00:00`;
+    const formattedEndDate = `${endDate}T00:00:00`;
+
+    formData.append('startTime', formattedStartDate);
+    formData.append('deadline', formattedEndDate);
+
+    console.log(startDate);
+
+// 파일이 있을 경우에만 추가
+    if (files && files.length > 0) {
+      files.forEach((file) => formData.append('studyFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
+    }
 
     try {
       const url = isEditing ? `${BASE_URL}/studies/update` : `${BASE_URL}/studies/save`;
@@ -96,11 +112,9 @@ const BootCamp = () => {
       alert('요청 처리 중 문제가 발생했습니다.');
     }
   };
-
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    const newImages = files.map(file => URL.createObjectURL(file));
-    setImages(newImages);
+  
+  const handleFileChange = (e) => {
+    setFiles(Array.from(e.target.files)); // FileList를 배열로 변환
   };
 
   return (
@@ -108,7 +122,7 @@ const BootCamp = () => {
       <Header />
 
       <img src={arrow} className={styles["app-arrow"]} alt="back_arrow" onClick={() => navigate(-1)} />
-      <h2 className={styles["title-text2"]}>{isEditing ? '게시글 수정' : '부트캠프 게시판 작성'}</h2>
+      <h2 className={styles["title-text2"]}>{isEditing ? '게시글 수정' : '부트캠프 게시판'}</h2>
 
       <img src={bar} className={styles["app-bar"]} alt="bar" />
 
@@ -164,25 +178,13 @@ const BootCamp = () => {
         />
       </div>
 
-      {/* 이미지 미리보기 */}
-      <div className={styles["image-preview-container"]}>
-        {images.map((imgSrc, index) => (
-          <img key={index} src={imgSrc} alt={`미리보기 ${index + 1}`} className={styles["image-preview"]} />
-        ))}
-      </div>
-
-      {/* 이미지 업로드 버튼 */ }
-      <div className={styles["image-upload"]}>
-        <label htmlFor="image-input">
-          <img src={camera} alt="카메라 아이콘" className={styles["camera-icon"]} />
-        </label>
+      <div className={styles["input-group"]}>
+        <h2 className={styles["title-text4"]}>파일 첨부</h2>
         <input
-          id="image-input"
+          className={styles["input"]}
           type="file"
-          accept="image/*"
-          multiple  // 여러 이미지 선택 가능
-          onChange={handleImageChange}
-          style={{ display: 'none' }}
+          multiple
+          onChange={handleFileChange}
         />
       </div>
 
