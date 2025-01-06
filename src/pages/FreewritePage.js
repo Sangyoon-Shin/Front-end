@@ -11,6 +11,8 @@ import Header from './_.js'; // 상단바 컴포넌트
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
+
+
 // API에서 사용할 기본 URL과 헤더 설정
 const BASE_URL = 'http://info-rmation.kro.kr/api/board';
 
@@ -37,6 +39,8 @@ const FreewritePage = () => {
   const [hashtag, setHashtag] = useState('');
   const [files, setFiles] = useState(null);
   const [isEditing, setIsEditing] = useState(false); // 수정 모드 여부
+  const [images, setImages] = useState([]);  // 이미지 배열로 수정
+
 
   // 특정 게시글 데이터 가져오기 (수정 모드일 경우)
   useEffect(() => {
@@ -96,6 +100,7 @@ const FreewritePage = () => {
     }
   };
 
+
   return (
     <div className={styles.app}>
       <Header />
@@ -135,6 +140,13 @@ const FreewritePage = () => {
           onChange={(e) => setContent(e.target.value)}
           placeholder="내용을 입력하세요."
         />
+      </div>
+
+      {/* 이미지 미리보기 */}
+      <div className={styles["image-preview-container"]}>
+        {images.map((imgSrc, index) => (
+          <img key={index} src={imgSrc} alt={`미리보기 ${index + 1}`} className={styles["image-preview"]} />
+        ))}
       </div>
 
       <div className={styles["input-group"]}>
