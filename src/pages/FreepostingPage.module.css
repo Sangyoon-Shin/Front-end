@@ -358,10 +358,14 @@
 /* 대댓글 입력창 스타일 */
 .reply-input {
   margin-top: 10px;
-  margin-left: 10px;
+  margin-left: 20px;
   /* 대댓글 입력창을 댓글보다 살짝 오른쪽으로 이동 */
 }
 
+.button-container {
+  display: flex;
+  justify-content: flex-end; /* 버튼을 왼쪽에 배치 */
+}
 
 
 .reply-input textarea {
@@ -448,7 +452,7 @@ button:hover {
   width:100%;
   display: flex;
   /* Flexbox로 설정 */
-  justify-content: center;
+  justify-content: flex-end;
   /* 오른쪽 정렬 */
   margin-top: -20px;
   /* 위쪽 여백 추가 */
@@ -469,6 +473,5 @@ button:hover {
   border-radius: 4px;
   /* 모서리를 둥글게 */
   cursor: pointer;
-  /* 커서 변경 */
-  margin-left: 330px;
+  /* 커서 변경 */  
 }

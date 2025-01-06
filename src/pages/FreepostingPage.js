@@ -13,7 +13,7 @@ import bar from '../images/bar.png';
 import Header from './_.js';  // 상단바 컴포넌트
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'http://info-rmation.kro.kr/api/board';
+const BASE_URL = 'https://a35af42a1848.ngrok.app/api/board';
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
   const userId = localStorage.getItem('userId'); // 이 부분이 사용자 ID를 가져옵니다.
@@ -80,45 +80,60 @@ const FreepostingPage = () => {
     fetchHeartStatus();
   }, [id]);
 
-  useEffect(() => { // 댓글 불러오기
-    const fetchComments = async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/free/${id}/comments`, {
-          method: 'GET',
-          headers: getAuthHeaders(),
-        });
+  const fetchComments = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/free/${id}/comments`, {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      });
 
-        if (response.ok) {
-          const data = await response.json();
-          // 안전하게 배열로 설정
-          setComments(Array.isArray(data.comments) ? data.comments : []);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('댓글 API 응답 데이터:', data);
+
+        // 서버의 댓글 데이터 구조에 맞게 처리
+        if (data && Array.isArray(data.content)) {
+          setComments(data.content);
         } else {
-          console.error('댓글 불러오기에 실패했습니다.');
+          console.error('댓글 데이터 형식이 올바르지 않습니다.', data);
+          setComments([]);
         }
-      } catch (error) {
-        console.log(`${BASE_URL}/free/${id}/comments`);
-        console.error('댓글 불러오는 중 오류 발생:', error);
+      } else {
+        console.error('댓글 불러오기에 실패했습니다.');
       }
-    };
+    } catch (error) {
+      console.error('댓글 불러오는 중 오류 발생:', error);
+    }
+  };
 
-    fetchComments();
 
-    const getBoard = async () => {
+
+  // 게시글 불러오기 함수
+  const getBoard = async () => {
+    try {
       const accessToken = localStorage.getItem('accessToken');
-      console.log(id);
-      fetch(`http://info-rmation.kro.kr/api/board/free/${id}`, {
+      const response = await fetch(`https://a35af42a1848.ngrok.app/board/free/${id}`, {
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'ngrok-skip-browser-warning': 1
-        }
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          setContent(data.freeContents);
-          setTitle(data.freeTitle);
-        });
-    };
+          Authorization: `Bearer ${accessToken}`,
+          'ngrok-skip-browser-warning': 1,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('게시글 데이터:', data);
+        setContent(data.freeContents);
+        setTitle(data.freeTitle);
+      } else {
+        console.error('게시글 불러오기에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('게시글 불러오는 중 오류 발생:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchComments();
     getBoard();
   }, [id]);
 
@@ -153,6 +168,7 @@ const FreepostingPage = () => {
 
       const newComment = {
         nickname: `${nickname}${newNicknameCount[nickname]}`,
+        content: commentContent, // 댓글 내용 추가
         replies: [],
       };
 
@@ -166,8 +182,8 @@ const FreepostingPage = () => {
         if (response.ok) {
           const savedComment = await response.json(); // 서버에서 저장된 댓글 데이터 반환
           // 댓글에 id가 포함되어 있으므로 이를 comments 배열에 추가
-          setComments([...comments, savedComment]);
-          setNicknameCount((prev) => ({ ...prev, [nickname]: prev[nickname] + 1 }));
+          setComments((prevComments) => [...prevComments, newComment]); // 상태 업데이트
+          setNicknameCount((prev) => ({ ...prev, [nickname]: prev[nickname] }));
           setCommentContent('');
         } else {
           console.error('댓글 추가에 실패했습니다.');
@@ -261,18 +277,28 @@ const FreepostingPage = () => {
     setIsPopupOpen(!isPopupOpen);
   };
 
+  const getCurrentUserId = () => {
+    return localStorage.getItem('userId') || 'unknownUser'; // 예: 기본값으로 'unknownUser' 반환
+  };
+
+
   const submitReport = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/free/${id}}/report`, {
+      const reason = reportContent; // 신고 내용
+      const reporterId = getCurrentUserId(); // 신고자 ID
+
+      // URL에 파라미터로 reason과 reporterId 추가
+      const url = `${BASE_URL}/free/${id}/report?reason=${encodeURIComponent(reason)}&reporterId=${encodeURIComponent(reporterId)}`;
+
+      const response = await fetch(url, {
         method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ content: reportContent }),
+        headers: getAuthHeaders(), // 필요한 헤더 추가
       });
 
       if (response.ok) {
-        setReportContent('');
-        togglePopup();
-        setIsAlertOpen(true);
+        setReportContent(''); // 신고 내용 초기화
+        togglePopup(); // 팝업 닫기
+        setIsAlertOpen(true); // 성공 알림 표시
 
         setTimeout(() => {
           setIsAlertOpen(false);
@@ -343,7 +369,9 @@ const FreepostingPage = () => {
             <textarea
               className={styles["popup-textarea"]}
               value={reportContent}
-              onChange={(e) => setReportContent(e.target.value)}
+              onChange={(e) => {
+                setReportContent(e.target.value);
+              }}
             />
             <div className={styles["popup-button-container"]}>
               <button onClick={togglePopup} className={styles["popup-close"]}>
@@ -421,14 +449,18 @@ const FreepostingPage = () => {
 
               {replyVisible[index] && (
                 <div className={styles["reply-input"]}>
+                <div className={styles["textarea-container"]}>
                   <textarea
                     className={styles["textarea_reply"]}
                     value={replyContents[index] || ""}
                     onChange={(e) => handleReplyChange(index, e)}
                     placeholder="대댓글을 입력하세요."
                   />
+                </div>
+                <div className={styles["button-container"]}>
                   <button onClick={() => handleAddReply(index)}>대댓글 달기</button>
                 </div>
+              </div>
               )}
 
               {/* 대댓글 목록도 안전하게 접근 (옵셔널 체이닝) */}
