@@ -5,7 +5,7 @@ import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
 import sendIcon from '../images/메시지전송버튼.png';
 import heartIcon from '../images/하트횃불이.png';
 
-import main_mascot from '../images/대학 심볼 횃불이.png';
+import main_mascot from '../images/졸업생횃불이.png';
 import main_bell from '../images/bell.png';
 import main_message from '../images/message.png';
 import main_my from '../images/my.png';
@@ -25,11 +25,11 @@ const Chat = () => {
     const [users, setUsers] = useState([]); // 채팅방 사용자 목록
     const messageListRef = useRef(null);
     const [room, setRoom] = useState([]); // 채팅방 정보
-    const token = localStorage.getItem('token'); // 로컬 스토리지에서 JWT 토큰 가져오기
-
+    //const token = localStorage.getItem('token'); // 로컬 스토리지에서 JWT 토큰 가져오기
+    const token = 'abc';
     const roomId = '91f3411b-1433-4fdd-b3ac-c0a594b5f407'; // 채팅방 ID는 classId로 설정
     const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
-    const baseUrl = ' https://e757-61-84-64-212.ngrok-free.app'; // 백엔드 서버 URL
+    const baseUrl = 'https://649d-61-84-64-212.ngrok-free.app'; // 백엔드 서버 URL
     // 웹소켓 초기화 함수
     const initializeWebSocket = () => {
         if (!token) {
@@ -125,41 +125,37 @@ const Chat = () => {
     // 채팅방 정보 및 사용자 목록 조회
     const fetchRoomInfo = async () => {
         try {
-            const [roomData, userList, chatData] = await Promise.all([
-                axios.get(`${baseUrl}/Room/${roomId}`, {
-                    headers: { Authorization: `Bearer ${token}`,"ngrok-skip-browser-warning": "abc" }
-                }),
-                axios.get(`${baseUrl}/Room/GetUserList/${roomId}`, {
-                    headers: {"ngrok-skip-browser-warning": "abc", Authorization: `Bearer ${token}` }
-                }),
-                axios.get(`${baseUrl}/Room/GetChatData/${roomId}`, {
-                    headers: {"ngrok-skip-browser-warning": "abc", Authorization: `Bearer ${token}` }
-                })
-            ]);
+            fetch(`${baseUrl}/Room/${roomId}`, {
+                headers: { Authorization: `Bearer ${token}`,"ngrok-skip-browser-warning": "abc" },
+                method: 'GET'
+            }).then((res)=> {
+                console.log(res);
+                return res.json()})
+            .then((data) => {
+                console.log(data);
+                setRoom(data.data);
+                setUserCount(data.data.userCount);
 
-            if (roomData.data.code === 200) {
-                console.log(roomData);
-                console.log(userList);
-                setRoom(roomData.data.data);
-                setUserCount(roomData.data.data.userCount);
-            }
-            if (userList.data.code === 200) {
-                setUsers(userList.data.data);
-            }
-            if(chatData.data.code === 200) {
-                setMessages(chatData.data.data);
-            }
+            });
+            fetch(`${baseUrl}/GetChatData/${roomId}`, {
+                headers: { Authorization: `Bearer ${token}`,"ngrok-skip-browser-warning": "abc" },
+                method: 'GET'
+            }).then((res)=> {return res.json()})
+            .then((data) => {
+                console.log(data);
+                setMessages(data.data.data);
+            });
         } catch (error) {
             console.error('채팅방 정보 또는 사용자 목록 조회 실패:', error);
         }
     };
 
     useEffect(() => {
-        initializeWebSocket(); // 웹소켓 초기화
-
-        joinRoom(); // 채팅방 입장
+        //initializeWebSocket(); // 웹소켓 초기화
 
         fetchRoomInfo(); // 채팅방 정보 및 사용자 목록 조회
+      //  joinRoom(); // 채팅방 입장
+
 
         return () => {
             if (websocketRef.current) {
@@ -224,7 +220,7 @@ const Chat = () => {
 
                 <div className={styles.messageList} ref={messageListRef}>
                     {messages.map((msg, index) => (
-                        <div key={index} className={msg.sender === 'me' ? styles.sentMessage : styles.receivedMessage}>
+                        <div key={index} className={msg.userId === '202301641' ? styles.sentMessage : styles.receivedMessage}>
                             <span className={styles.messageText}>{msg.message}</span>
                             <span className={styles.messageTime}>{msg.time}</span>
                         </div>
