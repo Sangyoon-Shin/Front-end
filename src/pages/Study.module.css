@@ -87,15 +87,6 @@
         margin-top: 10px;
         margin-right: 300px;
       }
-
-      .title-text7 {
-        font-size: 1.2rem ;
-        color: #000000;
-        margin-bottom: 10px;
-        /* 텍스트를 아래로 살짝 내림 */
-        margin-top: 10px;
-        margin-right: 300px;
-      }
       
       .app-main_message2 {
         height: 25px;
@@ -138,7 +129,7 @@
     }
       
     /* 기본 입력 필드 */
-    .input, .textarea, .recruit {
+    .input, .textarea {
       width: 95%; /* 너비 기본값 */
       padding: 10px;
       font-size: 1rem;
@@ -156,7 +147,7 @@
     
     /* 작성 버튼 스타일 */
     .submit-group {
-      margin-top: -50px; /* 간격 조정 */
+      margin-top: 20px; /* 간격 조정 */
       display: flex;
       justify-content: flex-end;
       width: 97%; /* 반응형 너비 */
@@ -230,44 +221,4 @@
       max-height: 120px;
       border: 1px solid #ddd;
       border-radius: 4px;
-    }
-    
-    .participant-input-group {
-      display: flex;
-      align-items: center;
-    }    
-    
-    .button-group {
-      display: flex;
-    }
-    
-    .toggle-button {
-      width: 30px;
-      height: 30px;
-      font-size: 18px;
-      text-align: center;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #f0f0f0;
-      cursor: pointer;
-    }
-    
-    .toggle-button:disabled {
-      background-color: #ddd;
-      cursor: not-allowed;
-    }
-    
-    .toggle-button {
-      width: 30px;
-      height: 30px;
-      font-size: 10px;
-      background-color: #0056b3;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    
-    .toggle-button:disabled {
-      background-color: #0056b3;
-      cursor: not-allowed;
     }
