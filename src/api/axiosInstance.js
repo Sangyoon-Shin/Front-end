@@ -2,8 +2,11 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'https://463665571ca4.ngrok.app', // Base URL 설정
+    baseURL: 'https://d1a8-2406-5900-10f0-c886-9d73-494b-76e8-192d.ngrok-free.app/', // Base URL 설정
     withCredentials: true,
+    headers: {
+        'ngrok-skip-browser-warning': 1, // 헤더 추가
+    },
 });
 
 

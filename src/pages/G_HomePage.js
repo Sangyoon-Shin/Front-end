@@ -3,7 +3,7 @@
 import React, { useState,useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from "./G_HomePage.module.css";
-
+//import { jwtDecode } from 'jwt-decode';
 import main_mascot from '../images/졸업생횃불이.png';  // 로고 이미지 불러오기
 import main_bell from '../images/bell.png';  // 로고 이미지 불러오기
 import main_message from '../images/message.png';  // 로고 이미지 불러오기
@@ -26,8 +26,8 @@ const G_HomePage = () => {
 
   const [G_freeBoardData, G_setFreeBoardData] = useState([]); //졸 자유게시판
   const [G_questBoardData, G_setQuestBoardData] = useState([]); //졸 질문게시판
-  const [topfreeBoardData, setTopFreeBoardData] = useState([]); //재 자유게시판
-  const [topquestBoardData, setTopQuestBoardData] = useState([]); //재 질문문게시판
+  const [TopFreeBoardData, setTopFreeBoardData] = useState([]); //재 자유게시판
+  const [TopQuestBoardData, setTopQuestBoardData] = useState([]); //재 질문문게시판
 
   const [dropdownVisible, setDropdownVisible] = useState(false);  // 드롭다운 상태 관리
   const [activeTab, setActiveTab] = useState('자유 게시판'); // Default active tab
@@ -72,21 +72,35 @@ const G_HomePage = () => {
   loadData();
 }, []);
 
-
+const [rooms, setRooms] = useState([]);
   //소통방
     // 방 ID에 맞는 페이지로 이동하기
     const handleRoomClick = (path) => {
       navigate(`/${path}`);  // 방 ID에 맞는 페이지로 이동
     };
+ //   const accessToken = localStorage.getItem('accessToken');
+ // if (!accessToken) throw new Error('사용자 인증 정보가 없습니다.');
 
+  //const decodedToken = jwtDecode(accessToken);
+  //const userId = decodedToken.userId;
+    const userId = '202301641'; // 추후 삭제제
+    const baseUrl = 'https://2646-61-84-64-212.ngrok-free.app';
+    fetch(`${baseUrl}/Room/userId/${userId}`, {
+        headers: {
+            contentType: 'application/json',
+            'ngrok-skip-browser-warning': 'abc',
+        },
+        method: 'GET'
+    }).then((res) => { return res.json() })
+      .then((data) => {
+        setRooms(data.data);
+      });
     const roomsData = [
-      { id: 1, title: '내가 속한 방 제목 1', lastMessage: '마지막 내용', icon: Icon1, selected: false },
-      { id: 2, title: '내가 속한 방 제목 2', lastMessage: '마지막 내용', icon: Icon2, selected: false },
-      { id: 3, title: '내가 속한 방 제목 3', lastMessage: '마지막 내용', icon: Icon3, selected: false },
+      { roomId: 1, roomName: '내가 속한 방 제목 1', lastMessage: '마지막 내용', icon: Icon1, selected: false },
     ];
 
 
-const [rooms, setRooms] = useState(roomsData);
+
 
 
 
@@ -152,7 +166,7 @@ const [rooms, setRooms] = useState(roomsData);
                     {!loading && !error && (
   <div className={styles.postList}>
     {/* 질문 게시판 데이터 렌더링 */}
-    <h2>질문 게시판</h2>
+    <h1>질문 게시판</h1>
     {G_questBoardData.map((item, index) => (
       <div
         key={`quest-${item.id}`}
@@ -160,16 +174,16 @@ const [rooms, setRooms] = useState(roomsData);
         onClick={() => handleQuestionClick(item.id, item.boardID)} // boardID를 함께 전달
       >
         <span className={styles.index2}>{index + 1}</span>
-        <span className={styles.question}>{item.questTitle}</span>
+        <span className={styles.question}>{item.graduateTitle}</span>
         <span className={styles.date}>
-          {new Date(item.questCreatedTime).toLocaleDateString()}
+          {new Date(item.graduateCreatedTime).toLocaleDateString()}
         </span>
         <S_cute className={styles.S_cute} />
       </div>
     ))}
 
     {/* 자유 게시판 데이터 렌더링 */}
-    <h2>자유 게시판</h2>
+    <h1>자유 게시판</h1>
     {G_freeBoardData.map((item, index) => (
       <div
         key={`free-${item.id}`}
@@ -177,9 +191,9 @@ const [rooms, setRooms] = useState(roomsData);
         onClick={() => handleFreeBoardClick(item.id, item.boardID)} // boardID를 함께 전달
       >
         <span className={styles.index2}>{index + 1}</span>
-        <span className={styles.question}>{item.freeTitle || 'No Title'}</span>
+        <span className={styles.question}>{item.graduateTitle || 'No Title'}</span>
         <span className={styles.date}>
-          {new Date(item.freeCreatedTime).toLocaleDateString()}
+          {new Date(item.graduateCreatedTime).toLocaleDateString()}
         </span>
         <S_cute className={styles.S_cute} />
       </div>
@@ -199,12 +213,12 @@ const [rooms, setRooms] = useState(roomsData);
     <div className={styles.roomsList}>
       {rooms.map((room) => (
         <div
-          key={room.id}
+          key={room.roomId}
           className={`${styles.roomItem} ${room.selected ? styles.selected : ''}`}
         >
-          <img src={room.icon} alt={`방 아이콘 ${room.id}`} className={styles.roomIcon} /> {/* 아이콘 추가 */}
+          <img src={room.icon} alt={`방 아이콘 ${room.roomId}`} className={styles.roomIcon} /> {/* 아이콘 추가 */}
           <div className={styles.roomInfo}>
-            <div className={styles.roomTitle}>{room.title}</div>
+            <div className={styles.roomTitle}>{room.roomName}</div>
             <div className={styles.roomMessage}>{room.lastMessage}</div>
           </div>
           <button
@@ -223,7 +237,6 @@ const [rooms, setRooms] = useState(roomsData);
                 return null;
             }
           };
-
 
   // 게시판 데이터 (예시 데이터)
   const hotPosts = [
@@ -329,24 +342,26 @@ const [rooms, setRooms] = useState(roomsData);
             <PlusButton className={styles.plusButton} />
           </a>
         </div>
-  
-        {/* 탭 내용 */}
-        <div className={`${styles.tabContent} ${isDesktop ? styles.desktopTabContent : ''}`}>
-          {renderTabContent()}
-        </div>{/* 게시판 컨테이너 */}
-<div className={`${styles.container} ${isDesktop ? styles.desktopContainer : ''}`}>
+  {/* 탭 내용 */}
+<div className={`${styles.tabContent} ${isDesktop ? styles.desktopTabContent : ''}`}>
+  {renderTabContent()}
+</div>
+
+{/* 게시판 컨테이너 */}
+<div className={`${styles.container2} ${isDesktop ? styles.desktopContainer : ''}`}>
   <h1 className={styles.title}>재학생들의 자유게시판</h1>
 
+  {/* 핫한 게시판 */}
   <section>
     <h4 className={styles.subtitle}>〈핫한 게시판〉</h4>
     <div className={styles.postList2}>
-      {hotPosts.map((post) => (
+      {TopFreeBoardData.map((post) => ( // 자유 게시판 데이터 순회
         <div key={post.id} className={styles.post}>
-          <h3 className={styles.postTitle}>{post.title}</h3>
-          <p className={styles.postDescription}>{post.description}</p>
+          <h3 className={styles.postTitle}>{post.freeTitle || '제목 없음'}</h3>
+          <p className={styles.postDescription}>{post.freeContents || '내용 없음'}</p>
           <button
             className={styles.commentButton}
-            onClick={() => handleTopNavigate(post.id, post.boardID)}  // boardID와 함께 전달
+            onClick={() => handleTopNavigate(post.id, post.boardID)} // boardID와 함께 전달
           >
             댓글 달기
           </button>
@@ -355,16 +370,17 @@ const [rooms, setRooms] = useState(roomsData);
     </div>
   </section>
 
+  {/* 질문 게시판 */}
   <section>
     <h4 className={styles.subtitle}>〈질문 게시판〉</h4>
     <div className={styles.postList2}>
-      {questionPosts.map((post) => (
+      {TopQuestBoardData.map((post) => ( // 질문 게시판 데이터 순회
         <div key={post.id} className={styles.post}>
-          <h3 className={styles.postTitle}>{post.title}</h3>
-          <p className={styles.postDescription}>{post.description}</p>
+          <h3 className={styles.postTitle}>{post.questTitle || '제목 없음'}</h3>
+          <p className={styles.postDescription}>{post.questContents || '내용 없음'}</p>
           <button
             className={styles.commentButton}
-            onClick={() => handleTopNavigate(post.id, post.boardID)}  // boardID와 함께 전달
+            onClick={() => handleTopNavigate(post.id, post.boardID)} // boardID와 함께 전달
           >
             댓글 달기
           </button>
@@ -373,6 +389,7 @@ const [rooms, setRooms] = useState(roomsData);
     </div>
   </section>
 </div>
+
 
   
         {/* 하단바 */}

@@ -60,8 +60,8 @@ import { UserProvider } from './pages/UserContext'; //유저 프로필
 import User_auth from './pages/User_auth'
 import Chat from './pages/Chat'
 import G_HomePage from './pages/G_HomePage'
-
 import HomePage from './pages/HomePage'; // 정확한 경로로 import 추가
+import G_Chat from './pages/G_Chat'
 
 
 // 지민이가 만든 채팅방 페이지
@@ -143,7 +143,7 @@ function App() {
         <Route path="/QuestionpostingPage/:id" element={<QuestionpostingPage />} /> 
         <Route path="/FreepostingPage/:id" element={<FreepostingPage />} />
           <Route path="/Chat/" element={<Chat />} />
-
+          <Route path="/G_Chat/" element={<G_Chat />} />
         </Routes>
       </BrowserRouter>
     </UserProvider>
