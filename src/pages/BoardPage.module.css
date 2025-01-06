@@ -29,8 +29,8 @@
 }
 
 .pageTitle {
-  margin-top: -200px;
-  font-size: 1.3rem;
+  margin-top: -25px;
+  font-size: 0.9rem;
   text-align: center;
   flex-grow: 1;
   /* 제목이 가능한 넓은 공간을 차지하도록 설정 */
@@ -53,10 +53,10 @@
   height: 1rem;
   position: absolute;
   /* 절대 위치 지정 */
-  margin-top: -10px;
+  margin-top: -5px;
   right: 4.5rem;
   /* 오른쪽에서 30px 떨어진 위치로 설정 */
-  transform: translateY(-120%);
+  transform: translateY(-80%);
   /* 버튼을 상단바 중앙에 수직 정렬 */
 }
 

@@ -32,8 +32,11 @@ import InformationContest from './pages/InformationContest'; // 대회 정보게
 import ContestWrite from './pages/ContestWrite'; // 대회 글쓰기
 import AlarmPage from './pages/AlarmPage'; // 알림페이지
 import Announcement from './pages/Announcement'; // 공지사항
+import BootBoardPage from './pages/BootBoardPage'; // 부트갬프 게시판 목록
 
-import BoardCode from './pages/BoardCode';
+import BoardCode from './pages/BoardCode'; 
+import InformationCodeBoard from './pages/InformationCodeBoard'
+import InformationContestBoard from './pages/InformationContestBoard';
 
 
 // 석진이형 페이지
@@ -67,7 +70,7 @@ import HomePage from './pages/HomePage'; // 정확한 경로로 import 추가
 // 지민이가 만든 채팅방 페이지
 import ClassChatRoom from './pages/ClassChatRoom'
 import ClassChat from './pages/ClassChat'
-import BootBoardPage from './pages/BootBoardPage';
+
 
 function App() {
   return (
@@ -112,6 +115,13 @@ function App() {
           <Route path="/ClassChatRoom" element={<ClassChatRoom />} />
           <Route path="/ClassChat" element={<ClassChat />} />
           <Route path="/BootBoardPage" element={<BootBoardPage />} />
+          <Route path="/BoardCode" element={<BoardCode />} />
+          <Route path="/InformationCodeBoard" element={<InformationCodeBoard/>} />
+          <Route path="/InformationContestBoard" element={<InformationContestBoard/>} />
+
+
+
+
 
           <Route path="/ChatRoom/:id" element={<ChatRoom />} /> {/* 동적 라우팅을 통한 채팅방 페이지 */}
 
