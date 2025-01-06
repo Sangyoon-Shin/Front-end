@@ -1,12 +1,12 @@
 
 import React from 'react';
 
-import styles from "./_.module.css";
-import main_mascot from '../images/대학 심볼 횃불이.png';  // 로고 이미지 불러오기
+import styles1 from "./_.module.css";
+import main_mascot1 from '../images/대학 심볼 횃불이.png';  // 로고 이미지 불러오기
 //import main_info from '../images/대학 심볼 횃불이.png';  // 로고 이미지 불러오기
-import main_bell from '../images/bell.png';  // 로고 이미지 불러오기
-import main_message from '../images/message.png';  // 로고 이미지 불러오기
-import main_my from '../images/my.png';  // 로고 이미지 불러오기
+import main_bell1 from '../images/bell.png';  // 로고 이미지 불러오기
+import main_message1 from '../images/message.png';  // 로고 이미지 불러오기
+import main_my1 from '../images/my.png';  // 로고 이미지 불러오기
 
 
 //검색, 쪽지, MY 아이콘 , 공지사항, 홰불이 
@@ -14,18 +14,18 @@ import main_my from '../images/my.png';  // 로고 이미지 불러오기
 
 const _ = () => {
   return (
-    <div className={styles.app}>
-      <header className={styles["app-header"]}>
-        <div className={styles["title-group"]}>
-          <img src={main_mascot} className={styles["app-main_mascot"]} alt="main_mascot" />
+    <div className={styles1.app}>
+      <header className={styles1["app-header"]}>
+        <div className={styles1["title-group"]}>
+          <img src={main_mascot1} className={styles1["app-main_mascot"]} alt="main_mascot" />
           <h2>INFO!</h2>
-          <div className={styles["right-section"]}>
+          <div className={styles1["right-section"]}>
 
-          <div className={styles["mascot-logo"]}></div>
-          <h2 className={styles["title-text"]}>공지사항</h2>
-          <img src={main_bell} className={styles["app-main_bell"]} alt="main_bell" />
-          <img src={main_message} className={styles["app-main_message"]} alt="main_message" />
-          <img src={main_my} className={styles["app-main_my"]} alt="main_my" />
+          <div className={styles1["mascot-logo"]}></div>
+          <h2 className={styles1["title-text"]}>공지사항</h2>
+          <img src={main_bell1} className={styles1["app-main_bell"]} alt="main_bell" />
+          <img src={main_message1} className={styles1["app-main_message"]} alt="main_message" />
+          <img src={main_my1} className={styles1["app-main_my"]} alt="main_my" />
         </div>
         </div>
 

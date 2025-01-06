@@ -90,13 +90,17 @@
 
 
 .deleteButton {
+    position:absolute;
+    top:3rem;
+    right:1rem;
     background-color: #ff4c4c;
     color: white;
     padding: 10px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    width: 100%;
+    width: 5rem;
+    z-index: 100;
 }
 
 .loadMoreButton {
@@ -167,7 +171,7 @@
 
 
 /* 데스크탑 전용 CSS 설정 */
-@media (min-width: 769px) {
+@media (min-width: 1024px) {
     .desktopContainer {
         padding: 40px;
     }
