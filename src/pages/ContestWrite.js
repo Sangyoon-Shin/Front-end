@@ -41,7 +41,6 @@ const ContestWrite = () => {
   const [isEditing, setIsEditing] = useState(false); // 수정 모드 여부
   const [images, setImages] = useState([]);  // 이미지 배열로 수정
 
-<<<<<<< HEAD
 
   // 특정 게시글 데이터 가져오기 (수정 모드일 경우)
   useEffect(() => {
@@ -50,10 +49,6 @@ const ContestWrite = () => {
       fetchPostData(id);
     }
   }, [id]);
-=======
-    // 반응형 처리를 위한 useMediaQuery 사용
-    const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
->>>>>>> 7090cc74850f8c1e4b61bb14f85aafb4644e7e59
 
   const fetchPostData = async (postId) => {
     try {
@@ -75,7 +70,6 @@ const ContestWrite = () => {
     setFiles(Array.from(e.target.files)); // FileList를 배열로 변환
   };
 
-<<<<<<< HEAD
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append('competitionTitle', title);
@@ -172,85 +166,6 @@ const ContestWrite = () => {
       </div>
     </div>
   );
-=======
-    return (
-        <div className={styles.container}>
-            <Header />
-            <div className={styles.content}>
-                <div className={`${styles.titleContainer} ${isDesktop ? styles.desktopTitleContainer : ''}`}>
-                    {/* 왼쪽 나가기 버튼 */}
-                    <img
-                        src={CommunicationRoom_goBack}
-                        className={`${styles.goBackButton} ${isDesktop ? styles.desktopGoBackButton : ''}`}
-                        alt="뒤로가기"
-                        onClick={() => navigate(-1)}  /* 뒤로 가기 동작 추가 */
-                    />
-                    {/* 페이지 타이틀 */}
-                    <p className={`${styles.subtitle} ${isDesktop ? styles.desktopSubtitle : ''}`}>정보 게시판 - 대회</p>
-                    <h1 className={`${styles.pageTitle} ${isDesktop ? styles.desktopPageTitle : ''}`}>
-                        게시글 작성
-                    </h1>
-                </div>
-
-                {/* 폼 입력 부분 */}
-                <div className={`${styles.form} ${isDesktop ? styles.desktopForm : ''}`}>
-
-                    {/* 제목 입력 */}
-                    <div className={`${styles.inputContainer} ${isDesktop ? styles.desktopInputContainer : ''}`}>
-                        <label className={`${styles.languageSelectionLabel} ${isDesktop ? styles.desktopLanguageSelectionLabel : ''}`}>제목</label>
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder=""
-                            className={`${styles.inputField} ${isDesktop ? styles.desktopInputField : ''}`}
-                        />
-                    </div>
-                    
-                    {/* 모집기간 입력 */}
-                    <div className={`${styles.inputContainer} ${isDesktop ? styles.desktopInputContainer : ''}`}>
-                        <label className={`${styles.languageSelectionLabel} ${isDesktop ? styles.desktopLanguageSelectionLabel : ''}`}>모집기간</label>
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={(e) => setRecruitPeriod(e.target.value)} // 모집기간 상태 업데이트
-                            placeholder=""
-                            className={`${styles.inputField} ${isDesktop ? styles.desktopInputField : ''}`}
-                        />
-                    </div>
-
-                    {/* 해시태그 입력 */}
-                    <div className={`${styles.inputContainer} ${isDesktop ? styles.desktopInputContainer : ''}`}>
-                        <label className={`${styles.languageSelectionLabel} ${isDesktop ? styles.desktopLanguageSelectionLabel : ''}`}>해시태그</label>
-                        <input
-                            type="text"
-                            value={hashTag}
-                            onChange={(e) => setHashTag(e.target.value)}
-                            placeholder="#해시태그"
-                            className={`${styles.inputField} ${isDesktop ? styles.desktopInputField : ''}`}
-                        />
-                    </div>
-
-                    {/* 내용 입력 */}
-                    <div className={`${styles.inputContainer} ${isDesktop ? styles.desktopInputContainer : ''}`}>
-                        <label className={`${styles.languageSelectionLabel} ${isDesktop ? styles.desktopLanguageSelectionLabel : ''}`}>내용</label>
-                        <textarea
-                            value={content}
-                            onChange={(e) => setContent(e.target.value)}
-                            placeholder="내용을 입력하세요..."
-                            className={`${styles.textarea} ${isDesktop ? styles.desktopTextarea: ''}`}
-                        />
-                    </div>
-
-                    {/* 게시글 올리기 버튼 */}
-                    <button className={`${styles.submitButton} ${isDesktop ? styles.desktopSubmitButton: ''}`} onClick={handleSubmit}>
-                        게시글 올리기
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
->>>>>>> 7090cc74850f8c1e4b61bb14f85aafb4644e7e59
 };
 
 export default ContestWrite;

@@ -54,17 +54,8 @@ const Study = () => {
 
   const fetchPostData = async (postId) => {
     try {
-<<<<<<< HEAD
       const response = await axios.get(`${BASE_URL}/studies/update/${postId}`, {
         headers: { ...getAuthHeaders(), 'ngrok-skip-browser-warning': 1 },
-=======
-      const response = await fetch('http://info-rmation.kro.kr/api/posts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(postData),
->>>>>>> 7090cc74850f8c1e4b61bb14f85aafb4644e7e59
       });
       const { studyID, studyTitle, studyContents, studyHashtag, startTime, deadline, studyFile} = response.data;
       setID(studyID);
