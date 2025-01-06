@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import styles from './Chat.module.css';
+import styles from './G_Chat.module.css';
 import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
 import sendIcon from '../images/메시지전송버튼.png';
 import heartIcon from '../images/하트횃불이.png';
@@ -13,7 +13,7 @@ import main_my from '../images/my.png';
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
 import axios from 'axios'; // API 요청을 위한 axios
 
-const Chat = () => {
+const G_Chat = () => {
     const websocketRef = useRef(null); // 웹소켓 참조
     const reconnectIntervalRef = useRef(null); // 재연결 타이머
     const { classId } = useParams();
@@ -246,4 +246,4 @@ const Chat = () => {
     );
 };
 
-export default Chat;
+export default G_Chat;
