@@ -6,6 +6,9 @@ const axiosInstance = axios.create({
     withCredentials: true,
 });
 
+
+
+
 // Request interceptor to add JWT token to headers
 /*axiosInstance.interceptors.request.use(
     (config) => {

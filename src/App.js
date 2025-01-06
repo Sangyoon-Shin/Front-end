@@ -135,6 +135,13 @@ function App() {
           <Route path="/Otherprofile" element={<Otherprofile />} />
           <Route path="/User_auth" element={<User_auth />} />
           <Route path="/G_HomePage" element={<G_HomePage />} />
+
+
+        <Route path="/" element={<G_HomePage />} />
+        <Route path="/G_questionpostingPage/:id" element={<G_questionpostingPage />} />
+        <Route path="/G_freepostingPage/:id" element={<G_freepostingPage />} />
+        <Route path="/QuestionpostingPage/:id" element={<QuestionpostingPage />} /> 
+        <Route path="/FreepostingPage/:id" element={<FreepostingPage />} />
           <Route path="/Chat/" element={<Chat />} />
 
         </Routes>
