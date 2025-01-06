@@ -8,7 +8,7 @@ import main_message from '../images/message.png';
 import main_my from '../images/my.png';
 import { useMediaQuery } from 'react-responsive';
 
-import styles from './Classroom.module.css';
+import styles from './ClassRoom.module.css';
 import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
 import menuIcon from '../images/메뉴버튼.png';
 import Icon1 from '../images/하트이모지.png';
