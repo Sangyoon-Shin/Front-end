@@ -14,7 +14,7 @@ import Header from './_.js';  // 상단바 컴포넌트
 
 // API에서 사용할 기본 URL과 헤더 설정
 // 필요하다면 뒤쪽 슬래시(/)는 빼도 되고, 그에 따라 경로에 '/'를 붙여줄 수 있음
-const BASE_URL = 'https://bcefb2d9d162.ngrok.app/api/board';
+const BASE_URL = 'http://info-rmation.kro.kr/api/board';
 
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
@@ -111,7 +111,7 @@ const IndustryBoard = () => {
     // 3) 좋아요(하트) 상태 불러오기
     const fetchHeartStatus = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/Industry/${id}/like-status`, {
+        const response = await fetch(`${BASE_URL}/studies/${id}/like-status`, {
           method: 'GET',
           headers: getAuthHeaders(),
         });
@@ -151,7 +151,7 @@ const IndustryBoard = () => {
     setIsHeartFilled(newHeartStatus);
 
     try {
-      const response = await fetch(`${BASE_URL}/Industry/${id}/like`, {
+      const response = await fetch(`${BASE_URL}/studies/${id}/like`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ liked: newHeartStatus }),
@@ -268,29 +268,33 @@ const IndustryBoard = () => {
   };
 
   // 신고 제출
-  // 신고 제출
+
   const submitReport = async () => {
     const boardType = 'IndustryBoard'; // 고정값 설정
-  
+
     try {
-      const response = await fetch(`${BASE_URL}/board/${boardType}/${id}/report`, {
+      const reason = reportContent; // 신고 내용
+      const reporterId = getCurrentUserId(); // 신고자 ID
+
+      // URL에 파라미터로 reason과 reporterId 추가
+      const url = `${BASE_URL}/board/${boardType}/${id}/report?reason=${encodeURIComponent(reason)}&reporterId=${encodeURIComponent(reporterId)}`;
+
+      const response = await fetch(url, {
         method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ content: reportContent }),
+        headers: getAuthHeaders(), // 필요한 헤더 추가
       });
-  
-      if (!response.ok) {
+
+      if (response.ok) {
+        setReportContent(''); // 신고 내용 초기화
+        togglePopup(); // 팝업 닫기
+        setIsAlertOpen(true); // 성공 알림 표시
+
+        setTimeout(() => {
+          setIsAlertOpen(false);
+        }, 3000);
+      } else {
         console.error('신고 제출에 실패했습니다.');
-        return;
       }
-  
-      setReportContent('');
-      togglePopup();
-      setIsAlertOpen(true);
-  
-      setTimeout(() => {
-        setIsAlertOpen(false);
-      }, 3000);
     } catch (error) {
       console.error('신고 제출 중 오류 발생:', error);
     }

@@ -147,7 +147,7 @@
     
     /* 작성 버튼 스타일 */
     .submit-group {
-      margin-top: -50px; /* 간격 조정 */
+      margin-top: 20px; /* 간격 조정 */
       display: flex;
       justify-content: flex-end;
       width: 97%; /* 반응형 너비 */

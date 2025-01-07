@@ -1,3 +1,5 @@
+//Otherpro
+
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Otherprofile.module.css';  // 필요한 스타일 가져오기

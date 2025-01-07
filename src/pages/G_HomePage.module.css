@@ -1,31 +1,43 @@
-/* 전체 화면 스타일 */
-.app {
-    text-align: center;
-    height: 230vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-  }
-  
 
-    .app-header {
-      position: fixed; 
-      top: 0px; /* 페이지 상단에 위치 */
-      height: 60px; /* 상단 바 높이 설정 */
-     width: 100%;
-    background-color: #ffffff;
-      z-index: 1000; /* 다른 요소 위에 표시 */
-      display: flex; /* 플렉스 박스 사용 */
+
+/*상단바*/
+.app {
+  /*justify-content: center;*/
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  background-color: #ffffff;
+  overflow-y: auto;  /* 스크롤 가능 */
   
-        margin-left: 77%;
-     
-      justify-content: space-between; /* 요소 간 간격 조정 */
-      align-items: center; /* 세로 가운데 정렬 */
-      padding: 0 10px; /* 좌우 여백 */
-  }
   
+}
+
+/* 헤더 스타일
+  .app-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0px; /* 헤더와 대회 정보 섹션 사이에 여백 추가 
+  margin-top: 0px; 
+    margin-top: 60px; /* 상단바 높이만큼 여백 설정 */
+
+
+  .app-header {  
+
+    
+    top: 0; /* 페이지 상단에 위치 */
+    left: 0; /* 왼쪽 끝에 위치 */
+    right: 0; /* 오른쪽 끝까지 확장 */
+    
+    z-index: 10; /* 다른 요소 위에 표시 */
+    display: flex; /* 플렉스 박스 사용 */
+    justify-content: space-between; /* 요소 간 간격 조정 */
+    align-items: center; /* 세로 가운데 정렬 */
+    padding: 0px; /* 좌우 여백 */
+
+}
+
   
   .title-group{
     display: flex;
@@ -197,7 +209,11 @@ h4 {
  /* Tab Container Styles */
  .tabContainer {
     width: 100%;
-    height: 2%;
+    margin-top: 3%;
+    
+    margin-bottom: 1%;
+    height: 3%;
+
     margin-left: 20%;
     display: flex;
     justify-content: space-evenly;
@@ -437,7 +453,7 @@ h4 {
     background-color: #f0f8ff;
     padding: 20px;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 15%;
   }
   
   /* 정보 게시판 포스트 리스트 스타일 */
@@ -445,7 +461,8 @@ h4 {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-bottom: 20px;
+    margin-bottom: 20%;
+    
   }
   
   .postItem {
@@ -543,7 +560,7 @@ h4 {
 
 
 
-  .container {
+  .container2 {
     padding: 20px;
     max-width: 800px;
     margin: 0 auto;
@@ -619,6 +636,131 @@ h4 {
   
   }
   
+
+
+
+
+
+
+
+
+/*소통방*/
+
+
+/* 방 목록 컨테이너 스타일 */
+.roomContainer {
+  margin: 0 auto; /* 가운데 정렬 */
+  margin-bottom: 50%;
+width: 100%;
+  height: 20%;
+  padding: 20px;
+  max-width: 400%;
+}
+
+
+.roomsList {
+  margin-top: 4%;
+  margin-bottom: 50%;
+  position: absolute;
+  left: 8%;
+  right : 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 75%;
+  padding: 20px; /* 내부 여백 제거 */
+  overflow-y: auto;
+  
+overflow-x: hidden; /* 가로 스크롤 제거 */
+  
+}
+
+.roomItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background-color: #B5DFFF; 
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/*
+.roomItem:hover {
+  background-color: #f0f0f0;
+}
+*/
+
+.selected {
+  background-color: #d0e6ff;
+}
+
+.roomTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.roomMessage {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.actionButton {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+.actionButton:hover {
+  background-color: #0056b3;
+}
+
+
+.footer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* 참여하기 버튼 서식*/
+.joinButton {
+  padding: 5px 10px;
+  background-color: #244A95;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
 /* 반응형 스타일 */
 

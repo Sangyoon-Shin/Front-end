@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const BASE_URL = "https://18a5fe61dbb7.ngrok.app"; // 실제 URL로 변경
+  const BASE_URL = "https://61010d194fbc.ngrok.app"; // 실제 URL로 변경
 
   // 페이지 이동을 위한 navigate 선언
   const navigate = useNavigate();
@@ -60,9 +60,9 @@ const LoginPage = () => {
       setUsername("");
       setPassword("");
 
-      // 로그인 성공 후 메인 페이지로 이동
-      navigate("/"); // 메인 페이지 경로로 변경
-    } catch (error) {
+      // 로그인 성공 시 메인 페이지로 이동
+      navigate('/HomePage'); // 이동할 페이지 경로 설정
+    }catch (error) {
       console.error("로그인 실패:", error.response?.data || error.message);
       if (error.response && error.response.status === 401) {
         setError("로그인 실패: 아이디나 비밀번호를 확인해 주세요.");
