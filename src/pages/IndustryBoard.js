@@ -268,29 +268,33 @@ const IndustryBoard = () => {
   };
 
   // 신고 제출
-  // 신고 제출
+
   const submitReport = async () => {
     const boardType = 'IndustryBoard'; // 고정값 설정
-  
+
     try {
-      const response = await fetch(`${BASE_URL}/board/${boardType}/${id}/report`, {
+      const reason = reportContent; // 신고 내용
+      const reporterId = getCurrentUserId(); // 신고자 ID
+
+      // URL에 파라미터로 reason과 reporterId 추가
+      const url = `${BASE_URL}/board/${boardType}/${id}/report?reason=${encodeURIComponent(reason)}&reporterId=${encodeURIComponent(reporterId)}`;
+
+      const response = await fetch(url, {
         method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ content: reportContent }),
+        headers: getAuthHeaders(), // 필요한 헤더 추가
       });
-  
-      if (!response.ok) {
+
+      if (response.ok) {
+        setReportContent(''); // 신고 내용 초기화
+        togglePopup(); // 팝업 닫기
+        setIsAlertOpen(true); // 성공 알림 표시
+
+        setTimeout(() => {
+          setIsAlertOpen(false);
+        }, 3000);
+      } else {
         console.error('신고 제출에 실패했습니다.');
-        return;
       }
-  
-      setReportContent('');
-      togglePopup();
-      setIsAlertOpen(true);
-  
-      setTimeout(() => {
-        setIsAlertOpen(false);
-      }, 3000);
     } catch (error) {
       console.error('신고 제출 중 오류 발생:', error);
     }
