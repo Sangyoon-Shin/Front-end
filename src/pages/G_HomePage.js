@@ -70,21 +70,9 @@ const G_HomePage = () => {
   };
 
   loadData();
-}, []);
-
-const [rooms, setRooms] = useState([]);
-  //소통방
-    // 방 ID에 맞는 페이지로 이동하기
-    const handleRoomClick = (path) => {
-      navigate(`/${path}`);  // 방 ID에 맞는 페이지로 이동
-    };
- //   const accessToken = localStorage.getItem('accessToken');
- // if (!accessToken) throw new Error('사용자 인증 정보가 없습니다.');
-
-  //const decodedToken = jwtDecode(accessToken);
-  //const userId = decodedToken.userId;
+  const fetchRooms = async () => {
     const userId = '202301641'; // 추후 삭제제
-    const baseUrl = 'https://2646-61-84-64-212.ngrok-free.app';
+    const baseUrl = 'https://a1de-61-84-64-212.ngrok-free.app';
     fetch(`${baseUrl}/Room/userId/${userId}`, {
         headers: {
             contentType: 'application/json',
@@ -98,6 +86,22 @@ const [rooms, setRooms] = useState([]);
     const roomsData = [
       { roomId: 1, roomName: '내가 속한 방 제목 1', lastMessage: '마지막 내용', icon: Icon1, selected: false },
     ];
+  };
+  fetchRooms();
+}, []);
+
+const [rooms, setRooms] = useState([]);
+  //소통방
+    // 방 ID에 맞는 페이지로 이동하기
+    const handleRoomClick = (path) => {
+      navigate(`/${path}`);  // 방 ID에 맞는 페이지로 이동
+    };
+ //   const accessToken = localStorage.getItem('accessToken');
+ // if (!accessToken) throw new Error('사용자 인증 정보가 없습니다.');
+
+  //const decodedToken = jwtDecode(accessToken);
+  //const userId = decodedToken.userId;
+  
 
 
 
@@ -209,6 +213,8 @@ const [rooms, setRooms] = useState([]);
             
                   
     <>
+  <div className={styles.Roomcontainer}>
+
     {/* 방 목록 */}
     <div className={styles.roomsList}>
       {rooms.map((room) => (
@@ -229,6 +235,8 @@ const [rooms, setRooms] = useState([]);
                     </button>
         </div>
       ))}
+    </div>
+    
     </div>
     </>        
                
@@ -342,14 +350,14 @@ const [rooms, setRooms] = useState([]);
             <PlusButton className={styles.plusButton} />
           </a>
         </div>
-  {/* 탭 내용 */}
-<div className={`${styles.tabContent} ${isDesktop ? styles.desktopTabContent : ''}`}>
-  {renderTabContent()}
-</div>
+        {/* 탭 내용 */}   
+        <div className={`${styles.tabContent} ${isDesktop ? styles.desktopTabContent : ''}`}>
+          {renderTabContent()}
+        </div>
 
-{/* 게시판 컨테이너 */}
-<div className={`${styles.container2} ${isDesktop ? styles.desktopContainer : ''}`}>
-  <h1 className={styles.title}>재학생들의 자유게시판</h1>
+        {/* 게시판 컨테이너 */}
+        <div className={`${styles.container2} ${isDesktop ? styles.desktopContainer : ''}`}>
+          <h1 className={styles.title}>재학생들의 자유게시판</h1>
 
   {/* 핫한 게시판 */}
   <section>
