@@ -129,9 +129,9 @@ function App() {
           <Route path="/Scrap" element={<Scrap />} />
           <Route path="/My_board" element={<My_board />} />
           <Route path="/My_message" element={<My_message />} />
-          <Route path="/StudyBoard" element={<StudyBoard />} />
-          <Route path="/BootBoard" element={<BootBoard />} />
-          <Route path="/IndustryBoard" element={<IndustryBoard />} />
+          <Route path="/StudyBoard/:id" element={<StudyBoard />} />
+          <Route path="/BootBoard/:id" element={<BootBoard />} />
+          <Route path="/IndustryBoard/:id" element={<IndustryBoard />} />
 
           {/* 영현 페이지*/}
           <Route path="/HomePage" element={<HomePage />} />
