@@ -76,8 +76,28 @@ const [error, setError] = useState(null);
       }
     };
 
-    loadData();
-  }, []);
+
+    
+  loadData();
+  const fetchRooms = async () => {
+    const userId = '202301641'; // 추후 삭제제
+    const baseUrl = 'https://a1de-61-84-64-212.ngrok-free.app';
+    fetch(`${baseUrl}/Room/userId/${userId}`, {
+        headers: {
+            contentType: 'application/json',
+            'ngrok-skip-browser-warning': 'abc',
+        },
+        method: 'GET'
+    }).then((res) => { return res.json() })
+      .then((data) => {
+        setRooms(data.data);
+      });
+    const roomsData = [
+      { roomId: 1, roomName: '내가 속한 방 제목 1', lastMessage: '마지막 내용', icon: Icon1, selected: false },
+    ];
+  };
+  fetchRooms();
+}, []);
 
 
 
@@ -157,6 +177,7 @@ const [rooms, setRooms] = useState(roomsData);
     };
 
 
+    
 
   // Render content based on the active tab
   const renderTabContent = () => {
@@ -353,17 +374,20 @@ const [rooms, setRooms] = useState(roomsData);
           <>
  
  
+                  
  <>
+  <div className={styles.Roomcontainer}>
+
     {/* 방 목록 */}
     <div className={styles.roomsList}>
       {rooms.map((room) => (
         <div
-          key={room.id}
+          key={room.roomId}
           className={`${styles.roomItem} ${room.selected ? styles.selected : ''}`}
         >
-          <img src={room.icon} alt={`방 아이콘 ${room.id}`} className={styles.roomIcon} /> {/* 아이콘 추가 */}
+          <img src={room.icon} alt={`방 아이콘 ${room.roomId}`} className={styles.roomIcon} /> {/* 아이콘 추가 */}
           <div className={styles.roomInfo}>
-            <div className={styles.roomTitle}>{room.title}</div>
+            <div className={styles.roomTitle}>{room.roomName}</div>
             <div className={styles.roomMessage}>{room.lastMessage}</div>
           </div>
           <button
@@ -375,7 +399,9 @@ const [rooms, setRooms] = useState(roomsData);
         </div>
       ))}
     </div>
-    </>                 </>
+    
+    </div>
+    </>                      </>
        
         );
       default:
