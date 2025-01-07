@@ -50,6 +50,8 @@ const BootBoard = () => {
       const [isAlertOpen, setIsAlertOpen] = useState(false);
       const handleBackClick = () => navigate(-1);
       const { id } = useParams();
+      const [imageUrls, setImageUrls] = useState([]); // 이미지 URL 상태 추가
+      
   
       const organizeComments = (data) => {
         const commentMap = {};
@@ -160,6 +162,7 @@ const BootBoard = () => {
 
               setContent(data.studyContents);
               setTitle(data.studyTitle);
+              setImageUrls(data.imageUrls || []); // imageUrls 상태 업데이트
             });
         };
         getBoard();
@@ -446,6 +449,24 @@ return (
         disabled
       />
     </div>
+
+    {/* 서버에서 받은 이미지 렌더링 */}
+    <div className={styles["image-section"]}>
+        {imageUrls.length > 0 ? (
+          <div className={styles["image-grid"]}>
+            {imageUrls.map((url, index) => (
+              <img
+                key={index}
+                src={url}
+                alt={`게시물 이미지 ${index + 1}`}
+                className={styles["uploaded-image"]}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className={styles["no-image"]}>이미지가 없습니다.</p>
+        )}
+      </div>
 
     {/* 파일 업로드 */}
     <input

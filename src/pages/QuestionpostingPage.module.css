@@ -162,31 +162,13 @@
   margin-bottom:10px;
 }
 /* INFO 텍스트 */
-h2 {
+/* h2 {
   font-size: 2.4rem;
   color: #0056A0;
   margin-bottom: 0px;
   margin-right: 5px;
-  /* 텍스트를 아래로 살짝 내림 */
 
-}
-
-.alert-popup {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%);
-  padding: 15px 30px;
-  background-color: #28a745;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  opacity: 1; /* 애니메이션 없이 바로 보이게 설정 */
-  z-index: 9999;
-}
+} */
 
 .app-arrow {
   cursor: pointer;
@@ -204,6 +186,23 @@ h2 {
   width: calc(100% - 20px); /* 좌우 10px씩 여백 추가 */
   margin: 20px auto;        /* 세로 가운데 정렬 및 여백 */
   background-color: #000;   /* (예시) 배경 색 지정 */
+}
+
+.alert-popup {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%);
+  padding: 15px 30px;
+  background-color: #28a745;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  opacity: 1; /* 애니메이션 없이 바로 보이게 설정 */
+  z-index: 9999;
 }
 
 /* 텍스트 입력 필드 스타일 */
@@ -376,10 +375,14 @@ h2 {
 /* 대댓글 입력창 스타일 */
 .reply-input {
   margin-top: 10px;
-  margin-left: 10px;
+  margin-left: 20px;
   /* 대댓글 입력창을 댓글보다 살짝 오른쪽으로 이동 */
 }
 
+.button-container {
+  display: flex;
+  justify-content: flex-end; /* 버튼을 왼쪽에 배치 */
+}
 
 
 .reply-input textarea {
@@ -466,7 +469,7 @@ button:hover {
   width:100%;
   display: flex;
   /* Flexbox로 설정 */
-  justify-content: center;
+  justify-content: flex-end;
   /* 오른쪽 정렬 */
   margin-top: -20px;
   /* 위쪽 여백 추가 */
@@ -487,6 +490,34 @@ button:hover {
   border-radius: 4px;
   /* 모서리를 둥글게 */
   cursor: pointer;
-  /* 커서 변경 */
-  margin-left: 330px;
+  /* 커서 변경 */  
+}
+
+.image-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* 수평 가운데 정렬 */
+  justify-content: center;  /* 수직 가운데 정렬 */
+  text-align: center;  /* 텍스트 가운데 정렬 */
+  margin: 20px 0;
+}
+
+.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.uploaded-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.no-image {
+  color: #666;
+  font-size: 14px;
+  text-align: center;
 }

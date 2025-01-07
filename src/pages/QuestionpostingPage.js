@@ -49,6 +49,8 @@ const QuestionpostingPage = () => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const handleBackClick = () => navigate(-1);
   const { id } = useParams();
+    const [imageUrls, setImageUrls] = useState([]); // 이미지 URL 상태 추가
+  
 
   const organizeComments = (data) => {
     const commentMap = {};
@@ -88,7 +90,7 @@ const QuestionpostingPage = () => {
   useEffect(() => {
     const fetchHeartStatus = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/free/${id}/like-status`, {
+        const response = await fetch(`${BASE_URL}/quest/${id}/like-status`, {
           method: 'GET',
           headers: getAuthHeaders(),
         });
@@ -110,7 +112,7 @@ const QuestionpostingPage = () => {
   useEffect(() => { // 댓글 불러오기
     const fetchComments = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/free/${id}/comments`, {
+        const response = await fetch(`${BASE_URL}/quest/${id}/comments`, {
           method: 'GET',
           headers: getAuthHeaders(),
         });
@@ -139,7 +141,7 @@ const QuestionpostingPage = () => {
     const getBoard = async () => {
       const accessToken = localStorage.getItem('accessToken');
       console.log(id);
-      fetch(`http://info-rmation.kro.kr/api/board/free/${id}`, {
+      fetch(`http://info-rmation.kro.kr/api/board/quest/${id}`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'ngrok-skip-browser-warning': 1
@@ -148,8 +150,9 @@ const QuestionpostingPage = () => {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          setContent(data.freeContents);
-          setTitle(data.freeTitle);
+          setContent(data.questContents);
+          setTitle(data.questTitle);
+          setImageUrls(data.imageUrls || []); // imageUrls 상태 업데이트
         });
     };
     getBoard();
@@ -204,7 +207,7 @@ const QuestionpostingPage = () => {
       };
   
       try {
-        const response = await fetch(`${BASE_URL}/free/${id}/comments/add?content=${encodeURIComponent(commentContent)}&anonymousId=${encodeURIComponent(anonymousId)}`, {
+        const response = await fetch(`${BASE_URL}/quest/${id}/comments/add?content=${encodeURIComponent(commentContent)}&anonymousId=${encodeURIComponent(anonymousId)}`, {
           method: 'POST',
           headers: getAuthHeaders(),
           body: JSON.stringify(newComment), // 댓글 내용은 본문에 포함
@@ -241,14 +244,14 @@ const QuestionpostingPage = () => {
     const newReply = {
       content: replyContent.trim(),
       parentCommentId: comments[index]?.id, // 상위 댓글의 ID
-      targetType: "free",
+      targetType: "quest",
       targetId: id, // 게시물 ID
     };
   
     console.log("전송 데이터:", newReply); // 디버깅용 로그
   
     try {
-      const response = await fetch(`${BASE_URL}/free/${id}/comments/add`, {
+      const response = await fetch(`${BASE_URL}/quest/${id}/comments/add`, {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify(newReply),
@@ -293,7 +296,7 @@ const QuestionpostingPage = () => {
     setIsHeartFilled(newHeartStatus);
 
     try {
-      const response = await fetch(`${BASE_URL}/free/${id}/like`, {
+      const response = await fetch(`${BASE_URL}/quest/${id}/like`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ isHeartFilled: newHeartStatus }),
@@ -305,7 +308,7 @@ const QuestionpostingPage = () => {
       }
     } catch (error) {
       console.error('좋아요 요청 중 오류 발생:', error);
-      console.log(`${BASE_URL}/free/${id}/like`);
+      console.log(`${BASE_URL}/quest/${id}/like`);
       setIsHeartFilled(!newHeartStatus); // 오류 발생 시 상태 되돌림
     }
   };
@@ -325,7 +328,7 @@ const QuestionpostingPage = () => {
       const reporterId = getCurrentUserId(); // 신고자 ID
 
       // URL에 파라미터로 reason과 reporterId 추가
-      const url = `${BASE_URL}/free/${id}/report?reason=${encodeURIComponent(reason)}&reporterId=${encodeURIComponent(reporterId)}`;
+      const url = `${BASE_URL}/quest/${id}/report?reason=${encodeURIComponent(reason)}&reporterId=${encodeURIComponent(reporterId)}`;
 
       const response = await fetch(url, {
         method: 'POST',
@@ -435,6 +438,24 @@ const QuestionpostingPage = () => {
           placeholder="내용을 입력하세요."
           disabled
         />
+      </div>
+
+      {/* 서버에서 받은 이미지 렌더링 */}
+      <div className={styles["image-section"]}>
+        {imageUrls.length > 0 ? (
+          <div className={styles["image-grid"]}>
+            {imageUrls.map((url, index) => (
+              <img
+                key={index}
+                src={url}
+                alt={`게시물 이미지 ${index + 1}`}
+                className={styles["uploaded-image"]}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className={styles["no-image"]}>이미지가 없습니다.</p>
+        )}
       </div>
 
       {/* 파일 업로드 */}
