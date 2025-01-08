@@ -27,6 +27,7 @@ const getAuthHeaders = () => {
   };
 };
 
+
 const FreepostingPage = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -44,12 +45,15 @@ const FreepostingPage = () => {
   const year = currentDate.getFullYear();
   const month = String(currentDate.getMonth() + 1).padStart(2, '0');
   const day = String(currentDate.getDate()).padStart(2, '0');
-  const formattedDate = `${year}.${month}.${day}`;
+  const [createdTime, setCreatedTime] = useState('');
+
   const [reportContent, setReportContent] = useState('');
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const handleBackClick = () => navigate(-1);
   const { id } = useParams();
   const [imageUrls, setImageUrls] = useState([]); // 이미지 URL 상태 추가
+
+  
 
 
   const organizeComments = (data) => {
@@ -141,22 +145,35 @@ const FreepostingPage = () => {
     const getBoard = async () => {
       const accessToken = localStorage.getItem('accessToken');
       console.log(id);
+    
       fetch(`http://info-rmation.kro.kr/api/board/free/${id}`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
-          'ngrok-skip-browser-warning': 1
-        }
+          'ngrok-skip-browser-warning': 1,
+        },
       })
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
           console.log('게시글 데이터', data);
+    
+          // freeCreatedTime 변환
+          const formattedDate = new Date(data.freeCreatedTime).toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+    
+          // 상태 업데이트
           setContent(data.freeContents);
           setTitle(data.freeTitle);
           setImageUrls(data.imageUrls || []); // imageUrls 상태 업데이트
-
+          setCreatedTime(formattedDate); // 작성 시간 상태 업데이트
         });
     };
+    
     getBoard();
   }, [id]);
 
@@ -353,6 +370,37 @@ const FreepostingPage = () => {
     }
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
+      return;
+    }
+  
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await fetch(`${BASE_URL}/free/delete/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'ngrok-skip-browser-warning': 1
+        },
+      });
+  
+      if (response.ok) {
+        alert("게시글이 삭제되었습니다.");
+        // 삭제 후 원하는 동작 수행 (예: 목록 페이지로 이동)
+        window.location.href = "/freeboardPage"; // 목록 페이지 경로로 이동
+      } else {
+        const errorData = await response.json();
+        console.error("삭제 실패:", errorData);
+        alert("게시글 삭제에 실패했습니다.");
+        console.log(`${BASE_URL}/free/delete/${id}`);
+      }
+    } catch (error) {
+      console.error("삭제 요청 중 오류 발생:", error);
+      alert("오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -394,9 +442,14 @@ const FreepostingPage = () => {
           </div>
         </div>
 
-        <h2 className={styles["title-text4"]}>작성일: {formattedDate}</h2>
-
+        <h2 className={styles["title-text4"]}>작성일 : {createdTime}</h2>
         <div className={styles["report"]}>
+          {/* <button onClick={handleEdit} className={styles["edit-button"]}>
+          수정하기
+          </button> */}
+          <button onClick={handleDelete} className={styles["delete-button"]}>
+          삭제하기
+          </button>
           <button onClick={togglePopup} className={styles["report-button"]}>
             신고하기
           </button>
@@ -431,17 +484,6 @@ const FreepostingPage = () => {
         <div className={styles["alert-popup"]}>제출이 완료되었습니다.</div>
       )}
 
-      {/* 자유게시판 내용(수정 가능 시) */}
-      <div className={styles["content-input"]}>
-        <textarea
-          className={styles["textarea"]}
-          value={content}
-          onChange={handleContentChange}
-          placeholder="내용을 입력하세요."
-          disabled
-        />
-      </div>
-
       {/* 서버에서 받은 이미지 렌더링 */}
       <div className={styles["image-section"]}>
         {imageUrls.length > 0 ? (
@@ -456,9 +498,22 @@ const FreepostingPage = () => {
             ))}
           </div>
         ) : (
-          <p className={styles["no-image"]}>이미지가 없습니다.</p>
+          <p className={styles["no-image"]}></p>
         )}
       </div>
+
+      {/* 자유게시판 내용(수정 가능 시) */}
+      <div className={styles["content-input"]}>
+        <textarea
+          className={styles["textarea"]}
+          value={content}
+          onChange={handleContentChange}
+          placeholder="내용을 입력하세요."
+          disabled
+        />
+      </div>
+
+      
 
       {/* 파일 업로드 */}
       <input
@@ -514,7 +569,9 @@ const FreepostingPage = () => {
                   onChange={(e) => handleReplyChange(index, e)}
                   placeholder="대댓글을 입력하세요."
                 />
-                <button onClick={() => handleAddReply(index)}>대댓글 달기</button>
+                <div className={styles["button-container"]}>
+                  <button onClick={() => handleAddReply(index)}>대댓글 달기</button>
+                </div>
               </div>
             )}
 
