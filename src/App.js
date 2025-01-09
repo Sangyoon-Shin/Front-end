@@ -65,6 +65,8 @@ import Chat from './pages/Chat'
 import G_HomePage from './pages/G_HomePage'
 import HomePage from './pages/HomePage'; // 정확한 경로로 import 추가
 import G_Chat from './pages/G_Chat'
+import Home from './pages/Home'
+import _2 from './pages/_2';
 
 
 // 지민이가 만든 채팅방 페이지
@@ -144,6 +146,9 @@ function App() {
           <Route path="/User_auth" element={<User_auth />} />
           <Route path="/G_HomePage" element={<G_HomePage />} />
 
+          <Route path="/Home" element={<Home />} />
+          
+          <Route path="/_2" element={<_2 />} />
 
         <Route path="/" element={<G_HomePage />} />
         <Route path="/G_questionpostingPage/:id" element={<G_questionpostingPage />} />
