@@ -150,7 +150,11 @@ function App() {
           <Route path="/Profileedit" element={<Profileedit />} />
           <Route path="/Myprofile" element={<Myprofile />} />
           <Route path="/ChatPreview" element={<ChatPreview />} />
+          
+          <Route path="/ChatPreview/:roomId" element={<ChatPreview />} />
           <Route path="/Otherprofile" element={<Otherprofile />} />
+          
+          <Route path="/Otherprofile/:roomId/:userId" element={<Otherprofile />} />
           <Route path="/User_auth" element={<User_auth />} />
           <Route path="/G_HomePage" element={<G_HomePage />} />
 

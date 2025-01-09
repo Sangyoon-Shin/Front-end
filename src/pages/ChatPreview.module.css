@@ -40,17 +40,18 @@
     align-items: center;
     border-radius: 10px;
     background-color: #5f99cd;
-    
+    height: 100%;
+    width: 100%;
   }
   
   .roomCard {
-    width: 80%;
     background-color: #73B3E3; /* 카드 배경색을 지정 */
     border-radius: 10px;
     padding: 20px;
     text-align: center;
     z-index: 10; /* 다른 요소보다 높은 값 설정 */
-    
+    height: 100%;
+    width: 100%;
 
   }
   
@@ -75,12 +76,17 @@
   
   .date {
     font-size: 12px;
-    color: #888;
+    color: #ffffff;
+    margin-top: 6%;
+    margin-left: 3%;
+    margin-right: 5%;
   }
   
   .participants {
     font-size: 12px;
-    color: #888;
+    color: #000000;
+    
+    margin-top: 6%;
 
   }
   
@@ -98,6 +104,7 @@
     border: none;
     border-radius: 5px;
     font-size: 1em;
+    margin-right: 4%;
     cursor: pointer;
   }
   

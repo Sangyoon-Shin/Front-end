@@ -1,3 +1,5 @@
+//2.FreeRoom
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
@@ -18,55 +20,34 @@ import Icon6 from '../images/자유소통방 횃불이.png';
 import Icon8 from '../images/프로필.png';
 import Icon9 from '../images/검색.png';
 
-// 웹소켓 설정
-const socketUrl = 'ws://localhost:8080'; // 백엔드의 웹소켓 URL (적절히 변경)
-const roomsData = [
-  { id: 1, title: '자유 소통방 1', lastMessage: '마지막 내용', icon: Icon1, selected: false },
-  { id: 2, title: '자유 소통방 2', lastMessage: '마지막 내용', icon: Icon2, selected: false },
-  { id: 3, title: '자유 소통방 3', lastMessage: '마지막 내용', icon: Icon3, selected: false },
-];
-
 const FreeRoom = () => {
-  const [rooms, setRooms] = useState(roomsData);
-  const [filteredRooms, setFilteredRooms] = useState(roomsData); // 필터된 방 목록
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [rooms, setRooms] = useState([]);
+  const [filteredRooms, setFilteredRooms] = useState([]); // 필터된 방 목록
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeFilter, setActiveFilter] = useState('재학생');
-  const [messages, setMessages] = useState([]); // 웹소켓 메시지 상태
   const navigate = useNavigate();
-  const socketRef = useRef(null);
-
-  // 반응형 페이지 처리를 위한 useMediaQuery 사용
   const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
-
-  // 웹소켓 연결 및 메시지 수신
+  const baseUrl = 'https://4784-61-84-64-212.ngrok-free.app';
+  // 열린 채팅방 목록 조회
   useEffect(() => {
-    socketRef.current = new WebSocket(socketUrl);
-
-    socketRef.current.onopen = () => {
-      console.log('WebSocket 연결 성공');
-    };
-
-    socketRef.current.onmessage = (event) => {
-      const newMessage = JSON.parse(event.data);
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    };
-
-    socketRef.current.onclose = () => {
-      console.log('WebSocket 연결 종료');
-    };
-
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.close();
-      }
-    };
+    fetch(`${baseUrl}/Room/RoomList`, {
+        headers: {  "ngrok-skip-browser-warning": "abc",
+            'Content-Type': 'application/json' },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.code === 200) {
+          const roomsWithIcons = data.data.map((room, index) => ({
+            id: room.roomId,
+            title: room.roomName,
+            lastMessage: room.lastMessage || '대화가 없습니다.',
+            icon: [Icon1, Icon2, Icon3][index % 3],
+          }));
+          setRooms(roomsWithIcons);
+          setFilteredRooms(roomsWithIcons);
+        }
+      })
+      .catch((error) => console.error('채팅방 목록 불러오기 실패:', error));
   }, []);
-
-  // 방 ID에 맞는 페이지로 이동하기
-  const handleRoomClick = (path) => {
-    navigate(`/${path}`);
-  };
 
   // 검색 기능 처리 함수
   const handleSearch = () => {
@@ -78,34 +59,20 @@ const FreeRoom = () => {
     setFilteredRooms(filtered);
   };
 
-  // 필터링 처리 함수
-  const handleFilter = (filter) => {
-    setActiveFilter(filter);
-    console.log('필터 선택:', filter);
-  };
-
-  // 프로필로 이동
-  const handleProfileClick = () => {
-    navigate('/myprofile');
-  };
-
-  // 방에 메시지 전송
-  const sendMessage = (roomId, message) => {
-    const messageData = {
-      roomId,
-      message,
-      time: new Date().toISOString(),
-    };
-
-    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-      socketRef.current.send(JSON.stringify(messageData));
-    }
-  };
-
   // 검색어가 변경될 때마다 검색 실행
   useEffect(() => {
     handleSearch();
   }, [searchTerm]);
+
+  // 방 ID에 맞는 ChatPreview 페이지로 이동하기
+  const handleRoomClick = (roomId) => {
+    navigate(`/ChatPreview/${roomId}`);
+  };
+
+    // 프로필로 이동
+    const handleProfileClick = () => {
+      navigate('/myprofile');
+    };
 
   return (
     <div className={styles.app}>
@@ -114,8 +81,6 @@ const FreeRoom = () => {
           <img src={main_mascot} className={styles["app-main_mascot"]} alt="main_mascot" />
           <h2>INFO!</h2>
           <div className={styles["right-section"]}>
-            <div className={styles["mascot-logo"]}></div>
-            <h2 className={styles["title-text"]}>공지사항</h2>
             <img src={main_bell} className={styles["app-main_bell"]} alt="main_bell" />
             <img src={main_message} className={styles["app-main_message"]} alt="main_message" />
             <img src={main_my} className={styles["app-main_my"]} alt="main_my" />
@@ -138,9 +103,11 @@ const FreeRoom = () => {
           </div>
 
           <div className={`${styles.searchContainer} ${isDesktop ? styles.desktopSearchContainer : ''}`}>
-            <div className={styles.profileIcon} onClick={handleProfileClick}>
-              <img src={Icon8} alt="Profile Icon" />
-            </div>
+          <div className={styles.profileIcon} onClick={handleProfileClick}>
+  <img src={Icon8} alt="Profile Icon" />
+</div>
+
+            
             <input
               type="text"
               className={styles.searchInput}
@@ -155,7 +122,7 @@ const FreeRoom = () => {
 
           <div className={styles.roomsList}>
             {filteredRooms.map((room) => (
-              <div key={room.id} className={`${styles.roomItem} ${room.selected ? styles.selected : ''}`}>
+              <div key={room.id} className={styles.roomItem}>
                 <img src={room.icon} alt={`방 아이콘 ${room.id}`} className={styles.roomIcon} />
                 <div className={styles.roomInfo}>
                   <div className={styles.roomTitle}>{room.title}</div>
@@ -163,45 +130,12 @@ const FreeRoom = () => {
                 </div>
                 <button
                   className={styles.joinButton}
-                  onClick={() => {
-                    handleRoomClick(room.id);
-                    sendMessage(room.id, '새로운 메시지!');
-                  }}
+                  onClick={() => handleRoomClick(room.id)}
                 >
                   참여하기
                 </button>
               </div>
             ))}
-          </div>
-
-          <div className={`${styles.bottomNav} ${isDesktop ? styles.desktopBottomNav : ''}`}>
-            <div className={styles.navItem}>
-              <img
-                src={Icon4}
-                alt="내가 속한 방"
-                className={styles.navIcon}
-                onClick={() => handleRoomClick("RoomPage")}
-              />
-              <span className={styles.navText}>내가 속한 방</span>
-            </div>
-            <div className={styles.navItem}>
-              <img
-                src={Icon5}
-                alt="수업 소통 방"
-                className={styles.navIcon}
-                onClick={() => handleRoomClick("ClassRoom")}
-              />
-              <span className={styles.navText}>수업 소통 방</span>
-            </div>
-            <div className={styles.navItem}>
-              <img
-                src={Icon6}
-                alt="자유 소통 방"
-                className={styles.navIcon}
-                onClick={() => handleRoomClick("FreeRoom")}
-              />
-              <span className={styles.navText}>자유 소통 방</span>
-            </div>
           </div>
         </div>
       </div>
