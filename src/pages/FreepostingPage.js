@@ -27,6 +27,8 @@ const getAuthHeaders = () => {
   };
 };
 
+
+
 const FreepostingPage = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -40,123 +42,55 @@ const FreepostingPage = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [replyVisible, setReplyVisible] = useState(''); // 신고 내용 저장
   const [title, setTitle] = useState('');
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-  const day = String(currentDate.getDate()).padStart(2, '0');
-  const formattedDate = `${year}.${month}.${day}`;
+  const [createdTime, setCreatedTime] = useState('');
   const [reportContent, setReportContent] = useState('');
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const handleBackClick = () => navigate(-1);
   const { id } = useParams();
   const [imageUrls, setImageUrls] = useState([]); // 이미지 URL 상태 추가
+  const [anonymousId, setAnonymousId] = useState('');
 
 
-  const organizeComments = (data) => {
-    const commentMap = {};
-
-    // 댓글 데이터를 Map으로 정리
-    data.forEach((comment) => {
-      commentMap[comment.id] = { ...comment, replies: [] };
-    });
-
-    // 댓글과 대댓글 연결
-    const structuredComments = [];
-    data.forEach((comment) => {
-      if (comment.parentCommentId === null) {
-        // 최상위 댓글
-        structuredComments.push(commentMap[comment.id]);
-      } else {
-        // 대댓글
-        const parent = commentMap[comment.parentCommentId];
-        if (parent) {
-          parent.replies.push(commentMap[comment.id]);
-        }
-      }
-    });
-
-    return structuredComments;
-  };
-
-
+  // 게시판 데이터 불러오기 useEffect
   useEffect(() => {
-    if (!nickname) {
-      const types = ['int', 'short', 'double', 'char'];
-      const randomType = types[Math.floor(Math.random() * types.length)];
-      setNickname(randomType);
-    }
-  }, [nickname]);
-
-  useEffect(() => {
-    const fetchHeartStatus = async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/free/${id}/like-status`, {
-          method: 'GET',
-          headers: getAuthHeaders(),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setIsHeartFilled(data.liked); // 서버로부터 불러온 좋아요 상태 반영
-        } else {
-          console.error('좋아요 상태 불러오기에 실패했습니다.');
-        }
-      } catch (error) {
-        console.error('좋아요 상태 불러오는 중 오류 발생:', error);
-      }
-    };
-
-    fetchHeartStatus();
-  }, [id]);
-
-  useEffect(() => { // 댓글 불러오기
-    const fetchComments = async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/free/${id}/comments`, {
-          method: 'GET',
-          headers: getAuthHeaders(),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log('댓글 API 응답 데이터:', data);
-
-          if (data && Array.isArray(data.content)) {
-            const structuredData = organizeComments(data.content);
-            setComments(structuredData);
-          } else {
-            console.error('댓글 데이터 형식이 올바르지 않습니다.', data);
-            setComments([]);
-          }
-        } else {
-          console.error('댓글 불러오기에 실패했습니다.');
-        }
-      } catch (error) {
-        console.error('댓글 불러오는 중 오류 발생:', error);
-      }
-    };
-
-    fetchComments();
-
     const getBoard = async () => {
       const accessToken = localStorage.getItem('accessToken');
       console.log(id);
-      fetch(`http://info-rmation.kro.kr/api/board/free/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'ngrok-skip-browser-warning': 1
-        }
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          console.log('게시글 데이터', data);
+
+      try {
+        const response = await fetch(`http://info-rmation.kro.kr/api/board/free/${id}`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'ngrok-skip-browser-warning': 1,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('게시글 데이터:', data);
+
+          // freeCreatedTime 변환
+          const formattedDate = new Date(data.freeCreatedTime).toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+
+          // 상태 업데이트
           setContent(data.freeContents);
           setTitle(data.freeTitle);
           setImageUrls(data.imageUrls || []); // imageUrls 상태 업데이트
-
-        });
+          setCreatedTime(formattedDate); // 작성 시간 상태 업데이트
+        } else {
+          console.error('게시판 데이터 불러오기에 실패했습니다.');
+        }
+      } catch (error) {
+        console.error('게시판 데이터 불러오는 중 오류 발생:', error);
+      }
     };
+
     getBoard();
   }, [id]);
 
@@ -183,28 +117,149 @@ const FreepostingPage = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchHeartStatus = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/free/${id}/like-status`, {
+          method: 'GET',
+          headers: getAuthHeaders(),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setIsHeartFilled(data.liked); // 서버로부터 불러온 좋아요 상태 반영
+        } else {
+          console.error('좋아요 상태 불러오기에 실패했습니다.');
+        }
+      } catch (error) {
+        console.error('좋아요 상태 불러오는 중 오류 발생:', error);
+      }
+    };
+
+    fetchHeartStatus();
+  }, [id]);
+
+
+  
+  useEffect(() => {
+    if (!nickname) {
+      const types = ['int', 'short', 'double', 'char'];
+      const randomType = types[Math.floor(Math.random() * types.length)];
+      setNickname(randomType);
+    }
+  }, [nickname]);
+
+  const organizeComments = (data) => {
+    const commentMap = {};
+  
+    // 댓글 데이터를 Map으로 정리
+    data.forEach((comment) => {
+      // 닉네임이 없으면 생성
+      if (!comment.nickname) {
+        comment.nickname = generateNickname(comment.id);
+      }
+      commentMap[comment.id] = { ...comment, replies: [] };
+    });
+  
+    // 댓글과 대댓글 연결
+    const structuredComments = [];
+    data.forEach((comment) => {
+      if (comment.parentCommentId === null) {
+        // 최상위 댓글
+        structuredComments.push(commentMap[comment.id]);
+      } else {
+        // 대댓글
+        const parent = commentMap[comment.parentCommentId];
+        if (parent) {
+          // 대댓글 닉네임이 없으면 생성
+          if (!comment.nickname) {
+            comment.nickname = generateNickname(comment.id);
+          }
+          parent.replies.push(commentMap[comment.id]);
+        }
+      }
+    });
+  
+    return structuredComments;
+  };
+
+  // 댓글 불러오기 useEffect
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/free/${id}/comments`, {
+          method: "GET",
+          headers: getAuthHeaders(),
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+          console.log("댓글 API 응답:", data);
+    
+          // 댓글 계층 구조 처리
+          const structuredComments = data.content.map((comment) => {
+            // 댓글 닉네임 기본값 설정
+            if (!comment.nickname) {
+              comment.nickname = generateNickname(comment.id);
+            }
+    
+            // 대댓글 닉네임 처리
+            if (comment.replies && Array.isArray(comment.replies)) {
+              comment.replies = comment.replies.map((reply) => {
+                if (!reply.nickname) {
+                  reply.nickname = generateNickname(reply.id);
+                }
+                return reply;
+              });
+            }
+    
+            return comment;
+          });
+    
+          setComments(structuredComments); // 댓글 및 대댓글 갱신
+        } else {
+          console.error("댓글 데이터를 가져오는데 실패했습니다.");
+        }
+      } catch (error) {
+        console.error("댓글 데이터 요청 중 오류:", error);
+      }
+    };
+    
+
+    // 닉네임 생성 함수
+    const generateNickname = (id) => {
+      const types = ["int", "short", "double", "char"];
+      const randomType = types[Math.floor(Math.random() * types.length)];
+      return `${randomType}${id}`;
+    };
+
+    fetchComments();
+  }, [id]);
+  
+
   // 댓글 추가 핸들러
   const handleAddComment = async () => {
     if (commentContent.trim() !== '') {
       const newNicknameCount = { ...nicknameCount };
-      newNicknameCount[nickname] += 1;
+      newNicknameCount[nickname] = (newNicknameCount[nickname] || 0) + 1;
       setNicknameCount(newNicknameCount);
 
-      // 랜덤으로 anonymousId 값 설정
-      let anonymousId = localStorage.getItem('anonymousId');
+      // 페이지 id별 anonymousId 고정
+      const localStorageKey = `anonymousId_${id}`;
+      let anonymousId = localStorage.getItem(localStorageKey);
 
       if (!anonymousId) {
         // 'char', 'int', 'short', 'double' 중 하나를 랜덤으로 선택
         const idOptions = ['char', 'int', 'short', 'double'];
         anonymousId = idOptions[Math.floor(Math.random() * idOptions.length)];
 
-        // 선택된 anonymousId를 localStorage에 저장하여 고정
-        localStorage.setItem('anonymousId', anonymousId);
+        // 선택된 anonymousId를 localStorage에 저장
+        localStorage.setItem(localStorageKey, anonymousId);
       }
 
       const newComment = {
         nickname: `${nickname}${newNicknameCount[nickname]}`,
-        content: commentContent,  // 댓글 내용 추가
+        content: commentContent, // 댓글 내용
         replies: [],
       };
 
@@ -216,15 +271,15 @@ const FreepostingPage = () => {
         });
 
         if (response.ok) {
-          const savedComment = await response.json();  // 서버에서 저장된 댓글 데이터 반환
+          const savedComment = await response.json(); // 서버에서 저장된 댓글 데이터 반환
 
           // savedComment에 nickname 정보가 없으면 newComment에서 가져와 병합
           const mergedComment = { ...savedComment, nickname: newComment.nickname };
 
           // 댓글 목록에 추가
-          setComments((prevComments) => [...prevComments, mergedComment]);  // 상태 업데이트
+          setComments((prevComments) => [...prevComments, mergedComment]);
           setNicknameCount((prev) => ({ ...prev, [nickname]: prev[nickname] }));
-          setCommentContent('');  // 입력 필드 초기화
+          setCommentContent(''); // 입력 필드 초기화
         } else {
           console.error('댓글 추가에 실패했습니다.');
         }
@@ -232,62 +287,116 @@ const FreepostingPage = () => {
         console.error('댓글 추가 중 오류 발생:', error);
       }
     }
+    
   };
 
   // 대댓글 추가 핸들러
   const handleAddReply = async (index) => {
     const replyContent = replyContents[index]; // 현재 입력된 대댓글 내용 가져오기
-
+  
     if (!replyContent || replyContent.trim().length === 0) {
       alert("대댓글 내용을 입력하세요."); // 빈값 입력 방지
       return;
     }
-
+  
+    const parentCommentId = comments[index]?.id;
+    if (!parentCommentId) {
+      console.log("parentCommentId:", parentCommentId);
+      alert("댓글 ID를 찾을 수 없습니다. 다시 시도해주세요.");
+      return;
+    }
+  
+    // anonymousId 생성 또는 가져오기
+    const localStorageKey = `anonymousId_${id}`;
+    let anonymousId = localStorage.getItem(localStorageKey);
+  
+    if (!anonymousId) {
+      // 'char', 'int', 'short', 'double' 중 하나를 랜덤으로 선택
+      const idOptions = ['char', 'int', 'short', 'double'];
+      anonymousId = idOptions[Math.floor(Math.random() * idOptions.length)];
+  
+      // 선택된 anonymousId를 localStorage에 저장
+      localStorage.setItem(localStorageKey, anonymousId);
+    }
+  
     const newReply = {
       content: replyContent.trim(),
-      parentCommentId: comments[index]?.id, // 상위 댓글의 ID
+      parentCommentId: parentCommentId, // 상위 댓글의 ID
       targetType: "free",
       targetId: id, // 게시물 ID
     };
-
+  
     console.log("전송 데이터:", newReply); // 디버깅용 로그
-
+  
     try {
-      const response = await fetch(`${BASE_URL}/free/${id}/comments/add`, {
-        method: "POST",
-        headers: getAuthHeaders(),
-        body: JSON.stringify(newReply),
-      });
-
-      if (response.ok) {
-        const savedReply = await response.json();
-        console.log("저장된 대댓글:", savedReply);
-
-        // 상태 업데이트
-        setComments((prevComments) =>
-          prevComments.map((comment, commentIndex) =>
-            commentIndex === index
-              ? { ...comment, replies: [...(comment.replies || []), savedReply] }
-              : comment
-          )
-        );
-
-        // 입력 필드 초기화
-        const newReplyContents = [...replyContents];
-        newReplyContents[index] = ""; // 초기화
-        setReplyContents(newReplyContents);
+      const response = await fetch(
+        `${BASE_URL}/free/${id}/comments/add?content=${encodeURIComponent(replyContent)}&anonymousId=${encodeURIComponent(anonymousId)}&parentCommentId=${encodeURIComponent(parentCommentId)}`,
+        {
+          method: "POST",
+          headers: getAuthHeaders(),
+          body: JSON.stringify(newReply),
+        }
+      );
+  
+      if (response.ok) {        
+        console.log("대댓글이 성공적으로 추가되었습니다.");
+        await fetchComments(); // 댓글 데이터를 최신 상태로 유지
       } else {
-        console.log('댓글 목록:', comments);
-        console.log('댓글 id 확인:', comments[index]?.id); // 부모 댓글 ID 확인
-        console.log("전송 데이터:", newReply); // 디버깅용 로그
-
         console.error("대댓글 추가에 실패했습니다.");
       }
     } catch (error) {
       console.error("대댓글 추가 중 오류 발생:", error);
     }
+  };  
+  
+  // 댓글 데이터를 최신 상태로 유지하는 함수
+  const fetchComments = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/free/${id}/comments`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log("댓글 API 응답:", data);
+  
+        // 댓글 계층 구조 처리
+        const structuredComments = data.content.map((comment) => {
+          // 댓글 닉네임 기본값 설정
+          if (!comment.nickname) {
+            comment.nickname = generateNickname(comment.id);
+          }
+  
+          // 대댓글 닉네임 처리
+          if (comment.replies && Array.isArray(comment.replies)) {
+            comment.replies = comment.replies.map((reply) => {
+              if (!reply.nickname) {
+                reply.nickname = generateNickname(reply.id);
+              }
+              return reply;
+            });
+          }
+  
+          return comment;
+        });
+  
+        setComments(structuredComments); // 댓글 및 대댓글 갱신
+      } else {
+        console.error("댓글 데이터를 가져오는데 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("댓글 데이터 요청 중 오류:", error);
+    }
   };
-
+  
+  
+  // 닉네임 생성 함수
+  const generateNickname = (id) => {
+    const types = ["int", "short", "double", "char"];
+    const randomType = types[Math.floor(Math.random() * types.length)];
+    return `${randomType}${id}`;
+  };
 
   const handleToggleReply = (index) => {
     setReplyVisible((prev) => ({ ...prev, [index]: !prev[index] }));
@@ -353,6 +462,37 @@ const FreepostingPage = () => {
     }
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
+      return;
+    }
+
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await fetch(`${BASE_URL}/free/delete/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'ngrok-skip-browser-warning': 1
+        },
+      });
+
+      if (response.ok) {
+        alert("게시글이 삭제되었습니다.");
+        // 삭제 후 원하는 동작 수행 (예: 목록 페이지로 이동)
+        window.location.href = "/freeboardPage"; // 목록 페이지 경로로 이동
+      } else {
+        const errorData = await response.json();
+        console.error("삭제 실패:", errorData);
+        alert("게시글 삭제에 실패했습니다.");
+        console.log(`${BASE_URL}/free/delete/${id}`);
+      }
+    } catch (error) {
+      console.error("삭제 요청 중 오류 발생:", error);
+      alert("오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -394,9 +534,14 @@ const FreepostingPage = () => {
           </div>
         </div>
 
-        <h2 className={styles["title-text4"]}>작성일: {formattedDate}</h2>
-
+        <h2 className={styles["title-text4"]}>작성일 : {createdTime}</h2>
         <div className={styles["report"]}>
+          {/* <button onClick={handleEdit} className={styles["edit-button"]}>
+          수정하기
+          </button> */}
+          <button onClick={handleDelete} className={styles["delete-button"]}>
+            삭제하기
+          </button>
           <button onClick={togglePopup} className={styles["report-button"]}>
             신고하기
           </button>
@@ -431,17 +576,6 @@ const FreepostingPage = () => {
         <div className={styles["alert-popup"]}>제출이 완료되었습니다.</div>
       )}
 
-      {/* 자유게시판 내용(수정 가능 시) */}
-      <div className={styles["content-input"]}>
-        <textarea
-          className={styles["textarea"]}
-          value={content}
-          onChange={handleContentChange}
-          placeholder="내용을 입력하세요."
-          disabled
-        />
-      </div>
-
       {/* 서버에서 받은 이미지 렌더링 */}
       <div className={styles["image-section"]}>
         {imageUrls.length > 0 ? (
@@ -456,9 +590,22 @@ const FreepostingPage = () => {
             ))}
           </div>
         ) : (
-          <p className={styles["no-image"]}>이미지가 없습니다.</p>
+          <p className={styles["no-image"]}></p>
         )}
       </div>
+
+      {/* 자유게시판 내용(수정 가능 시) */}
+      <div className={styles["content-input"]}>
+        <textarea
+          className={styles["textarea"]}
+          value={content}
+          onChange={handleContentChange}
+          placeholder="내용을 입력하세요."
+          disabled
+        />
+      </div>
+
+
 
       {/* 파일 업로드 */}
       <input
@@ -514,7 +661,9 @@ const FreepostingPage = () => {
                   onChange={(e) => handleReplyChange(index, e)}
                   placeholder="대댓글을 입력하세요."
                 />
-                <button onClick={() => handleAddReply(index)}>대댓글 달기</button>
+                <div className={styles["button-container"]}>
+                  <button onClick={() => handleAddReply(index)}>대댓글 달기</button>
+                </div>
               </div>
             )}
 
