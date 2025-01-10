@@ -22,6 +22,8 @@ import G_questionwritePage from './pages/G_questionwritePage'; // G_ 질문게�
 import G_freeboardPage from './pages/G_freeboardPage'; // G_ 자유게시판 페이지
 import G_questionboardPage from './pages/G_questionboardPage'; // G_ 질문게시판 페이지
 
+import Makechat from './pages/Makechat';
+
 //상윤님
 // import BoardPage from './pages/BoardPage';// 게시판 메인 페이지
 import QuestionCode from './pages/QuestionCode';// 코드 질문방 본문
@@ -105,6 +107,9 @@ function App() {
           <Route path="G_questionwritePage" element={<G_questionwritePage />} />
           <Route path="G_freeboardPage" element={<G_freeboardPage />} />
           <Route path="G_questionboardPage" element={<G_questionboardPage />} />
+
+          <Route path="/Makechat" element={<Makechat />} />
+
 
 
           {/* 상윤님 */}
