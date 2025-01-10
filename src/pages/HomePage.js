@@ -13,6 +13,9 @@ import competitionImage1 from '../images/대회1.png'; // 대회 이미지 1 (�
 import competitionImage2 from '../images/대회2.png'; // 대회 이미지 2 (추가)
 import competitionImage3 from '../images/대회3.png'; // 대회 이미지 3 (추가)
 import PlusButton from '../assets/MoreButton'; // 플러스 버튼 컴포넌트 import
+import Icon1 from '../images/하트이모지.png';
+import Icon2 from '../images/눈이모지.png';
+import Icon3 from '../images/폭죽이모지.png';
 
 import S_cute from '../assets/S_cuteButton'; //스크랩
 
@@ -73,17 +76,62 @@ const [error, setError] = useState(null);
       }
     };
 
-    loadData();
-  }, []);
+
+    
+  loadData();
+  const fetchRooms = async () => {
+    const userId = '202301641'; // 추후 삭제제
+    const baseUrl = 'https://a1de-61-84-64-212.ngrok-free.app';
+    fetch(`${baseUrl}/Room/userId/${userId}`, {
+        headers: {
+            contentType: 'application/json',
+            'ngrok-skip-browser-warning': 'abc',
+        },
+        method: 'GET'
+    }).then((res) => { return res.json() })
+      .then((data) => {
+        setRooms(data.data);
+      });
+    const roomsData = [
+      { roomId: 1, roomName: '내가 속한 방 제목 1', lastMessage: '마지막 내용', icon: Icon1, selected: false },
+    ];
+  };
+  fetchRooms();
+}, []);
 
 
 
   //여기까지 Api..
 
+  //소통방
+    // 방 ID에 맞는 페이지로 이동하기
+    const handleRoomClick = (path) => {
+      navigate(`/${path}`);  // 방 ID에 맞는 페이지로 이동
+    };
+
+    const roomsData = [
+      { id: 1, title: '내가 속한 방 제목 1', lastMessage: '마지막 내용', icon: Icon1, selected: false },
+      { id: 2, title: '내가 속한 방 제목 2', lastMessage: '마지막 내용', icon: Icon2, selected: false },
+      { id: 3, title: '내가 속한 방 제목 3', lastMessage: '마지막 내용', icon: Icon3, selected: false },
+    ];
+
+
+const [rooms, setRooms] = useState(roomsData);
+
 
   const [dropdownVisible, setDropdownVisible] = useState(false);  // 드롭다운 상태 관리
   const [activeTab, setActiveTab] = useState('정보게시판'); // Default active tab
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false); //logout
+
+    const [imageLoaded, setImageLoaded] = useState(false);
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
+  const handleImageError = (e) => {
+    e.target.src = competitionImage1; // 이미지 로딩 실패 시 기본 이미지
+  };
 
 
 
@@ -129,6 +177,7 @@ const [error, setError] = useState(null);
     };
 
 
+    
 
   // Render content based on the active tab
   const renderTabContent = () => {
@@ -159,29 +208,24 @@ const [error, setError] = useState(null);
 
           {/* 코딩 게시판 상위 2개 게시물 리스트 */}
           <div className={styles.postList}>
-               {codingBoardData.slice(0, 2).map((post) => (  // 상위 2개 게시물만 렌더링
-                    <div
-                         key={post.id}
-                         className={styles.postItem}
-                         onClick={() => handleQuestionClick(post.id)} // 게시물 클릭 시 상세 페이지로 이동
-                    >
-                         <span className={styles.index}>{codingBoardData.indexOf(post) + 1}</span>
-                         <span className={styles.question}>{post.codingTitle || '제목 없음'}</span>
-                         <span className={styles.date}>
-                              {new Date(post.codingCreatedTime).toLocaleDateString()}
-                         </span>
-                         {/* 첨부파일이 있으면 이미지로 표시 */}
-                         {post.fileAttached === 1 && post.storedFileName && (
-                              <img
-                                   src={`path/to/images/${post.storedFileName[0]}`}  // 이미지 경로 맞게 수정
-                                   alt="Coding Image"
-                                   className={styles.codingImage}
-                              />
-                         )}
-                    </div>
-               ))}
+  {codingBoardData.slice(0, 2).map((post) => (
+    <div
+      key={post.id}
+      className={styles.postItem}
+      onClick={() => handleQuestionClick(post.id)} // 게시물 클릭 시 상세 페이지로 이동
+    >
+      <span className={styles.index}>{codingBoardData.indexOf(post) + 1}</span>
+      <span className={styles.question}>{post.codingTitle || '제목 없음'}</span>
+      <span className={styles.date}>
+        {new Date(post.codingCreatedTime).toLocaleDateString()}
+      </span>
+      {/* 첨부파일 여부와 관계없이 S_cute 표시 */}
+      <S_cute className={styles.S_cute} />
+    </div>
+  ))} 
+</div>
+
           </div>
-     </div>
 
 
 
@@ -330,78 +374,34 @@ const [error, setError] = useState(null);
           <>
  
  
- <div className={styles.container}>
-      <div className={styles.infoheader}>
-      <h2 className={styles.comtext}>자유 게시판</h2>
-        <a href="/self-development" className={styles.plusButtonLink}>
-          <PlusButton className={styles.plusButton} />
-        </a>
-      </div>
-      
+                  
+ <>
+  <div className={styles.Roomcontainer}>
 
-      <div className={styles.postList}>
-        <div className={styles.postItem} onClick={() => handleQuestionClick(1)}>
-          <span className={styles.index2}>HOT</span>
-          <span className={styles.question}>[부트 캠프] SSAFY</span>
-          <span className={styles.date}>2024.01.01</span>
-          <S_cute className={styles.S_cute} />
+    {/* 방 목록 */}
+    <div className={styles.roomsList}>
+      {rooms.map((room) => (
+        <div
+          key={room.roomId}
+          className={`${styles.roomItem} ${room.selected ? styles.selected : ''}`}
+        >
+          <img src={room.icon} alt={`방 아이콘 ${room.roomId}`} className={styles.roomIcon} /> {/* 아이콘 추가 */}
+          <div className={styles.roomInfo}>
+            <div className={styles.roomTitle}>{room.roomName}</div>
+            <div className={styles.roomMessage}>{room.lastMessage}</div>
+          </div>
+          <button
+                      className={styles.joinButton}
+                      onClick={() => handleRoomClick(room.id)}
+                    >
+                      참여하기
+                    </button>
         </div>
-
-        <div className={styles.postItem} onClick={() => handleQuestionClick(2)}>
-          <span className={styles.index2}>HOT</span>
-          <span className={styles.question}>[산업 연계] CJ 클라우드 네트워크스</span>
-          <span className={styles.date}>2024.01.01</span>
-          <S_cute className={styles.S_cute} />
-        </div>
-
-        <div className={styles.postItem} onClick={() => handleQuestionClick(3)}>
-          <span className={styles.index2}>HOT</span>
-          <span className={styles.question}>[스터디 모집] 운영체제 스터디 모집</span>
-          <span className={styles.date}>2024.01.01</span>
-          <S_cute className={styles.S_cute} />
-        </div>
-
-      </div>
+      ))}
     </div>
-
-
-    <div className={styles.container}>
-      <div className={styles.infoheader}>
-      <h2 className={styles.comtext}>질문 게시판</h2>
-        <a href="/self-development" className={styles.plusButtonLink}>
-          <PlusButton className={styles.plusButton} />
-        </a>
-      </div>
-      
-
-      <div className={styles.postList}>
-        <div className={styles.postItem} onClick={() => handleQuestionClick(1)}>
-          <span className={styles.index2}>HOT</span>
-          <span className={styles.question}>[부트 캠프] SSAFY</span>
-          <span className={styles.date}>2024.01.01</span>
-          <S_cute className={styles.S_cute} />
-        </div>
-
-        <div className={styles.postItem} onClick={() => handleQuestionClick(2)}>
-          <span className={styles.index2}>HOT</span>
-          <span className={styles.question}>[산업 연계] CJ 클라우드 네트워크스</span>
-          <span className={styles.date}>2024.01.01</span>
-          <S_cute className={styles.S_cute} />
-        </div>
-
-        <div className={styles.postItem} onClick={() => handleQuestionClick(3)}>
-          <span className={styles.index2}>HOT</span>
-          <span className={styles.question}>[스터디 모집] 운영체제 스터디 모집</span>
-          <span className={styles.date}>2024.01.01</span>
-          <S_cute className={styles.S_cute} />
-        </div>
-
-      </div>
+    
     </div>
-
-
-            
-          </>
+    </>                      </>
        
         );
       default:
@@ -463,7 +463,7 @@ const [error, setError] = useState(null);
                 <a href="/scrap" className={styles["menu-item"]}>스크랩</a>
                 <a href="/write-post" className={styles["menu-item"]}>작성 게시글</a>
                 <a href="/write-comment" className={styles["menu-item"]}>작성 댓글</a>
-                <a href="/User_auth" className={styles["menu-item"]}>사용자 권한 인증</a>
+                <a href="/User_auth" className={styles["menu-item"]}>스터디 신청 확인</a>
                 <a
                   href="#"
                   onClick={handleLogoutClick}
@@ -489,16 +489,26 @@ const [error, setError] = useState(null);
       <div className={`${styles.competitions} ${isDesktop ? styles.desktopCompetitions : ''}`}>
             {competitionBoardData.slice(0, 3).map((post) => (  // 상위 3개 게시물만 렌더링
                   <div key={post.id} className={styles.competitionItem}>
-                        <span className={styles.index2}>HOT</span>
-                        <span className={styles.competitionTitle}>{post.competitionTitle}</span>
-                        <span className={styles.date}>{new Date(post.competitionCreatedTime).toLocaleDateString()}</span>
-                        {post.fileAttached === 1 && post.storedFileName.length > 0 && (
-                              <img
-                                    src={`path/to/images/${post.storedFileName[0]}`}  // 파일 경로에 맞게 수정
-                                    alt="Competition Image"
-                                    className={styles.competitionImage}
-                              />
-                        )}
+  
+                        {post.imageUrls && post.imageUrls.length > 0 ? (
+        <div className={styles.imageContainer}>
+          {post.imageUrls.slice(0, 3).map((url, index) => (
+            <div key={index} className={styles.imageWrapper}>
+              {!imageLoaded && <div className={styles.loader}>Loading...</div>} {/* 로딩 표시 */}
+              <img
+                src={url}
+                alt={`Competition Image ${index + 1}`}
+                className={styles.competitionImage}
+                onLoad={handleImageLoad}
+                onError={handleImageError}
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <span className={styles.noImageText}>이미지가 없습니다</span>
+      )}
+
                   </div>
             ))}
       </div>

@@ -32,8 +32,11 @@ import InformationContest from './pages/InformationContest'; // 대회 정보게
 import ContestWrite from './pages/ContestWrite'; // 대회 글쓰기
 import AlarmPage from './pages/AlarmPage'; // 알림페이지
 import Announcement from './pages/Announcement'; // 공지사항
+import BootBoardPage from './pages/BootBoardPage'; // 부트갬프 게시판 목록
 
-import BoardCode from './pages/BoardCode';
+import BoardCode from './pages/BoardCode'; 
+import InformationCodeBoard from './pages/InformationCodeBoard'
+import InformationContestBoard from './pages/InformationContestBoard';
 
 
 // 석진이형 페이지
@@ -63,14 +66,16 @@ import { UserProvider } from './pages/UserContext'; //유저 프로필
 import User_auth from './pages/User_auth'
 import Chat from './pages/Chat'
 import G_HomePage from './pages/G_HomePage'
-
 import HomePage from './pages/HomePage'; // 정확한 경로로 import 추가
+import G_Chat from './pages/G_Chat'
+import Home from './pages/Home'
+import _2 from './pages/_2';
 
 
 // 지민이가 만든 채팅방 페이지
 import ClassChatRoom from './pages/ClassChatRoom'
 import ClassChat from './pages/ClassChat'
-import BootBoardPage from './pages/BootBoardPage';
+
 
 function App() {
   return (
@@ -115,6 +120,13 @@ function App() {
           <Route path="/ClassChatRoom" element={<ClassChatRoom />} />
           <Route path="/ClassChat" element={<ClassChat />} />
           <Route path="/BootBoardPage" element={<BootBoardPage />} />
+          <Route path="/BoardCode" element={<BoardCode />} />
+          <Route path="/InformationCodeBoard" element={<InformationCodeBoard/>} />
+          <Route path="/InformationContestBoard" element={<InformationContestBoard/>} />
+
+
+
+
 
           <Route path="/ChatRoom/:id" element={<ChatRoom />} /> {/* 동적 라우팅을 통한 채팅방 페이지 */}
 
@@ -129,9 +141,9 @@ function App() {
           <Route path="/Scrap" element={<Scrap />} />
           <Route path="/My_board" element={<My_board />} />
           <Route path="/My_message" element={<My_message />} />
-          <Route path="/StudyBoard" element={<StudyBoard />} />
-          <Route path="/BootBoard" element={<BootBoard />} />
-          <Route path="/IndustryBoard" element={<IndustryBoard />} />
+          <Route path="/StudyBoard/:id" element={<StudyBoard />} />
+          <Route path="/BootBoard/:id" element={<BootBoard />} />
+          <Route path="/IndustryBoard/:id" element={<IndustryBoard />} />
 
           {/* 영현 페이지*/}
           <Route path="/HomePage" element={<HomePage />} />
@@ -140,11 +152,25 @@ function App() {
           <Route path="/Profileedit" element={<Profileedit />} />
           <Route path="/Myprofile" element={<Myprofile />} />
           <Route path="/ChatPreview" element={<ChatPreview />} />
+          
+          <Route path="/ChatPreview/:roomId" element={<ChatPreview />} />
           <Route path="/Otherprofile" element={<Otherprofile />} />
+          
+          <Route path="/Otherprofile/:roomId/:userId" element={<Otherprofile />} />
           <Route path="/User_auth" element={<User_auth />} />
           <Route path="/G_HomePage" element={<G_HomePage />} />
-          <Route path="/Chat/" element={<Chat />} />
 
+          <Route path="/Home" element={<Home />} />
+          
+          <Route path="/_2" element={<_2 />} />
+
+        <Route path="/" element={<G_HomePage />} />
+        <Route path="/G_questionpostingPage/:id" element={<G_questionpostingPage />} />
+        <Route path="/G_freepostingPage/:id" element={<G_freepostingPage />} />
+        <Route path="/QuestionpostingPage/:id" element={<QuestionpostingPage />} /> 
+        <Route path="/FreepostingPage/:id" element={<FreepostingPage />} />
+          <Route path="/Chat/" element={<Chat />} />
+          <Route path="/G_Chat/" element={<G_Chat />} />
         </Routes>
       </BrowserRouter>
     </UserProvider>

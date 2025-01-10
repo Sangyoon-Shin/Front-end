@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
+import axiosInstance from '../utils/api';
 import Header from './G_.js';  // 상단바 컴포넌트
 import styles from './FreeboardPage.module.css';  // BoardPage용 CSS 파일
 import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
@@ -26,44 +27,84 @@ const G_freeboardPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);  // 드롭다운 상태 관리
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
   const [scrapStatus, setScrapStatus] = useState({}); // 각 게시물의 스크랩 상태 관리
+  const [topLikedPosts, setTopLikedPosts] = useState([]); // 좋아요 10개 이상 게시물
   const [posts, setPosts] = useState([]); // 게시물 목록 상태 관리
   const [sortType, setSortType] = useState('latest'); // 초기 정렬 상태는 'latest'
+  const [initialPosts, setInitialPosts] = useState([]); // 최초 데이터 로드한 거 저장시키기
+  const [selectedCategory, setSelectedCategory] = useState(''); // 선택된 항목 상태
 
-  const navigate = useNavigate();  // useNavigate 훅을 컴포넌트 내부에서 호출
+  // 페이징 및 추가 필터링 상태
+  const [page, setPage] = useState(0); // 현재 페이지 번호
+  const [size, setSize] = useState(10); // 페이지당 항목 수
+  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
+  const [hashtagKeyword, setHashtagKeyword] = useState(''); // 해시태그 필터
+  const [typeKeyword, setTypeKeyword] = useState(''); // 타입 필터
 
-  // 반응형 처리를 위한 useMediaQuery 사용
-  const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
+  // 로딩 상태 관리
+  const [isLoading, setIsLoading] = useState(false); // 데이터 로딩 상태
+
+  const navigate = useNavigate(); // useNavigate 훅을 컴포넌트 내부에서 호출
+  const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
 
   // 게시물 목록을 백엔드에서 불러오기
   useEffect(() => {
     const fetchPosts = async () => {
+      setIsLoading(true); // 로딩 시작
       try {
-        const response = await fetch(`${BASE_URL}/free`, {
-          method: 'GET',
-          headers: getAuthHeaders(), // 인증 헤더 추가
+        const response = await axiosInstance.get('https://d1a8-2406-5900-10f0-c886-9d73-494b-76e8-192d.ngrok-free.app/api/board/graduate', {
+          params: {
+            page,
+            size,
+            graduateId: 'Free'
+          }, // 페이지와 사이즈를 쿼리 파라미터로 추가
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+          },
         });
 
-        if (!response.ok) {
-          throw new Error('게시물 목록을 불러오는데 실패했습니다.');
+        const data = response.data; // Axios는 자동으로 JSON을 파싱합니다.
+
+        if (!data.content || data.content.length === 0) {
+          console.warn('게시물이 없습니다.');
+          setPosts([]); // 빈 데이터로 상태 초기화
+          return;
         }
 
-        const data = await response.json();
-        setPosts(data.content); // 게시물 목록 상태 업데이트
-        const initialScrapStatus = {};
-        data.content.forEach(post => {
-          initialScrapStatus[post.id] = post.isScraped; // 스크랩 상태 초기화
-        });
-        setScrapStatus(initialScrapStatus); // 스크랩 상태 업데이트
+        setPosts(data.content); // 게시물 데이터 설정
+        setInitialPosts(response.data.content); // 초기 데이터 저장
+        setTotalPages(data.totalPages); // 전체 페이지 수 설정
+        console.log('게시물 데이터:', data);
       } catch (error) {
-        console.error('게시물 목록 불러오는 중 오류가 발생했습니다:', error);
+        console.error('게시물 목록을 불러오는 중 오류가 발생했습니다:', error);
+        alert('게시물 데이터를 불러오는데 문제가 발생했습니다. 다시 시도해주세요.');
+      } finally {
+        setIsLoading(false); // 로딩 종료
       }
     };
-
+    // 좋아요 10개 이상 게시물 가져오기
+    const fetchTopLikedPosts = async () => {
+      try {
+        const response = await axiosInstance.get('https://d1a8-2406-5900-10f0-c886-9d73-494b-76e8-192d.ngrok-free.app/api/board/graduate/top-liked', {
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+          },
+        });
+        if (response.status === 200) {
+          console.log(response)
+          setTopLikedPosts(response.data.map((post) => post.id)); // 좋아요 10개 이상 게시물의 ID만 저장
+        } else {
+          setTopLikedPosts([]); // 데이터가 없는 경우 빈 배열로 초기화
+        }
+      } catch (error) {
+        console.error('좋아요 상위 게시물을 불러오는 중 오류가 발생했습니다:', error);
+      }
+    };
     fetchPosts();
-  }, []);
+    fetchTopLikedPosts();
+  }, [page, size]); // page와 size 변경 시 재호출
 
   const toggleMenu = () => {
-    setMenuOpen(!menuOpen);  // 드롭다운 토글
+    setMenuOpen((prevMenuOpen) => !prevMenuOpen); // 드롭다운 메뉴 열기/닫기 토글
   };
 
   const handleBoardChange = (boardName) => {
@@ -74,25 +115,18 @@ const G_freeboardPage = () => {
   };
 
   const toggleScrap = async (id) => {
-    // 백엔드에 스크랩 상태를 업데이트하는 요청 보내기
     try {
-      const response = await fetch(`${BASE_URL}/free/scrap`, {
-        method: 'PATCH',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({
-          postId: id,
-          scrapStatus: !scrapStatus[id], // 새로운 스크랩 상태 전송
-        }),
+      const response = await axiosInstance.post(`https://d1a8-2406-5900-10f0-c886-9d73-494b-76e8-192d.ngrok-free.app/api/board/${id}/scrap`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+        },
+
       });
 
-      if (!response.ok) {
-        throw new Error('스크랩 상태 업데이트에 실패했습니다.');
-      }
-
-      // 서버 응답이 성공적일 경우 상태 업데이트
+      // 성공적으로 응답을 받은 경우 상태를 업데이트
       setScrapStatus((prevState) => ({
         ...prevState,
-        [id]: !prevState[id],
+        [id]: !prevState[id], // 현재 상태를 토글
       }));
 
       console.log('스크랩 상태가 성공적으로 업데이트되었습니다.');
@@ -102,27 +136,78 @@ const G_freeboardPage = () => {
     }
   };
 
-  // 검색 입력값을 변경하는 함수
-  const handleSearchInputChange = (event) => {
+
+  const handlePostClick = (postId) => {
+    navigate(`/post/${postId}`);  // 해당 게시물 상세 페이지로 이동
+  };
+
+  // 정렬 버튼 클릭 시 정렬 상태 업데이트
+  const handleSort = async (type) => {
+    setSortType(type); // 정렬 상태 업데이트
+
+    if (type === 'latest') {
+      setPosts(initialPosts); // 초기 데이터로 복원
+      return;
+    }
+
+    try {
+      const params = {
+        page: 0,
+        size: 10,
+        searchKeyword: '', // 필요 시 값 설정
+        contentKeyword: '', // 필요 시 값 설정
+        hashtagKeyword: '', // 필요 시 값 설정
+        typeKeyword: '', // 필요 시 값 설정
+        graduateId: 'Free',
+      };
+
+      const response = await axiosInstance.get('https://d1a8-2406-5900-10f0-c886-9d73-494b-76e8-192d.ngrok-free.app/api/board/graduate/sort-by-likes', {
+        params,
+        headers: {
+          'ngrok-skip-browser-warning': 'true', // 필요 시 유지
+        },
+      });
+
+      const data = response.data;
+
+      if (!data || !data.content) {
+        throw new Error('API 응답이 올바르지 않습니다.');
+      }
+
+      setPosts(data.content); // 정렬된 데이터로 게시물 목록 업데이트
+    } catch (error) {
+      console.error('정렬 데이터 로드 중 오류 발생:', error);
+      alert('정렬된 데이터를 가져오는 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // 검색 버튼을 클릭했을 때 호출되는 함수
   const handleSearch = async () => {
     console.log('검색 버튼 클릭됨');
     if (searchTerm.trim() !== '') {
       try {
-        const response = await fetch(`${BASE_URL}/free/search?query=${encodeURIComponent(searchTerm)}`, {
-          method: 'GET',
-          headers: getAuthHeaders(),
+        console.log(`검색어: ${searchTerm}`);
+        const response = await axiosInstance.get('https://d1a8-2406-5900-10f0-c886-9d73-494b-76e8-192d.ngrok-free.app/api/board/graduate', {
+          params: {
+            searchKeyword: searchTerm, // 검색어 전달
+            page: 0,
+            size: 10,
+            graduateId: 'Free',
+          },
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+          },
         });
 
-        if (!response.ok) {
-          throw new Error('검색 결과를 불러오는데 실패했습니다.');
-        }
+        const data = response.data;
+        console.log('검색 결과:', data);
 
-        const data = await response.json();
-        setPosts(data.content); // 검색 결과를 게시물 목록으로 업데이트
+        // 검색 결과를 게시물 목록으로 업데이트 (명세서에 따른 구조 반영)
+        setPosts(data.content); // 'content' 필드가 검색 결과로 가정
+
         alert('검색이 완료되었습니다. 결과가 화면에 표시됩니다.');
       } catch (error) {
         console.error('검색 결과를 불러오는 중 오류가 발생했습니다:', error);
@@ -133,25 +218,6 @@ const G_freeboardPage = () => {
     }
   };
 
-  const handlePostClick = (postId) => {
-    navigate(`/post/${postId}`);  // 해당 게시물 상세 페이지로 이동
-  };
-
-  // 정렬 버튼 클릭 시 정렬 상태 업데이트
-  const handleSort = (type) => {
-    setSortType(type);
-    if (type === 'latest') {
-      // 최신순으로 정렬
-      setPosts((prevPosts) =>
-        [...prevPosts].sort((a, b) => new Date(b.date) - new Date(a.date))
-      );
-    } else if (type === 'recommend') {
-      // 추천순으로 정렬 (좋아요 개수 기준)
-      setPosts((prevPosts) =>
-        [...prevPosts].sort((a, b) => b.likes - a.likes)
-      );
-    }
-  };
 
   return (
     <div className={styles.container}>
@@ -196,7 +262,7 @@ const G_freeboardPage = () => {
             <input
               type="text"
               value={searchTerm}
-              onChange={handleSearchInputChange}
+              onChange={handleSearchChange}
               className={`${styles.searchInput} ${isDesktop ? styles.desktopSearchInput : ''}`}
               placeholder="검색어 입력"
             />
@@ -227,37 +293,50 @@ const G_freeboardPage = () => {
         <div className={styles.postList}>
           {posts.map((post) => (
             <div key={post.id} className={styles.postItem}>
-              {post.id <= 3 && <span className={styles.hotTag}>HOT</span>}
+              {/* HOT 표시 (좋아요 10개 이상 게시물) */}
+              {topLikedPosts.includes(post.id) && (
+                <span className={styles.hotTag}>HOT</span>
+              )}
+
+              {/* 게시물 제목 및 정보 */}
               <div className={styles.postInfo}>
                 <span
                   className={styles.postTitle}
-                  onClick={() => handlePostClick(post.id)}
+                  onClick={() => handlePostClick(post.id)} // 게시물 제목 클릭 시 상세 페이지로 이동
                 >
-                  {post.freeTitle}
+                  {post.graduateTitle || '제목 없음'} {/* 백엔드 데이터의 키에 맞춰 수정, 기본값 처리 */}
                 </span>
-                <span className={styles.postDate}>{post.freeCreatedTime.slice(0, 10)}</span>
+                <span className={styles.postDate}>
+                  {post.graduateCreatedTime
+                    ? new Date(post.graduateCreatedTime).toLocaleDateString() // 작성 날짜 표시
+                    : '날짜 없음'}
+                </span>
               </div>
+
+              {/* 스크랩 상태 아이콘 */}
               <img
                 src={scrapStatus[post.id] ? IconScrap : IconUnscrap}
                 alt={scrapStatus[post.id] ? '스크랩됨' : '스크랩안됨'}
                 className={styles.scrapIcon}
-                onClick={() => toggleScrap(post.id)}
+                onClick={() => toggleScrap(post.id)} // 스크랩 상태 변경 및 백엔드 전송
               />
             </div>
           ))}
         </div>
 
+        {/* 페이지네이션 */}
         <div className={styles.pagination}>
-          {[1, 2, 3, 4, 5].map((pageNumber) => (
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
             <button
               key={pageNumber}
-              className={styles.pageButton}
-              onClick={() => navigate(`/board/page/${pageNumber}`)}
+              className={`${styles.pageButton} ${page === pageNumber - 1 ? styles.activePageButton : ''}`} // 현재 페이지 강조
+              onClick={() => setPage(pageNumber - 1)} // 페이지 번호 업데이트
             >
               {pageNumber}
             </button>
           ))}
         </div>
+        
       </div>
     </div>
   );
