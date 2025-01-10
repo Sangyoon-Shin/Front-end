@@ -86,6 +86,12 @@ const G_freewritePage = () => {
       files.forEach((file) => formData.append('graduateFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
     }
 
+    
+    // 수정모드일 때만 id 추가
+    if (isEditing) {
+      formData.append('id', id); // 수정 시에만 id 추가
+    }
+
     try {
       const url = isEditing ? `${BASE_URL}/graduate/update` : `${BASE_URL}/graduate/save`;
       const headers = { ...getAuthHeaders(), 'Content-Type': 'multipart/form-data' };

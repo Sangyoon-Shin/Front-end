@@ -94,6 +94,11 @@ const Study = () => {
       files.forEach((file) => formData.append('studyFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
     }
 
+    
+    // 수정모드일 때만 id 추가
+    if (isEditing) {
+      formData.append('id', id); // 수정 시에만 id 추가
+    }
     try {
       const url = isEditing ? `${BASE_URL}/studies/update` : `${BASE_URL}/studies/save`;
       const headers = { ...getAuthHeaders(), 'Content-Type': 'multipart/form-data' };
