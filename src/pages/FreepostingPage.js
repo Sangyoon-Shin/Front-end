@@ -58,7 +58,7 @@ const FreepostingPage = () => {
       console.log(id);
 
       try {
-        const response = await fetch(`http://info-rmation.kro.kr/api/board/free/${id}`, {
+        const response = await fetch(`${BASE_URL}/free/${id}`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'ngrok-skip-browser-warning': 1,
@@ -102,6 +102,8 @@ const FreepostingPage = () => {
     setCommentContent(e.target.value);
   };
 
+
+
   const handleReplyChange = (index, e) => {
     const newReplyContents = [...replyContents];
     newReplyContents[index] = e.target.value; // 현재 입력값 저장
@@ -139,8 +141,13 @@ const FreepostingPage = () => {
     fetchHeartStatus();
   }, [id]);
 
+  // 닉네임 생성 함수
+  const generateNickname = (id) => {
+    const types = ["int", "short", "double", "char"];
+    const randomType = types[Math.floor(Math.random() * types.length)];
+    return `${randomType}${id}`;
+  };
 
-  
   useEffect(() => {
     if (!nickname) {
       const types = ['int', 'short', 'double', 'char'];
@@ -149,37 +156,38 @@ const FreepostingPage = () => {
     }
   }, [nickname]);
 
-  const organizeComments = (data) => {
-    const commentMap = {};
-  
-    // 댓글 데이터를 Map으로 정리
-    data.forEach((comment) => {
-      // 닉네임이 없으면 생성
-      if (!comment.nickname) {
-        comment.nickname = generateNickname(comment.id);
+  // 댓글 및 대댓글을 계층 구조로 정리하는 함수
+  const organizeComments = (comments) => {
+    const commentMap = {};  // 댓글을 id별로 매핑하기 위한 객체
+    const nicknameMap = {};  // anonymousId에 따른 닉네임 매핑 객체
+    const structuredComments = [];  // 최종적으로 계층 구조로 정리된 댓글 배열
+
+    // 댓글을 매핑 객체에 추가
+    comments.forEach((comment) => {
+      // anonymousId에 따른 닉네임 매핑
+      const { anonymousId } = comment;
+      if (!nicknameMap[anonymousId]) {
+        nicknameMap[anonymousId] = generateNickname(Object.keys(nicknameMap).length);
       }
+      comment.nickname = nicknameMap[anonymousId];
+
+      // 댓글에 빈 replies 배열 추가
       commentMap[comment.id] = { ...comment, replies: [] };
     });
-  
-    // 댓글과 대댓글 연결
-    const structuredComments = [];
-    data.forEach((comment) => {
-      if (comment.parentCommentId === null) {
-        // 최상위 댓글
-        structuredComments.push(commentMap[comment.id]);
-      } else {
-        // 대댓글
-        const parent = commentMap[comment.parentCommentId];
-        if (parent) {
-          // 대댓글 닉네임이 없으면 생성
-          if (!comment.nickname) {
-            comment.nickname = generateNickname(comment.id);
-          }
-          parent.replies.push(commentMap[comment.id]);
+
+    // 댓글 계층 구조 구성
+    comments.forEach((comment) => {
+      if (comment.parentCommentId) {
+        // 부모 댓글이 있는 경우, 해당 댓글의 replies에 대댓글 추가
+        if (commentMap[comment.parentCommentId]) {
+          commentMap[comment.parentCommentId].replies.push(commentMap[comment.id]);
         }
+      } else {
+        // 부모 댓글이 없는 경우(즉, 댓글인 경우) 최상위 댓글 배열에 추가
+        structuredComments.push(commentMap[comment.id]);
       }
     });
-  
+
     return structuredComments;
   };
 
@@ -191,31 +199,13 @@ const FreepostingPage = () => {
           method: "GET",
           headers: getAuthHeaders(),
         });
-    
+
         if (response.ok) {
           const data = await response.json();
           console.log("댓글 API 응답:", data);
-    
-          // 댓글 계층 구조 처리
-          const structuredComments = data.content.map((comment) => {
-            // 댓글 닉네임 기본값 설정
-            if (!comment.nickname) {
-              comment.nickname = generateNickname(comment.id);
-            }
-    
-            // 대댓글 닉네임 처리
-            if (comment.replies && Array.isArray(comment.replies)) {
-              comment.replies = comment.replies.map((reply) => {
-                if (!reply.nickname) {
-                  reply.nickname = generateNickname(reply.id);
-                }
-                return reply;
-              });
-            }
-    
-            return comment;
-          });
-    
+
+          // 댓글과 대댓글을 계층 구조로 정리
+          const structuredComments = organizeComments(data.content);
           setComments(structuredComments); // 댓글 및 대댓글 갱신
         } else {
           console.error("댓글 데이터를 가져오는데 실패했습니다.");
@@ -224,18 +214,10 @@ const FreepostingPage = () => {
         console.error("댓글 데이터 요청 중 오류:", error);
       }
     };
-    
-
-    // 닉네임 생성 함수
-    const generateNickname = (id) => {
-      const types = ["int", "short", "double", "char"];
-      const randomType = types[Math.floor(Math.random() * types.length)];
-      return `${randomType}${id}`;
-    };
 
     fetchComments();
   }, [id]);
-  
+
 
   // 댓글 추가 핸들러
   const handleAddComment = async () => {
@@ -244,7 +226,6 @@ const FreepostingPage = () => {
       newNicknameCount[nickname] = (newNicknameCount[nickname] || 0) + 1;
       setNicknameCount(newNicknameCount);
 
-      // 페이지 id별 anonymousId 고정
       const localStorageKey = `anonymousId_${id}`;
       let anonymousId = localStorage.getItem(localStorageKey);
 
@@ -253,21 +234,22 @@ const FreepostingPage = () => {
         const idOptions = ['char', 'int', 'short', 'double'];
         anonymousId = idOptions[Math.floor(Math.random() * idOptions.length)];
 
-        // 선택된 anonymousId를 localStorage에 저장
+        // 생성된 anonymousId를 localStorage에 저장
         localStorage.setItem(localStorageKey, anonymousId);
       }
 
       const newComment = {
         nickname: `${nickname}${newNicknameCount[nickname]}`,
-        content: commentContent, // 댓글 내용
+        content: commentContent,
         replies: [],
+        anonymousId: anonymousId, // anonymousId를 추가하여 서버로 전송
       };
 
       try {
         const response = await fetch(`${BASE_URL}/free/${id}/comments/add?content=${encodeURIComponent(commentContent)}&anonymousId=${encodeURIComponent(anonymousId)}`, {
           method: 'POST',
           headers: getAuthHeaders(),
-          body: JSON.stringify(newComment), // 댓글 내용은 본문에 포함
+          body: JSON.stringify(newComment),
         });
 
         if (response.ok) {
@@ -276,9 +258,9 @@ const FreepostingPage = () => {
           // savedComment에 nickname 정보가 없으면 newComment에서 가져와 병합
           const mergedComment = { ...savedComment, nickname: newComment.nickname };
 
-          // 댓글 목록에 추가
           setComments((prevComments) => [...prevComments, mergedComment]);
           setNicknameCount((prev) => ({ ...prev, [nickname]: prev[nickname] }));
+          window.location.reload(); // 페이지 새로 고침
           setCommentContent(''); // 입력 필드 초기화
         } else {
           console.error('댓글 추가에 실패했습니다.');
@@ -287,116 +269,77 @@ const FreepostingPage = () => {
         console.error('댓글 추가 중 오류 발생:', error);
       }
     }
-    
   };
 
   // 대댓글 추가 핸들러
   const handleAddReply = async (index) => {
-    const replyContent = replyContents[index]; // 현재 입력된 대댓글 내용 가져오기
-  
-    if (!replyContent || replyContent.trim().length === 0) {
-      alert("대댓글 내용을 입력하세요."); // 빈값 입력 방지
-      return;
-    }
-  
-    const parentCommentId = comments[index]?.id;
-    if (!parentCommentId) {
-      console.log("parentCommentId:", parentCommentId);
-      alert("댓글 ID를 찾을 수 없습니다. 다시 시도해주세요.");
-      return;
-    }
-  
-    // anonymousId 생성 또는 가져오기
-    const localStorageKey = `anonymousId_${id}`;
-    let anonymousId = localStorage.getItem(localStorageKey);
-  
-    if (!anonymousId) {
-      // 'char', 'int', 'short', 'double' 중 하나를 랜덤으로 선택
-      const idOptions = ['char', 'int', 'short', 'double'];
-      anonymousId = idOptions[Math.floor(Math.random() * idOptions.length)];
-  
-      // 선택된 anonymousId를 localStorage에 저장
-      localStorage.setItem(localStorageKey, anonymousId);
-    }
-  
-    const newReply = {
-      content: replyContent.trim(),
-      parentCommentId: parentCommentId, // 상위 댓글의 ID
-      targetType: "free",
-      targetId: id, // 게시물 ID
-    };
-  
-    console.log("전송 데이터:", newReply); // 디버깅용 로그
-  
-    try {
-      const response = await fetch(
-        `${BASE_URL}/free/${id}/comments/add?content=${encodeURIComponent(replyContent)}&anonymousId=${encodeURIComponent(anonymousId)}&parentCommentId=${encodeURIComponent(parentCommentId)}`,
-        {
-          method: "POST",
-          headers: getAuthHeaders(),
-          body: JSON.stringify(newReply),
+    if (replyContents[index]?.trim() !== '') {
+      const updatedComments = [...comments];
+
+      const newNicknameCount = { ...nicknameCount };
+      newNicknameCount[nickname] = (newNicknameCount[nickname] || 0) + 1;
+      setNicknameCount(newNicknameCount);
+
+      const localStorageKey = `anonymousId_${id}`;
+      let anonymousId = localStorage.getItem(localStorageKey);
+
+      if (!anonymousId) {
+        const idOptions = ['char', 'int', 'short', 'double'];
+        anonymousId = idOptions[Math.floor(Math.random() * idOptions.length)];
+
+        localStorage.setItem(localStorageKey, anonymousId);
+      }
+
+      const parentCommentId = comments[index]?.id;
+      if (!parentCommentId) {
+        console.error('부모 댓글 ID가 없습니다.');
+        return;
+      }
+
+      const content = replyContents[index];
+      const replyNickname = `${nickname}${newNicknameCount[nickname]}`;
+
+      const newReply = {
+        nickname: replyNickname,
+        content,
+        anonymousId, // anonymousId 추가
+      };
+
+      try {
+        const response = await fetch(
+          `${BASE_URL}/free/${id}/comments/add?parentCommentId=${parentCommentId}&content=${encodeURIComponent(content)}&anonymousId=${encodeURIComponent(anonymousId)}`,
+          {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(newReply),
+          }
+        );
+
+        if (response.ok) {
+          const savedReply = await response.json();
+
+          if (!updatedComments[index].replies) {
+            updatedComments[index].replies = [];
+          }
+          updatedComments[index].replies.push(savedReply);
+          setComments(updatedComments);
+
+          const newReplyContents = [...replyContents];
+          newReplyContents[index] = '';
+          setReplyContents(newReplyContents);
+          setReplyVisible((prev) => ({ ...prev, [index]: false }));
+          window.location.reload(); // 페이지 새로 고침
+
+        } else {
+          console.error('대댓글 추가에 실패했습니다.');
         }
-      );
-  
-      if (response.ok) {        
-        console.log("대댓글이 성공적으로 추가되었습니다.");
-        await fetchComments(); // 댓글 데이터를 최신 상태로 유지
-      } else {
-        console.error("대댓글 추가에 실패했습니다.");
+      } catch (error) {
+        console.error('대댓글 추가 중 오류 발생:', error);
       }
-    } catch (error) {
-      console.error("대댓글 추가 중 오류 발생:", error);
-    }
-  };  
-  
-  // 댓글 데이터를 최신 상태로 유지하는 함수
-  const fetchComments = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/free/${id}/comments`, {
-        method: "GET",
-        headers: getAuthHeaders(),
-      });
-  
-      if (response.ok) {
-        const data = await response.json();
-        console.log("댓글 API 응답:", data);
-  
-        // 댓글 계층 구조 처리
-        const structuredComments = data.content.map((comment) => {
-          // 댓글 닉네임 기본값 설정
-          if (!comment.nickname) {
-            comment.nickname = generateNickname(comment.id);
-          }
-  
-          // 대댓글 닉네임 처리
-          if (comment.replies && Array.isArray(comment.replies)) {
-            comment.replies = comment.replies.map((reply) => {
-              if (!reply.nickname) {
-                reply.nickname = generateNickname(reply.id);
-              }
-              return reply;
-            });
-          }
-  
-          return comment;
-        });
-  
-        setComments(structuredComments); // 댓글 및 대댓글 갱신
-      } else {
-        console.error("댓글 데이터를 가져오는데 실패했습니다.");
-      }
-    } catch (error) {
-      console.error("댓글 데이터 요청 중 오류:", error);
     }
   };
-  
-  
-  // 닉네임 생성 함수
-  const generateNickname = (id) => {
-    const types = ["int", "short", "double", "char"];
-    const randomType = types[Math.floor(Math.random() * types.length)];
-    return `${randomType}${id}`;
-  };
+
+
 
   const handleToggleReply = (index) => {
     setReplyVisible((prev) => ({ ...prev, [index]: !prev[index] }));
@@ -493,6 +436,26 @@ const FreepostingPage = () => {
     }
   };
 
+  // handleScrap 함수 수정
+const handleScrap = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/free/${id}/scrap`, {
+      method: 'POST',
+      headers: getAuthHeaders(), // getAuthHeaders()로 인증 헤더 포함
+    });
+
+    if (response.ok) {
+      console.log('스크랩 요청 성공');
+      alert('스크랩이 완료되었습니다.'); // 스크랩 완료 팝업
+      navigate("/scrap"); // 요청 성공 후 스크랩 페이지로 이동
+    } else {
+      console.error('스크랩 요청 실패');
+    }
+  } catch (error) {
+    console.error('스크랩 요청 중 오류 발생:', error);
+  }
+};
+
   return (
     <div>
       <Header />
@@ -524,7 +487,7 @@ const FreepostingPage = () => {
           {/* 두 번째 이미지 */}
           <div
             className={styles["hover-image"]}
-            onClick={() => navigate("/scrap")}
+            onClick={handleScrap}
           >
             <img
               src={scrab}
