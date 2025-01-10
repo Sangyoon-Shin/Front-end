@@ -37,7 +37,7 @@ const QuestionboardPage = () => {
     const fetchPosts = async () => {
       setIsLoading(true); // 로딩 시작
       try {
-        const response = await axiosInstance.get('https://bcefb2d9d162.ngrok.app/api/board/quest', {
+        const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/quest', {
           params: { page, size }, // 페이지와 사이즈를 쿼리 파라미터로 추가
           headers: {
             'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
@@ -66,7 +66,7 @@ const QuestionboardPage = () => {
     // 좋아요 10개 이상 게시물 가져오기
     const fetchTopLikedPosts = async () => {
       try {
-        const response = await axiosInstance.get('https://bcefb2d9d162.ngrok.app/api/board/quest/top-liked', {
+        const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/quest/top-liked', {
           headers: {
             'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
           },
@@ -87,7 +87,7 @@ const QuestionboardPage = () => {
 
   const toggleScrap = async (id) => {
     try {
-      const response = await axiosInstance.post(`https://bcefb2d9d162.ngrok.app/api/board/quest/${id}/scrap`, {
+      const response = await axiosInstance.post(`https://3e319465b029.ngrok.app/api/board/quest/${id}/scrap`, {
         headers: {
           'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
         },
@@ -113,7 +113,7 @@ const QuestionboardPage = () => {
 
   const handleBoardChange = (boardName) => {
     if (boardName === '자유 게시판') {
-      navigate('/BoardPage/');
+      navigate('/FreeboardPage/');
     }
     setMenuOpen(false);  // 메뉴 닫기
   };
@@ -130,7 +130,7 @@ const QuestionboardPage = () => {
     if (searchTerm.trim() !== '') {
       try {
         console.log(`검색어: ${searchTerm}`);
-        const response = await axiosInstance.get('https://bcefb2d9d162.ngrok.app/api/board/quest', {
+        const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/quest', {
           params: {
             searchKeyword: searchTerm, // 검색어 전달
             page: 0,
@@ -158,7 +158,7 @@ const QuestionboardPage = () => {
   };
 
   const handlePostClick = (postId) => {
-    navigate(`/post/${postId}`);  // 해당 게시물 상세 페이지로 이동
+    navigate(`/QuestionpostingPage/${postId}`);  // 해당 게시물 상세 페이지로 이동
   };
 
 
@@ -181,7 +181,7 @@ const QuestionboardPage = () => {
         typeKeyword: '', // 필요 시 값 설정
       };
 
-      const response = await axiosInstance.get('https://bcefb2d9d162.ngrok.app/api/board/quest/sort-by-likes', {
+      const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/quest/sort-by-likes', {
         params,
         headers: {
           'ngrok-skip-browser-warning': 'true', // 필요 시 유지
@@ -245,7 +245,7 @@ const QuestionboardPage = () => {
           {/* 글쓰기 버튼 */}
           <button
             className={`${styles.writeButton} ${isDesktop ? styles.desktopWriteButton : ''}`}
-            onClick={() => navigate('/G_questionwritePage')} // 글쓰기 페이지로 이동
+            onClick={() => navigate('/QuestionwritePage')} // 글쓰기 페이지로 이동
           >
             글쓰기
           </button>

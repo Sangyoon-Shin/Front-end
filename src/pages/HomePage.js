@@ -81,7 +81,7 @@ const [error, setError] = useState(null);
   loadData();
   const fetchRooms = async () => {
     const userId = '202301641'; // 추후 삭제제
-    const baseUrl = 'https://a1de-61-84-64-212.ngrok-free.app';
+    const baseUrl = 'https://3e319465b029.ngrok.app';
     fetch(`${baseUrl}/Room/userId/${userId}`, {
         headers: {
             contentType: 'application/json',

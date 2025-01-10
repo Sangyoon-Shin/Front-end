@@ -51,7 +51,7 @@ const G_freeboardPage = () => {
     const fetchPosts = async () => {
       setIsLoading(true); // 로딩 시작
       try {
-        const response = await axiosInstance.get('https://d1a8-2406-5900-10f0-c886-9d73-494b-76e8-192d.ngrok-free.app/api/board/graduate', {
+        const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/graduate', {
           params: {
             page,
             size,
@@ -84,7 +84,7 @@ const G_freeboardPage = () => {
     // 좋아요 10개 이상 게시물 가져오기
     const fetchTopLikedPosts = async () => {
       try {
-        const response = await axiosInstance.get('https://d1a8-2406-5900-10f0-c886-9d73-494b-76e8-192d.ngrok-free.app/api/board/graduate/top-liked', {
+        const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/graduate/top-liked', {
           headers: {
             'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
           },
@@ -116,7 +116,7 @@ const G_freeboardPage = () => {
 
   const toggleScrap = async (id) => {
     try {
-      const response = await axiosInstance.post(`https://d1a8-2406-5900-10f0-c886-9d73-494b-76e8-192d.ngrok-free.app/api/board/graduate/${id}/scrap`, {
+      const response = await axiosInstance.post(`http://info-rmation.kro.kr/api/board/graduate/${id}/scrap`, {
         headers: {
           'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
         },
@@ -161,7 +161,7 @@ const G_freeboardPage = () => {
         graduateId: 'Quest',
       };
 
-      const response = await axiosInstance.get('https://d1a8-2406-5900-10f0-c886-9d73-494b-76e8-192d.ngrok-free.app/api/board/graduate/sort-by-likes', {
+      const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/graduate/sort-by-likes', {
         params,
         headers: {
           'ngrok-skip-browser-warning': 'true', // 필요 시 유지
@@ -190,7 +190,7 @@ const G_freeboardPage = () => {
     if (searchTerm.trim() !== '') {
       try {
         console.log(`검색어: ${searchTerm}`);
-        const response = await axiosInstance.get('https://d1a8-2406-5900-10f0-c886-9d73-494b-76e8-192d.ngrok-free.app/api/board/graduate', {
+        const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/graduate', {
           params: {
             searchKeyword: searchTerm, // 검색어 전달
             page: 0,

@@ -45,7 +45,7 @@ const Classroom = () => {
     useEffect(() => {
         const fetchRoomData = async () => {
             try {
-                const response = await fetch('https://bcefb2d9d162.ngrok.app/api/rooms/all2', {
+                const response = await fetch('https://3e319465b029.ngrok.app/api/rooms/all2', {
                     method: 'GET',
                     headers: {
                         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IjIwMjIwMTY1OSIsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzM1MTk1MjU3LCJleHAiOjE3Mzg0MzUyNTd9.swBkh1kaXDEzW04G04llXKt-hB2B8c1XvuXpjuQbv3o', // 실제 토큰으로 변경

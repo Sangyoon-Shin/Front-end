@@ -249,7 +249,7 @@ const BootBoardPage = () => {
                     {/* 글쓰기 버튼 */}
                     <button
                         className={`${styles.writeButton} ${isDesktop ? styles["desktopWriteButton"] : ''}`}
-                        onClick={() => navigate('/write')} // 글쓰기 페이지로 이동
+                        onClick={() => navigate('/BootCamp')} // 글쓰기 페이지로 이동
                     >
                         글쓰기
                     </button>

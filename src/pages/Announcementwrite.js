@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from "./FreewritePage.module.css";
-import main_mascot from '../images/대학 심볼 횃불이.png';
-import main_bell from '../images/bell.png';
-import main_message from '../images/message.png';
-import main_my from '../images/my.png';
 import arrow from '../images/arrow.png';
 import bar from '../images/bar.png';
 import Header from './_.js'; // 상단바 컴포넌트
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-
-
 
 // API에서 사용할 기본 URL과 헤더 설정
 const BASE_URL = 'http://info-rmation.kro.kr/api/board';
@@ -30,17 +24,15 @@ const getAuthHeaders = () => {
   };
 };
 
-const ContestWrite = () => {
+const Announcementwrite = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // 게시글 ID를 URL에서 가져옴 (수정 시 사용)
+  const { id } = useParams(); // URL에서 id를 가져옵니다.
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [hashtag, setHashtag] = useState('');
   const [files, setFiles] = useState(null);
   const [isEditing, setIsEditing] = useState(false); // 수정 모드 여부
-  const [images, setImages] = useState([]);  // 이미지 배열로 수정
-
 
   // 특정 게시글 데이터 가져오기 (수정 모드일 경우)
   useEffect(() => {
@@ -52,14 +44,14 @@ const ContestWrite = () => {
 
   const fetchPostData = async (postId) => {
     try {
-      const response = await axios.get(`${BASE_URL}/competition/update/${postId}`, {
+      const response = await axios.get(`${BASE_URL}/notice/update/${postId}`, {
         headers: { ...getAuthHeaders(), 'ngrok-skip-browser-warning': 1 },
       });
-      const { competitionTitle, competitionContents, competitionHashtag, competitionFile } = response.data;
-      setTitle(competitionTitle);
-      setContent(competitionContents);
-      setHashtag(competitionHashtag);
-      setFiles(competitionFile);
+      const { noticeTitle, noticeContents, noticeHashtag, noticeFile } = response.data;
+      setTitle(noticeTitle);
+      setContent(noticeContents);
+      setHashtag(noticeHashtag);
+      setFiles(noticeFile); // 파일을 불러오는 부분
     } catch (error) {
       console.error('Error fetching post data:', error);
       alert('게시글 정보를 불러오는 데 실패했습니다.');
@@ -72,30 +64,29 @@ const ContestWrite = () => {
 
   const handleSubmit = async () => {
     const formData = new FormData();
-    formData.append('competitionTitle', title);
-    formData.append('competitionContents', content);
-    formData.append('competitionHashtag', hashtag);
+    formData.append('noticeTitle', title);
+    formData.append('noticeContents', content);
+    formData.append('noticeHashtag', hashtag);
 
     // 파일이 있을 경우에만 추가
     if (files && files.length > 0) {
-      files.forEach((file) => formData.append('competitionFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
+      files.forEach((file) => formData.append('noticeFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
     }
 
-    
     // 수정모드일 때만 id 추가
     if (isEditing) {
       formData.append('id', id); // 수정 시에만 id 추가
     }
 
     try {
-      const url = isEditing ? `${BASE_URL}/competition/update` : `${BASE_URL}/competition/save`;
+      const url = isEditing ? `${BASE_URL}/notice/update` : `${BASE_URL}/notice/save`;
       const headers = { ...getAuthHeaders(), 'Content-Type': 'multipart/form-data' };
 
       const response = await axios.post(url, formData, { headers });
 
       if (response.status === 200) {
         alert('게시글이 성공적으로 처리되었습니다.');
-        navigate('/InformationContest'); // 게시글 목록 페이지로 이동
+        navigate('/Announcement'); // 게시글 목록 페이지로 이동
       } else {
         console.error('Failed to save or update data:', response.statusText);
         alert('게시글 처리 중 오류가 발생했습니다.');
@@ -106,13 +97,12 @@ const ContestWrite = () => {
     }
   };
 
-
   return (
     <div className={styles.app}>
       <Header />
 
       <img src={arrow} className={styles["app-arrow"]} alt="back_arrow" onClick={() => navigate(-1)} />
-      <h2 className={styles["title-text2"]}>{isEditing ? '게시글 수정' : '대회게시판 작성'}</h2>
+      <h2 className={styles["title-text2"]}>{isEditing ? '게시글 수정' : '공지사항 작성'}</h2>
 
       <img src={bar} className={styles["app-bar"]} alt="bar" />
 
@@ -150,8 +140,8 @@ const ContestWrite = () => {
 
       {/* 이미지 미리보기 */}
       <div className={styles["image-preview-container"]}>
-        {images.map((imgSrc, index) => (
-          <img key={index} src={imgSrc} alt={`미리보기 ${index + 1}`} className={styles["image-preview"]} />
+        {files && files.map((file, index) => (
+          <img key={index} src={URL.createObjectURL(file)} alt={`미리보기 ${index + 1}`} className={styles["image-preview"]} />
         ))}
       </div>
 
@@ -174,4 +164,4 @@ const ContestWrite = () => {
   );
 };
 
-export default ContestWrite;
+export default Announcementwrite;
