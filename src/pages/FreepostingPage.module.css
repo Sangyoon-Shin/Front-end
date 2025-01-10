@@ -370,6 +370,14 @@
   color: white;
 }
 
+.edit-button {
+  padding: 4px 5px;
+  cursor: pointer;
+  border: none;
+  background-color: #28a745;
+  color: white;
+}
+
 .delete-button:hover {
   background-color: #f5c6c6;
 }

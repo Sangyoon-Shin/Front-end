@@ -456,6 +456,29 @@ const handleScrap = async () => {
   }
 };
 
+const handleEdit = async () => {
+  try {
+    // API 요청 보내기
+    const response = await fetch(`${BASE_URL}/free/update/${id}`, {
+      method: "GET",
+      headers: getAuthHeaders(),
+    });
+
+    // 응답 처리
+    if (response.ok) {
+      const data = await response.json();
+      console.log("수정 가능한 데이터를 가져왔습니다:", data);
+
+      // 데이터를 활용해 수정 화면으로 이동하거나 상태 업데이트
+      // 예: navigate(`/edit/${id}`) 또는 수정 데이터 상태 업데이트
+    } else {
+      console.error("수정 데이터를 가져오지 못했습니다:", response.status);
+    }
+  } catch (error) {
+    console.error("수정 요청 중 오류가 발생했습니다:", error);
+  }
+};
+
   return (
     <div>
       <Header />
@@ -499,9 +522,9 @@ const handleScrap = async () => {
 
         <h2 className={styles["title-text4"]}>작성일 : {createdTime}</h2>
         <div className={styles["report"]}>
-          {/* <button onClick={handleEdit} className={styles["edit-button"]}>
+          <button onClick={handleEdit} className={styles["edit-button"]}>
           수정하기
-          </button> */}
+          </button>
           <button onClick={handleDelete} className={styles["delete-button"]}>
             삭제하기
           </button>
