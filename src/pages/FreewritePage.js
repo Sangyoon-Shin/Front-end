@@ -76,9 +76,15 @@ const FreewritePage = () => {
     formData.append('freeContents', content);
     formData.append('freeHashtag', hashtag);
 
+
     // 파일이 있을 경우에만 추가
     if (files && files.length > 0) {
       files.forEach((file) => formData.append('freeFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
+    }
+
+    // 수정모드일 때만 id 추가
+    if (isEditing) {
+      formData.append('id', id); // 수정 시에만 id 추가
     }
 
     try {
