@@ -257,7 +257,7 @@ const BootBoardPage = () => {
                     {/* 글쓰기 버튼 */}
                     <button
                         className={`${styles.writeButton} ${isDesktop ? styles["desktopWriteButton"] : ''}`}
-                        // 각 카테고리에 맞는 글쓰기 페이지로 이동하도록 변경함.
+                        // 각 카테고리에 맞는 글쓰기 페이지로 이동하도록 수정함.
                         onClick={() => {
                             const path = selectedCategory === '부트캠프'
                                 ? '/bootcamp'
