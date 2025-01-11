@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
 
 
 // Request interceptor to add JWT token to headers
-/*axiosInstance.interceptors.request.use(
+axiosInstance.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('jwtToken'); // 로컬 스토리지에서 토큰 가져오기
         
@@ -29,5 +29,5 @@ const axiosInstance = axios.create({
         return Promise.reject(error); // 요청 에러 처리
     }
 );
-*/
+
 export default axiosInstance;
