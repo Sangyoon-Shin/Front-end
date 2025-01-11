@@ -113,7 +113,7 @@ function App() {
 
           <Route path="/Makechat" element={<Makechat />} />
           <Route path="/Announcementwrite" element={<Announcementwrite />} />
-          <Route path="/Announcementposting" element={<Announcementposting />} />
+          <Route path="/Announcementposting/:id" element={<Announcementposting />} />
 
 
 
