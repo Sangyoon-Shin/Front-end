@@ -381,9 +381,9 @@ const InformationCode = () => {
                   className={styles.postTitle}
                   onClick={() => handlePostClick(post.id)} // 게시물 제목 클릭 시 상세 페이지로 이동
                 >
-                  {post.title}
+                  {post.codingTitle}
                 </span>
-                <span className={styles.postDate}>{post.date}</span>
+                <span className={styles.postDate}>{post.codingCreatedTime}</span>
               </div>
 
               {/* 스크랩 상태 아이콘 */}

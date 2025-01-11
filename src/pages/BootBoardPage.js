@@ -160,8 +160,16 @@ const BootBoardPage = () => {
     };
 
 
-    const handlePostClick = (postId) => {
-        navigate(`/BootBoard/${postId}`);  // 해당 게시물 상세 페이지로 이동
+    const handlePostClick = (postId) => { // 선택된 카테고리별로 네비게이트 다르게 하게 수정함.
+        if (selectedCategory === '부트캠프') {
+            navigate(`/BootBoard/${postId}`);  // 해당 게시물 상세 페이지로 이동
+        }
+        else if (selectedCategory === '스터디') {
+            navigate(`/StudyBoard/${postId}`);
+        }
+        else {
+            navigate(`/IndustryBoard/${postId}`);
+        }
     };
 
 
@@ -249,7 +257,15 @@ const BootBoardPage = () => {
                     {/* 글쓰기 버튼 */}
                     <button
                         className={`${styles.writeButton} ${isDesktop ? styles["desktopWriteButton"] : ''}`}
-                        onClick={() => navigate('/BootCamp')} // 글쓰기 페이지로 이동
+                        // 각 카테고리에 맞는 글쓰기 페이지로 이동하도록 변경함.
+                        onClick={() => {
+                            const path = selectedCategory === '부트캠프'
+                                ? '/bootcamp'
+                                : selectedCategory === '산업 연계'
+                                    ? '/industry'
+                                    : '/study';
+                            navigate(path); 
+                        }}
                     >
                         글쓰기
                     </button>

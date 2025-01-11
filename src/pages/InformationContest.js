@@ -37,7 +37,7 @@ const InformationContest = () => {
     const fetchPosts = async () => {
       setIsLoading(true); // 로딩 시작
       try {
-        const response = await fetch('https://3e319465b029.ngrok.app/api/board/competition', {// page와 size 추가
+        const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/competition', {// page와 size 추가
           params: { page, size }, // 페이지와 사이즈를 쿼리 파라미터로 추가
           headers: {
             'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
@@ -88,7 +88,7 @@ const InformationContest = () => {
 
   const toggleScrap = async (id) => {
     try {
-      const response = await axiosInstance.post(`https://3e319465b029.ngrok.app/api/board/free/${id}/competition`, {
+      const response = await axiosInstance.post(`https://bcefb2d9d162.ngrok.app/api/board/free/${id}/competition`, {
         headers: {
           'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
         },
@@ -270,7 +270,7 @@ const InformationContest = () => {
                   {post.competitionTitle || '제목 없음'} {/* 백엔드 데이터의 키에 맞춰 수정, 기본값 처리 */}
                 </span>
                 <span className={styles.postDate}>
-                  {post.competitionfreeCreatedTime
+                  {post.competitionCreatedTime
                     ? new Date(post.competitionCreatedTime).toLocaleDateString() // 작성 날짜 표시
                     : '날짜 없음'}
                 </span>
