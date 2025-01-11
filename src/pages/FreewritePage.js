@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import styles from "./FreewritePage.module.css";
+import styles from "./QuestionwritePage.module.css";
+import main_mascot from '../images/대학 심볼 횃불이.png';
+import main_bell from '../images/bell.png';
+import main_message from '../images/message.png';
+import main_my from '../images/my.png';
 import arrow from '../images/arrow.png';
 import bar from '../images/bar.png';
 import Header from './_.js'; // 상단바 컴포넌트
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+
+
 
 // API에서 사용할 기본 URL과 헤더 설정
 const BASE_URL = 'http://info-rmation.kro.kr/api/board';
@@ -24,15 +30,17 @@ const getAuthHeaders = () => {
   };
 };
 
-const FreewritePage = () => {
+const QuestionwritePage = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // URL에서 id를 가져옵니다.
+  const { id } = useParams(); // 게시글 ID를 URL에서 가져옴 (수정 시 사용)
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [hashtag, setHashtag] = useState('');
   const [files, setFiles] = useState(null);
   const [isEditing, setIsEditing] = useState(false); // 수정 모드 여부
+  const [images, setImages] = useState([]);  // 이미지 배열로 수정
+
 
   // 특정 게시글 데이터 가져오기 (수정 모드일 경우)
   useEffect(() => {
@@ -45,7 +53,7 @@ const FreewritePage = () => {
 
   const fetchPostData = async (postId) => {
     try {
-      const response = await axios.get(`${BASE_URL}/free/update/${postId}`, {
+      const response = await axios.get(`${BASE_URL}/quest/update/${postId}`, {
         headers: { ...getAuthHeaders(), 'ngrok-skip-browser-warning': 1 },
       });
       const { freeTitle, freeContents, freeHashtag, freeFile } = response.data;
@@ -77,7 +85,7 @@ const FreewritePage = () => {
     formData.append('freeHashtag', hashtag);
 
     if (files && files.length > 0) {
-      files.forEach((file) => formData.append('freeFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
+      files.forEach((file) => formData.append('questFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
     }
 
     console.log(id);
@@ -87,14 +95,14 @@ const FreewritePage = () => {
     console.log(files);
 
     try {
-      const url = isEditing ? `${BASE_URL}/free/update` : `${BASE_URL}/free/save`;
+      const url = isEditing ? `${BASE_URL}/quest/update` : `${BASE_URL}/quest/save`;
       const headers = { ...getAuthHeaders(), 'Content-Type': 'multipart/form-data' };
 
       const response = await axios.post(url, formData, { headers });
 
       if (response.status === 200) {
         alert('게시글이 성공적으로 처리되었습니다.');
-        navigate('/FreeboardPage'); // 게시글 목록 페이지로 이동
+        navigate('/QuestionboardPage'); // 게시글 목록 페이지로 이동
       } else {
         console.error('Failed to save or update data:', response.statusText);
         alert('게시글 처리 중 오류가 발생했습니다.');
@@ -104,6 +112,7 @@ const FreewritePage = () => {
       alert('요청 처리 중 문제가 발생했습니다.');
     }
   };
+
 
   return (
     <div className={styles.app}>
@@ -148,8 +157,8 @@ const FreewritePage = () => {
 
       {/* 이미지 미리보기 */}
       <div className={styles["image-preview-container"]}>
-        {files && files.map((file, index) => (
-          <img key={index} src={URL.createObjectURL(file)} alt={`미리보기 ${index + 1}`} className={styles["image-preview"]} />
+        {images.map((imgSrc, index) => (
+          <img key={index} src={imgSrc} alt={`미리보기 ${index + 1}`} className={styles["image-preview"]} />
         ))}
       </div>
 
@@ -172,4 +181,4 @@ const FreewritePage = () => {
   );
 };
 
-export default FreewritePage;
+export default QuestionwritePage;

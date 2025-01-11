@@ -1,95 +1,105 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
-import Header from './_.js';  // 상단바 컴포넌트
 import axiosInstance from '../utils/api';
-import styles from './FreeboardPage.module.css';  // BoardPage용 CSS 파일
+import Header from './_.js'; // 상단바 컴포넌트
+import styles from './FreeboardPage.module.css'; // BoardPage용 CSS 파일
 import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
 import DownMenu from '../images/아래방향메뉴선택.png';
-import SearchIcon from '../images/돋보기아이콘.png';  // 돋보기 아이콘
+import SearchIcon from '../images/돋보기아이콘.png'; // 돋보기 아이콘
 import IconScrap from '../images/횃불이스크랩.png';
 import IconUnscrap from '../images/횃불이스크랩X.png';
-
-// API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'http://info-rmation.kro.kr/';
-// 실제 Bearer 토큰을 코드에 하드코딩해서 사용
-const getAuthHeaders = () => {
-  // 실제 Bearer 토큰 값으로 수정
-  const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IjIwMjIwMTY1OSIsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzM1MjEwNTcxLCJleHAiOjE3Mzg0NTA1NzF9.AkO3lrnl3Kh86nWp04xs8LTE1EQbu1RGjfu8aV_3LPA";
-  const userId = localStorage.getItem('userId'); // 사용자 ID를 로컬스토리지에서 가져옴
-  return {
-    'Authorization': `Bearer ${accessToken}`,  // Bearer 토큰을 Authorization 헤더에 포함
-    'X-USER-ID': userId, // 사용자 ID를 X-USER-ID 헤더에 포함
-    'Content-Type': 'application/json',
-  };
-};
-
-
 
 const FreeboardPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);  // 드롭다운 상태 관리
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
   const [scrapStatus, setScrapStatus] = useState({}); // 각 게시물의 스크랩 상태 관리
+  const [topLikedPosts, setTopLikedPosts] = useState([]); // 좋아요 10개 이상 게시물
   const [posts, setPosts] = useState([]); // 게시물 목록 상태 관리
   const [sortType, setSortType] = useState('latest'); // 초기 정렬 상태는 'latest'
-  const navigate = useNavigate();  // useNavigate 훅을 컴포넌트 내부에서 호출
+  const [initialPosts, setInitialPosts] = useState([]); // 최초 데이터 로드한 거 저장시키기
+  
 
-  // 반응형 처리를 위한 useMediaQuery 사용
-  const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
+  // 페이징 및 추가 필터링 상태
+  const [page, setPage] = useState(0); // 현재 페이지 번호
+  const [size, setSize] = useState(10); // 페이지당 항목 수
+  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
+  const [hashtagKeyword, setHashtagKeyword] = useState(''); // 해시태그 필터
+  const [typeKeyword, setTypeKeyword] = useState(''); // 타입 필터
 
-  // 백엔드에서 게시물 목록 불러오기
+  // 로딩 상태 관리
+  const [isLoading, setIsLoading] = useState(false); // 데이터 로딩 상태
+
+  const navigate = useNavigate(); // useNavigate 훅을 컴포넌트 내부에서 호출
+  const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
+
+  // 게시물 목록을 가져오는 함수
   useEffect(() => {
-    // 페이지 로드 시 백엔드에서 게시물 목록을 불러옴
     const fetchPosts = async () => {
+      setIsLoading(true); // 로딩 시작
       try {
-        const accessToken = localStorage.getItem('accessToken'); 
-        const response = await fetch('http://info-rmation.kro.kr/api/board/free', { headers: { 'ngrok-skip-browser-warning': 1,'Authorization': `Bearer ${accessToken}` } });
-        if (!response.ok) {
-          throw new Error('게시물 목록을 불러오는데 실패했습니다.');
+        const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/free', {
+          params: { page, size }, // 페이지와 사이즈를 쿼리 파라미터로 추가
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+          },
+        });
+
+        const data = response.data; // Axios는 자동으로 JSON을 파싱합니다.
+
+        if (!data.content || data.content.length === 0) {
+          console.warn('게시물이 없습니다.');
+          setPosts([]); // 빈 데이터로 상태 초기화
+          return;
         }
-        // 'response.json()'으로 데이터를 받아옴
-        const data = await response.json(); // 여기가 수정된 부분입니다.
-        console.log(data);
-        setPosts(data.content);  // 게시물 목록 상태 업데이트
+
+        setPosts(data.content); // 게시물 데이터 설정
+        setInitialPosts(response.data.content); // 초기 데이터 저장
+        setTotalPages(data.totalPages); // 전체 페이지 수 설정
+        console.log('게시물 데이터:', data);
       } catch (error) {
         console.error('게시물 목록을 불러오는 중 오류가 발생했습니다:', error);
+        alert('게시물 데이터를 불러오는데 문제가 발생했습니다. 다시 시도해주세요.');
+      } finally {
+        setIsLoading(false); // 로딩 종료
+      }
+    };
+    // 좋아요 10개 이상 게시물 가져오기
+    const fetchTopLikedPosts = async () => {
+      try {
+        const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/free/top-liked', {
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+          },
+        });
+        if (response.status === 200) {
+          console.log(response)
+          setTopLikedPosts(response.data.map((post) => post.id)); // 좋아요 10개 이상 게시물의 ID만 저장
+        } else {
+          setTopLikedPosts([]); // 데이터가 없는 경우 빈 배열로 초기화
+        }
+      } catch (error) {
+        console.error('좋아요 상위 게시물을 불러오는 중 오류가 발생했습니다:', error);
       }
     };
     fetchPosts();
+    fetchTopLikedPosts();
+  }, [page, size]); // page와 size 변경 시 재호출
 
-  }, []);
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);  // 드롭다운 토글
-  };
-
-  const handleBoardChange = (boardName) => {
-    if (boardName === '질문 게시판') {
-      navigate('/QuestionboardPage/'); // 질문 게시판으로 이동
-    }
-    setMenuOpen(false);  // 메뉴 닫기
-  };
-
+  // 스크랩 토글 함수
   const toggleScrap = async (id) => {
-    // 스크랩 상태를 업데이트하는 요청을 보냄
     try {
-      const response = await fetch(`${BASE_URL}/free/scrap`, {
-        method: 'PATCH',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({
-          postId: id,
-          scrapStatus: !scrapStatus[id], // 새로운 스크랩 상태 전송
-        }),
+      const response = await axiosInstance.post(`https://bcefb2d9d162.ngrok.app/api/board/free/${id}/scrap`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+        },
+
       });
 
-      if (!response.ok) {
-        throw new Error('스크랩 상태 업데이트에 실패했습니다.');
-      }
-
-      // 서버 응답이 성공적일 경우 상태 업데이트
+      // 성공적으로 응답을 받은 경우 상태를 업데이트
       setScrapStatus((prevState) => ({
         ...prevState,
-        [id]: !prevState[id], // 기존 스크랩 상태를 반전
+        [id]: !prevState[id], // 현재 상태를 토글
       }));
 
       console.log('스크랩 상태가 성공적으로 업데이트되었습니다.');
@@ -99,123 +109,131 @@ const FreeboardPage = () => {
     }
   };
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value); // 검색어 상태 업데이트
-  };
 
-  // 검색 버튼을 클릭했을 때 호출되는 함수
+  // 검색 입력값을 변경하는 함수
   const handleSearch = async () => {
     console.log('검색 버튼 클릭됨');
-    const accessToken = localStorage.getItem('accessToken'); 
     if (searchTerm.trim() !== '') {
       try {
-        const baseUrl = new URL('http://info-rmation.kro.kr/api/board/free');
-        baseUrl.searchParams.append('searchKeyword', searchTerm);
-        baseUrl.searchParams.append('page', '0');
-        baseUrl.searchParams.append('size', '10');
-  
         console.log(`검색어: ${searchTerm}`);
-        const response = await fetch(baseUrl.toString(), {
-      
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'ngrok-skip-browser-warning': 1, // ngrok 관련 헤더 추가
+        const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/free', {
+          params: {
+            searchKeyword: searchTerm, // 검색어 전달
+            page: 0,
+            size: 10,
           },
-          method:'get'
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
+          },
         });
 
-        if (!response.ok) {
-          throw new Error(`서버 응답 오류: ${response.status}`);
-        }
-        
-        const data = await response.json();
+        const data = response.data;
         console.log('검색 결과:', data);
+
         // 검색 결과를 게시물 목록으로 업데이트 (명세서에 따른 구조 반영)
-        setPosts(data.content); // 'content' 필드가 검색 결과로 가정        
+        setPosts(data.content); // 'content' 필드가 검색 결과로 가정
+
         alert('검색이 완료되었습니다. 결과가 화면에 표시됩니다.');
       } catch (error) {
         console.error('검색 결과를 불러오는 중 오류가 발생했습니다:', error);
-        if (error.message.includes('Unexpected token')) {
-          alert('서버에서 올바른 데이터를 반환하지 않았습니다. 서버 로그를 확인하세요.');
-        } else {
-          alert('검색 결과를 불러오는 중 오류가 발생했습니다.');
-        }
+        alert('검색 결과를 불러오는 중 오류가 발생했습니다.');
       }
     } else {
       alert('검색어를 입력해주세요.');
     }
   };
 
-
-
-  const handlePostClick = (postId) => {
-    navigate(`/FreepostingPage/${postId}`);  // 해당 게시물 상세 페이지로 이동
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value); // 검색어 상태 업데이트
   };
 
-  // 정렬 버튼 클릭 시 정렬 상태 업데이트
-  // 정렬 버튼 클릭 시 정렬 상태 업데이트
-  const handleSort = (type) => {
-    setSortType(type);
+  // 정렬 버튼 클릭 시 호출
+  const handleSort = async (type) => {
+    setSortType(type); // 정렬 상태 업데이트
 
-    let sortedPosts;
     if (type === 'latest') {
-      // 최신순으로 정렬: 먼저 HOT 1~3개를 최신순으로, 나머지 최신순으로 정렬
-      sortedPosts = [...posts]
-        .filter((post) => post.freeLike >= 10)  // HOT 게시물 필터링 (좋아요 10개 이상)
-        .sort((a, b) => new Date(b.freeCreatedTime) - new Date(a.freeCreatedTime)); // 최신순으로 정렬
+      setPosts(initialPosts); // 초기 데이터로 복원
+      return;
+    }
 
-      // HOT 게시물 1개 또는 3개만 보여주기
-      const topHotPosts = sortedPosts.slice(0, 3);  // 상위 3개만 표시
+    try {
+      const params = {
+        page: 0,
+        size: 10,
+        searchKeyword: '', // 필요 시 값 설정
+        contentKeyword: '', // 필요 시 값 설정
+        hashtagKeyword: '', // 필요 시 값 설정
+        typeKeyword: '', // 필요 시 값 설정
+      };
 
-      const nonHotPosts = [...posts]
-        .filter((post) => post.freeLike < 10)  // HOT이 아닌 게시물 필터링
-        .sort((a, b) => new Date(b.freeCreatedTime) - new Date(a.freeCreatedTime)); // 최신순으로 정렬
+      const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/free/sort-by-likes', {
+        params,
+        headers: {
+          'ngrok-skip-browser-warning': 'true', // 필요 시 유지
+        },
+      });
 
-      setPosts([...topHotPosts, ...nonHotPosts]); // HOT 게시물(최대 3개) + 나머지 게시물 최신순으로 결합
-    } else if (type === 'recommend') {
-      // 추천순으로 정렬: 먼저 HOT 1~3개를 추천순으로, 나머지 추천순으로 정렬
-      sortedPosts = [...posts]
-        .filter((post) => post.freeLike >= 10)  // HOT 게시물 필터링 (좋아요 10개 이상)
-        .sort((a, b) => b.freeLike - a.freeLike); // 좋아요 순으로 정렬
+      const data = response.data;
 
-      // HOT 게시물 1개 또는 3개만 보여주기
-      const topHotPosts = sortedPosts.slice(0, 3);  // 상위 3개만 표시
+      if (!data || !data.content) {
+        throw new Error('API 응답이 올바르지 않습니다.');
+      }
 
-      const nonHotPosts = [...posts]
-        .filter((post) => post.freeLike < 10)  // HOT이 아닌 게시물 필터링
-        .sort((a, b) => b.freeLike - a.freeLike); // 좋아요 순으로 정렬
-
-      setPosts([...topHotPosts, ...nonHotPosts]); // HOT 게시물(최대 3개) + 나머지 게시물 추천순으로 결합
+      setPosts(data.content); // 정렬된 데이터로 게시물 목록 업데이트
+    } catch (error) {
+      console.error('정렬 데이터 로드 중 오류 발생:', error);
+      alert('정렬된 데이터를 가져오는 중 오류가 발생했습니다.');
     }
   };
 
+
+  const toggleMenu = () => {
+    setMenuOpen((prevMenuOpen) => !prevMenuOpen); // 드롭다운 메뉴 열기/닫기 토글
+  };
+
+  const handleBoardChange = (boardName) => {
+    if (boardName === '질문 게시판') {
+      navigate('/QuestionBoardPage/'); // 질문 게시판으로 이동
+    }
+    setMenuOpen(false); // 메뉴 닫기
+  };
+
+
+
+  const handlePostClick = (postId) => {
+    navigate(`/FreepostingPage/${postId}`); // 해당 게시물 상세 페이지로 이동
+  };
 
   return (
     <div className={styles.container}>
       <Header />
       <div className={styles.content}>
         <div className={`${styles.titleContainer} ${isDesktop ? styles.desktopTitleContainer : ''}`}>
+          {/* 왼쪽 나가기 버튼 */}
           <img
             src={CommunicationRoom_goBack}
-            className={`${styles.goBackButton} ${isDesktop ? styles.desktopGoBackButton : ''}`}
+            className={`${styles.goBackButton} ${isDesktop ? styles["desktopGoBackButton"] : ''}`}
             alt="뒤로가기"
-            onClick={() => navigate(-1)}  /* 뒤로 가기 동작 추가 */
+            onClick={() => navigate(-1)} /* 뒤로 가기 동작 추가 */
           />
-          <h1 className={`${styles.pageTitle} ${isDesktop ? styles.desktopPageTitle : ''}`}>자유 게시판</h1>
+          {/* 페이지 타이틀 */}
+          <h1 className={`${styles.pageTitle} ${isDesktop ? styles["desktopPageTitle"] : ''}`}>
+            자유 게시판
+          </h1>
+          {/* 드롭다운 버튼 */}
           <img
             src={DownMenu}
-            className={`${styles.downMenuButton} ${isDesktop ? styles.desktopDownMenuButton : ''}`}
+            className={`${styles.downMenuButton} ${isDesktop ? styles["desktopDownMenuButton"]: ''}`}
             alt="게시판 선택"
             onClick={toggleMenu}
           />
         </div>
 
+        {/* 드롭다운 메뉴 */}
         {menuOpen && (
-          <div
-            className={`${styles.dropdownMenu} ${isDesktop ? styles.desktopDropdownMenu : ''}`}
-          >
+          <div className={`${styles.dropdownMenu} ${isDesktop ? styles.desktopDropdownMenu : ''}`}>
             <div
-              className={`${styles.menuItem} ${isDesktop ? styles.desktopMenuItem : ''}`}
+              className={`${styles.menuItem} ${isDesktop ? styles["desktopMenuItem"] : ''}`}
               onClick={() => handleBoardChange('질문 게시판')}
             >
               질문 게시판
@@ -223,18 +241,21 @@ const FreeboardPage = () => {
           </div>
         )}
 
-        <div className={`${styles.controlPanel} ${isDesktop ? styles.desktopControlPanel : ''}`}>
+        {/* 컨트롤 패널 */}
+        <div className={`${styles.controlPanel} ${isDesktop ? styles["desktopControlPanel"] : ''}`}>
+          {/* 글쓰기 버튼 */}
           <button
-            className={`${styles.writeButton} ${isDesktop ? styles.desktopWriteButton : ''}`}
-            onClick={() => navigate('/FreewritePage')}
+            className={`${styles.writeButton} ${isDesktop ? styles["desktopWriteButton"]: ''}`}
+            onClick={() => navigate('/freewritePage')} // 글쓰기 페이지로 이동
           >
             글쓰기
           </button>
 
+          {/* 검색창 */}
           <div className={`${styles.searchBar} ${isDesktop ? styles.desktopSearchBar : ''}`}>
             <input
               type="text"
-              value={searchTerm}
+              value={searchTerm} // 상태에서 가져온 검색 키워드
               onChange={handleSearchChange} // 기존 함수명을 새 함수명으로 교체
               className={`${styles.searchInput} ${isDesktop ? styles.desktopSearchInput : ''}`}
               placeholder="검색어 입력"
@@ -243,65 +264,81 @@ const FreeboardPage = () => {
               src={SearchIcon}
               className={`${styles.searchIcon} ${isDesktop ? styles.desktopSearchIcon : ''}`}
               alt="검색"
-              onClick={handleSearch}
+              onClick={handleSearch} // 검색 버튼 클릭 시 호출
             />
           </div>
 
+          {/* 정렬 버튼들 */}
           <div className={`${styles.sortButtons} ${isDesktop ? styles.desktopSortButtons : ''}`}>
             <button
-              className={`${styles.sortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''}`}
-              onClick={() => handleSort('latest')}
+              className={`${styles.latestSortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''} ${sortType === 'latest' ? styles.activeSortButton : ''}`}
+              onClick={() => handleSort('latest')} // handleSort 함수 호출
             >
               최신순
             </button>
+
+            {/* 추천순 정렬 버튼 */}
             <button
-              className={`${styles.sortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''}`}
-              onClick={() => handleSort('recommend')}
+              className={`${styles.recommendSortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''} ${sortType === 'recommend' ? styles.activeSortButton : ''}`}
+              onClick={() => handleSort('recommend')} // handleSort 함수 호출
             >
               추천순
             </button>
           </div>
         </div>
 
+        {/* 게시물 목록 */}
         <div className={styles.postList}>
-          {posts.map((post) => (
+        {posts.map((post) => (
             <div key={post.id} className={styles.postItem}>
-              {post.freeLike >= 10 && <span className={styles.hotTag}>HOT</span>} {/* 좋아요가 10개 이상일 때 HOT 태그 표시 */}
+              {/* HOT 표시 (좋아요 10개 이상 게시물) */}
+              {topLikedPosts.includes(post.id) && (
+                <span className={styles.hotTag}>HOT</span>
+              )}
+
+              {/* 게시물 제목 및 정보 */}
               <div className={styles.postInfo}>
                 <span
                   className={styles.postTitle}
-                  onClick={() => handlePostClick(post.id)}
+                  onClick={() => handlePostClick(post.id)} // 게시물 제목 클릭 시 상세 페이지로 이동
                 >
-                  {post.freeTitle}
+                  {post.freeTitle || '제목 없음'} {/* 백엔드 데이터의 키에 맞춰 수정, 기본값 처리 */}
                 </span>
-                <span className={styles.postDate}>{post.freeCreatedTime.slice(0, 10)}</span>
+                <span className={styles.postDate}>
+                  {post.freeCreatedTime
+                    ? new Date(post.freeCreatedTime).toLocaleDateString() // 작성 날짜 표시
+                    : '날짜 없음'}
+                </span>
               </div>
+
+              {/* 스크랩 상태 아이콘 */}
               <img
                 src={scrapStatus[post.id] ? IconScrap : IconUnscrap}
                 alt={scrapStatus[post.id] ? '스크랩됨' : '스크랩안됨'}
                 className={styles.scrapIcon}
-                onClick={() => toggleScrap(post.id)}
+                onClick={() => toggleScrap(post.id)} // 스크랩 상태 변경 및 백엔드 전송
               />
             </div>
           ))}
         </div>
 
-
-
+        {/* 페이지네이션 */}
         <div className={styles.pagination}>
-          {[1, 2, 3, 4, 5].map((pageNumber) => (
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
             <button
               key={pageNumber}
-              className={styles.pageButton}
-              onClick={() => navigate(`/board/page/${pageNumber}`)}
+              className={`${styles.pageButton} ${page === pageNumber - 1 ? styles.activePageButton : ''}`} // 현재 페이지 강조
+              onClick={() => setPage(pageNumber - 1)} // 페이지 번호 업데이트
             >
               {pageNumber}
             </button>
           ))}
         </div>
+
       </div>
     </div>
   );
 };
+
 
 export default FreeboardPage;
