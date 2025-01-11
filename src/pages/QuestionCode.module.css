@@ -258,7 +258,7 @@
       
       .languageButton {
         padding: 10px 20px;
-        background-color: #f0f0f0;
+        background-color: #73B3E3;
         border: 1px solid #ccc;
         border-radius: 5px;
         cursor: pointer;
@@ -273,7 +273,7 @@
       }
       
       .activeLanguageButton {
-        background-color: #73B3E3;
+        background-color: #0056b3;
         color: white;
         border: none;
       }

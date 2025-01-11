@@ -40,6 +40,7 @@ const FreewritePage = () => {
       setIsEditing(true);
       fetchPostData(id);
     }
+
   }, [id]);
 
   const fetchPostData = async (postId) => {
@@ -52,6 +53,7 @@ const FreewritePage = () => {
       setContent(freeContents);
       setHashtag(freeHashtag);
       setFiles(freeFile); // 파일을 불러오는 부분
+
     } catch (error) {
       console.error('Error fetching post data:', error);
       alert('게시글 정보를 불러오는 데 실패했습니다.');
@@ -64,19 +66,25 @@ const FreewritePage = () => {
 
   const handleSubmit = async () => {
     const formData = new FormData();
+
+    // 수정모드일 때만 id 추가
+    if (isEditing) {
+      formData.append('Id', id); // 수정 시에만 id 추가
+      console.log("들어가냐?")
+    }
     formData.append('freeTitle', title);
     formData.append('freeContents', content);
     formData.append('freeHashtag', hashtag);
 
-    // 파일이 있을 경우에만 추가
     if (files && files.length > 0) {
       files.forEach((file) => formData.append('freeFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
     }
 
-    // 수정모드일 때만 id 추가
-    if (isEditing) {
-      formData.append('id', id); // 수정 시에만 id 추가
-    }
+    console.log(id);
+    console.log(title);
+    console.log(content);
+    console.log(hashtag);
+    console.log(files);
 
     try {
       const url = isEditing ? `${BASE_URL}/free/update` : `${BASE_URL}/free/save`;
