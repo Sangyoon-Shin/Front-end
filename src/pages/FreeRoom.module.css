@@ -65,7 +65,9 @@
   border-radius: 10px;
   cursor: pointer;
   overflow-y: auto;
+  margin-left: 4%;
   
+  width: 94%;
 }
 
 /*
@@ -487,6 +489,7 @@ h2 {
     width: 100%; 
   }
 
+
   .searchContainer { 
     width: 90%;
     
@@ -587,6 +590,16 @@ h2 {
     
     width: 100%; 
   }
+
+  .joinButton {
+    margin-top: 3%;
+  }
+
+  .roomItem {
+  overflow-x: hidden;
+    width: 91%;
+  }
+
 
   .container {
     padding: 5%;

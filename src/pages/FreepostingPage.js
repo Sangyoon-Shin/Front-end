@@ -13,7 +13,7 @@ import bar from '../images/bar.png';
 import Header from './_.js';  // 상단바 컴포넌트
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'http://info-rmation.kro.kr/api/board';
+const BASE_URL = 'https://3e319465b029.ngrok.app/api/board';
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
   const userId = localStorage.getItem('userId'); // 이 부분이 사용자 ID를 가져옵니다.
@@ -26,6 +26,8 @@ const getAuthHeaders = () => {
     'ngrok-skip-browser-warning': 1
   };
 };
+
+
 
 const FreepostingPage = () => {
   const navigate = useNavigate();
@@ -40,50 +42,82 @@ const FreepostingPage = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [replyVisible, setReplyVisible] = useState(''); // 신고 내용 저장
   const [title, setTitle] = useState('');
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-  const day = String(currentDate.getDate()).padStart(2, '0');
-  const formattedDate = `${year}.${month}.${day}`;
+  const [createdTime, setCreatedTime] = useState('');
   const [reportContent, setReportContent] = useState('');
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const handleBackClick = () => navigate(-1);
   const { id } = useParams();
+  const [imageUrls, setImageUrls] = useState([]); // 이미지 URL 상태 추가
+  const [anonymousId, setAnonymousId] = useState('');
 
-  const organizeComments = (data) => {
-    const commentMap = {};
-  
-    // 댓글 데이터를 Map으로 정리
-    data.forEach((comment) => {
-      commentMap[comment.id] = { ...comment, replies: [] };
-    });
-  
-    // 댓글과 대댓글 연결
-    const structuredComments = [];
-    data.forEach((comment) => {
-      if (comment.parentCommentId === null) {
-        // 최상위 댓글
-        structuredComments.push(commentMap[comment.id]);
-      } else {
-        // 대댓글
-        const parent = commentMap[comment.parentCommentId];
-        if (parent) {
-          parent.replies.push(commentMap[comment.id]);
-        }
-      }
-    });
-  
-    return structuredComments;
-  };
-  
 
+  // 게시판 데이터 불러오기 useEffect
   useEffect(() => {
-    if (!nickname) {
-      const types = ['int', 'short', 'double', 'char'];
-      const randomType = types[Math.floor(Math.random() * types.length)];
-      setNickname(randomType);
+    const getBoard = async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      console.log(id);
+
+      try {
+        const response = await fetch(`${BASE_URL}/free/${id}`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'ngrok-skip-browser-warning': 1,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('게시글 데이터:', data);
+
+          // freeCreatedTime 변환
+          const formattedDate = new Date(data.freeCreatedTime).toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+
+          // 상태 업데이트
+          setContent(data.freeContents);
+          setTitle(data.freeTitle);
+          setImageUrls(data.imageUrls || []); // imageUrls 상태 업데이트
+          setCreatedTime(formattedDate); // 작성 시간 상태 업데이트
+        } else {
+          console.error('게시판 데이터 불러오기에 실패했습니다.');
+        }
+      } catch (error) {
+        console.error('게시판 데이터 불러오는 중 오류 발생:', error);
+      }
+    };
+
+    getBoard();
+  }, [id]);
+
+  const handleContentChange = (e) => {
+    setContent(e.target.value);
+  };
+
+  const handleCommentChange = (e) => {
+    setCommentContent(e.target.value);
+  };
+
+
+
+  const handleReplyChange = (index, e) => {
+    const newReplyContents = [...replyContents];
+    newReplyContents[index] = e.target.value; // 현재 입력값 저장
+    setReplyContents(newReplyContents); // 상태 업데이트
+  };
+
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      console.log("선택된 파일:", file);
+      // 파일 업로드 혹은 미리보기 로직 처리
     }
-  }, [nickname]);
+  };
 
   useEffect(() => {
     const fetchHeartStatus = async () => {
@@ -105,121 +139,129 @@ const FreepostingPage = () => {
     };
 
     fetchHeartStatus();
-  }, [id]);  
+  }, [id]);
 
-  useEffect(() => { // 댓글 불러오기
+  // 닉네임 생성 함수
+  const generateNickname = (id) => {
+    const types = ["int", "short", "double", "char"];
+    const randomType = types[Math.floor(Math.random() * types.length)];
+    return `${randomType}${id}`;
+  };
+
+  useEffect(() => {
+    if (!nickname) {
+      const types = ['int', 'short', 'double', 'char'];
+      const randomType = types[Math.floor(Math.random() * types.length)];
+      setNickname(randomType);
+    }
+  }, [nickname]);
+
+  // 댓글 및 대댓글을 계층 구조로 정리하는 함수
+  const organizeComments = (comments) => {
+    const commentMap = {};  // 댓글을 id별로 매핑하기 위한 객체
+    const nicknameMap = {};  // anonymousId에 따른 닉네임 매핑 객체
+    const structuredComments = [];  // 최종적으로 계층 구조로 정리된 댓글 배열
+
+    // 댓글을 매핑 객체에 추가
+    comments.forEach((comment) => {
+      // anonymousId에 따른 닉네임 매핑
+      const { anonymousId } = comment;
+      if (!nicknameMap[anonymousId]) {
+        nicknameMap[anonymousId] = generateNickname(Object.keys(nicknameMap).length);
+      }
+      comment.nickname = nicknameMap[anonymousId];
+
+      // 댓글에 빈 replies 배열 추가
+      commentMap[comment.id] = { ...comment, replies: [] };
+    });
+
+    // 댓글 계층 구조 구성
+    comments.forEach((comment) => {
+      if (comment.parentCommentId) {
+        // 부모 댓글이 있는 경우, 해당 댓글의 replies에 대댓글 추가
+        if (commentMap[comment.parentCommentId]) {
+          commentMap[comment.parentCommentId].replies.push(commentMap[comment.id]);
+        }
+      } else {
+        // 부모 댓글이 없는 경우(즉, 댓글인 경우) 최상위 댓글 배열에 추가
+        structuredComments.push(commentMap[comment.id]);
+      }
+    });
+
+    return structuredComments;
+  };
+
+  // 댓글 불러오기 useEffect
+  useEffect(() => {
     const fetchComments = async () => {
       try {
         const response = await fetch(`${BASE_URL}/free/${id}/comments`, {
-          method: 'GET',
+          method: "GET",
           headers: getAuthHeaders(),
         });
-  
+
         if (response.ok) {
           const data = await response.json();
-          console.log('댓글 API 응답 데이터:', data);
-  
-          if (data && Array.isArray(data.content)) {
-            const structuredData = organizeComments(data.content);
-            setComments(structuredData);
-          } else {
-            console.error('댓글 데이터 형식이 올바르지 않습니다.', data);
-            setComments([]);
-          }
+          console.log("댓글 API 응답:", data);
+
+          // 댓글과 대댓글을 계층 구조로 정리
+          const structuredComments = organizeComments(data.content);
+          setComments(structuredComments); // 댓글 및 대댓글 갱신
         } else {
-          console.error('댓글 불러오기에 실패했습니다.');
+          console.error("댓글 데이터를 가져오는데 실패했습니다.");
         }
       } catch (error) {
-        console.error('댓글 불러오는 중 오류 발생:', error);
+        console.error("댓글 데이터 요청 중 오류:", error);
       }
     };
-  
-    fetchComments();
 
-    const getBoard = async () => {
-      const accessToken = localStorage.getItem('accessToken');
-      console.log(id);
-      fetch(`http://info-rmation.kro.kr/api/board/free/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'ngrok-skip-browser-warning': 1
-        }
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          setContent(data.freeContents);
-          setTitle(data.freeTitle);
-        });
-    };
-    getBoard();
+    fetchComments();
   }, [id]);
 
-  const handleContentChange = (e) => {
-    setContent(e.target.value);
-  };
-
-  const handleCommentChange = (e) => {
-    setCommentContent(e.target.value);
-  };
-
-  const handleReplyChange = (index, e) => {
-    const newReplyContents = [...replyContents];
-    newReplyContents[index] = e.target.value; // 현재 입력값 저장
-    setReplyContents(newReplyContents); // 상태 업데이트
-  };
-  
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      console.log("선택된 파일:", file);
-      // 파일 업로드 혹은 미리보기 로직 처리
-    }
-  };
 
   // 댓글 추가 핸들러
   const handleAddComment = async () => {
     if (commentContent.trim() !== '') {
       const newNicknameCount = { ...nicknameCount };
-      newNicknameCount[nickname] += 1;
+      newNicknameCount[nickname] = (newNicknameCount[nickname] || 0) + 1;
       setNicknameCount(newNicknameCount);
-  
-      // 랜덤으로 anonymousId 값 설정
-      let anonymousId = localStorage.getItem('anonymousId');
-      
+
+      const localStorageKey = `anonymousId_${id}`;
+      let anonymousId = localStorage.getItem(localStorageKey);
+
       if (!anonymousId) {
         // 'char', 'int', 'short', 'double' 중 하나를 랜덤으로 선택
         const idOptions = ['char', 'int', 'short', 'double'];
         anonymousId = idOptions[Math.floor(Math.random() * idOptions.length)];
-  
-        // 선택된 anonymousId를 localStorage에 저장하여 고정
-        localStorage.setItem('anonymousId', anonymousId);
+
+        // 생성된 anonymousId를 localStorage에 저장
+        localStorage.setItem(localStorageKey, anonymousId);
       }
-  
+
       const newComment = {
         nickname: `${nickname}${newNicknameCount[nickname]}`,
-        content: commentContent,  // 댓글 내용 추가
+        content: commentContent,
         replies: [],
+        anonymousId: anonymousId, // anonymousId를 추가하여 서버로 전송
       };
-  
+
       try {
         const response = await fetch(`${BASE_URL}/free/${id}/comments/add?content=${encodeURIComponent(commentContent)}&anonymousId=${encodeURIComponent(anonymousId)}`, {
           method: 'POST',
           headers: getAuthHeaders(),
-          body: JSON.stringify(newComment), // 댓글 내용은 본문에 포함
+          body: JSON.stringify(newComment),
         });
-  
+
         if (response.ok) {
-          const savedComment = await response.json();  // 서버에서 저장된 댓글 데이터 반환
-          
+          const savedComment = await response.json(); // 서버에서 저장된 댓글 데이터 반환
+
           // savedComment에 nickname 정보가 없으면 newComment에서 가져와 병합
           const mergedComment = { ...savedComment, nickname: newComment.nickname };
-  
-          // 댓글 목록에 추가
-          setComments((prevComments) => [...prevComments, mergedComment]);  // 상태 업데이트
+
+          setComments((prevComments) => [...prevComments, mergedComment]);
           setNicknameCount((prev) => ({ ...prev, [nickname]: prev[nickname] }));
-          setCommentContent('');  // 입력 필드 초기화
+          window.location.reload(); // 페이지 새로 고침
+          setCommentContent(''); // 입력 필드 초기화
         } else {
           console.error('댓글 추가에 실패했습니다.');
         }
@@ -231,58 +273,73 @@ const FreepostingPage = () => {
 
   // 대댓글 추가 핸들러
   const handleAddReply = async (index) => {
-    const replyContent = replyContents[index]; // 현재 입력된 대댓글 내용 가져오기
-  
-    if (!replyContent || replyContent.trim().length === 0) {
-      alert("대댓글 내용을 입력하세요."); // 빈값 입력 방지
-      return;
-    }
-  
-    const newReply = {
-      content: replyContent.trim(),
-      parentCommentId: comments[index]?.id, // 상위 댓글의 ID
-      targetType: "free",
-      targetId: id, // 게시물 ID
-    };
-  
-    console.log("전송 데이터:", newReply); // 디버깅용 로그
-  
-    try {
-      const response = await fetch(`${BASE_URL}/free/${id}/comments/add`, {
-        method: "POST",
-        headers: getAuthHeaders(),
-        body: JSON.stringify(newReply),
-      });
-  
-      if (response.ok) {
-        const savedReply = await response.json();
-        console.log("저장된 대댓글:", savedReply);
-  
-        // 상태 업데이트
-        setComments((prevComments) =>
-          prevComments.map((comment, commentIndex) =>
-            commentIndex === index
-              ? { ...comment, replies: [...(comment.replies || []), savedReply] }
-              : comment
-          )
-        );
-  
-        // 입력 필드 초기화
-        const newReplyContents = [...replyContents];
-        newReplyContents[index] = ""; // 초기화
-        setReplyContents(newReplyContents);
-      } else {
-        console.log('댓글 목록:', comments);
-        console.log('댓글 id 확인:', comments[index]?.id); // 부모 댓글 ID 확인
-        console.log("전송 데이터:", newReply); // 디버깅용 로그
+    if (replyContents[index]?.trim() !== '') {
+      const updatedComments = [...comments];
 
-        console.error("대댓글 추가에 실패했습니다.");
+      const newNicknameCount = { ...nicknameCount };
+      newNicknameCount[nickname] = (newNicknameCount[nickname] || 0) + 1;
+      setNicknameCount(newNicknameCount);
+
+      const localStorageKey = `anonymousId_${id}`;
+      let anonymousId = localStorage.getItem(localStorageKey);
+
+      if (!anonymousId) {
+        const idOptions = ['char', 'int', 'short', 'double'];
+        anonymousId = idOptions[Math.floor(Math.random() * idOptions.length)];
+
+        localStorage.setItem(localStorageKey, anonymousId);
       }
-    } catch (error) {
-      console.error("대댓글 추가 중 오류 발생:", error);
+
+      const parentCommentId = comments[index]?.id;
+      if (!parentCommentId) {
+        console.error('부모 댓글 ID가 없습니다.');
+        return;
+      }
+
+      const content = replyContents[index];
+      const replyNickname = `${nickname}${newNicknameCount[nickname]}`;
+
+      const newReply = {
+        nickname: replyNickname,
+        content,
+        anonymousId, // anonymousId 추가
+      };
+
+      try {
+        const response = await fetch(
+          `${BASE_URL}/free/${id}/comments/add?parentCommentId=${parentCommentId}&content=${encodeURIComponent(content)}&anonymousId=${encodeURIComponent(anonymousId)}`,
+          {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(newReply),
+          }
+        );
+
+        if (response.ok) {
+          const savedReply = await response.json();
+
+          if (!updatedComments[index].replies) {
+            updatedComments[index].replies = [];
+          }
+          updatedComments[index].replies.push(savedReply);
+          setComments(updatedComments);
+
+          const newReplyContents = [...replyContents];
+          newReplyContents[index] = '';
+          setReplyContents(newReplyContents);
+          setReplyVisible((prev) => ({ ...prev, [index]: false }));
+          window.location.reload(); // 페이지 새로 고침
+
+        } else {
+          console.error('대댓글 추가에 실패했습니다.');
+        }
+      } catch (error) {
+        console.error('대댓글 추가 중 오류 발생:', error);
+      }
     }
   };
-  
+
+
 
   const handleToggleReply = (index) => {
     setReplyVisible((prev) => ({ ...prev, [index]: !prev[index] }));
@@ -348,6 +405,82 @@ const FreepostingPage = () => {
     }
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
+      return;
+    }
+
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await fetch(`${BASE_URL}/free/delete/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'ngrok-skip-browser-warning': 1
+        },
+      });
+
+      if (response.ok) {
+        alert("게시글이 삭제되었습니다.");
+        // 삭제 후 원하는 동작 수행 (예: 목록 페이지로 이동)
+        window.location.href = "/freeboardPage"; // 목록 페이지 경로로 이동
+      } else {
+        const errorData = await response.json();
+        console.error("삭제 실패:", errorData);
+        alert("게시글 삭제에 실패했습니다.");
+        console.log(`${BASE_URL}/free/delete/${id}`);
+      }
+    } catch (error) {
+      console.error("삭제 요청 중 오류 발생:", error);
+      alert("오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  // handleScrap 함수 수정
+const handleScrap = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/free/${id}/scrap`, {
+      method: 'POST',
+      headers: getAuthHeaders(), // getAuthHeaders()로 인증 헤더 포함
+    });
+
+    if (response.ok) {
+      console.log('스크랩 요청 성공');
+      alert('스크랩이 완료되었습니다.'); // 스크랩 완료 팝업
+      navigate("/scrap"); // 요청 성공 후 스크랩 페이지로 이동
+    } else {
+      console.error('스크랩 요청 실패');
+    }
+  } catch (error) {
+    console.error('스크랩 요청 중 오류 발생:', error);
+  }
+};
+
+const handleEdit = async () => {
+  try {
+    // API 요청 보내기
+    const response = await fetch(`${BASE_URL}/free/update/${id}`, {
+      method: "GET",
+      headers: getAuthHeaders(),
+    });
+
+    // 응답 처리
+    if (response.ok) {
+      const data = await response.json();
+      console.log("수정 가능한 데이터를 가져왔습니다:", data);
+
+      // 데이터를 활용해 수정 화면으로 이동하거나 상태 업데이트
+      navigate(`/FreewritePage/${id}`);
+    } else {
+      console.error("수정 데이터를 가져오지 못했습니다:", response.status);
+    }
+  } catch (error) {
+    console.error("수정 요청 중 오류가 발생했습니다:", error);
+  }
+};
+
+
+
   return (
     <div>
       <Header />
@@ -367,7 +500,7 @@ const FreepostingPage = () => {
           {/* 첫 번째 이미지 */}
           <div
             className={styles["hover-image"]}
-            onClick={() => navigate("/ChatRoom")} // 원하는 페이지로 이동
+            onClick={() => navigate("/ChatRoom")}
           >
             <img
               src={main_message}
@@ -379,7 +512,7 @@ const FreepostingPage = () => {
           {/* 두 번째 이미지 */}
           <div
             className={styles["hover-image"]}
-            onClick={() => navigate("/scrap")} // 스크랩 페이지로 이동
+            onClick={handleScrap}
           >
             <img
               src={scrab}
@@ -389,9 +522,14 @@ const FreepostingPage = () => {
           </div>
         </div>
 
-        <h2 className={styles["title-text4"]}>작성일: {formattedDate}</h2>
-
+        <h2 className={styles["title-text4"]}>작성일 : {createdTime}</h2>
         <div className={styles["report"]}>
+          <button onClick={handleEdit} className={styles["edit-button"]}>
+          수정하기
+          </button>
+          <button onClick={handleDelete} className={styles["delete-button"]}>
+            삭제하기
+          </button>
           <button onClick={togglePopup} className={styles["report-button"]}>
             신고하기
           </button>
@@ -426,6 +564,24 @@ const FreepostingPage = () => {
         <div className={styles["alert-popup"]}>제출이 완료되었습니다.</div>
       )}
 
+      {/* 서버에서 받은 이미지 렌더링 */}
+      <div className={styles["image-section"]}>
+        {imageUrls.length > 0 ? (
+          <div className={styles["image-grid"]}>
+            {imageUrls.map((url, index) => (
+              <img
+                key={index}
+                src={url}
+                alt={`게시물 이미지 ${index + 1}`}
+                className={styles["uploaded-image"]}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className={styles["no-image"]}></p>
+        )}
+      </div>
+
       {/* 자유게시판 내용(수정 가능 시) */}
       <div className={styles["content-input"]}>
         <textarea
@@ -436,6 +592,8 @@ const FreepostingPage = () => {
           disabled
         />
       </div>
+
+
 
       {/* 파일 업로드 */}
       <input
@@ -471,52 +629,47 @@ const FreepostingPage = () => {
 
       {/* 댓글 목록 */}
       <div className={styles["comments-section"]}>
-        {
-          // comments가 undefined인 경우를 대비해 안전하게 처리
-          (comments || []).map((comment, index) => (
-            <div key={index} className={styles["comment-item"]}>
-              <strong>{comment.nickname}:</strong> {comment.content}
-              <div className={styles["reply-container"]}>
-                <button
-                  className={styles["toggle-reply-button"]}
-                  onClick={() => handleToggleReply(index)}
-                >
-                  {replyVisible[index] ? "대댓글 숨기기" : "대댓글 달기"}
-                </button>
-              </div>
+        {(comments || []).map((comment, index) => (
+          <div key={index} className={styles["comment-item"]}>
+            <strong>{comment.nickname}:</strong> {comment.content}
+            <div className={styles["reply-container"]}>
+              <button
+                className={styles["toggle-reply-button"]}
+                onClick={() => handleToggleReply(index)}
+              >
+                {replyVisible[index] ? "대댓글 숨기기" : "대댓글 달기"}
+              </button>
+            </div>
 
-              {replyVisible[index] && (
-                <div className={styles["reply-input"]}>
-                <div className={styles["textarea-container"]}>
-                  <textarea
-                    className={styles["textarea_reply"]}
-                    value={replyContents[index] || ""}
-                    onChange={(e) => handleReplyChange(index, e)}
-                    placeholder="대댓글을 입력하세요."
-                  />
-                </div>
+            {replyVisible[index] && (
+              <div className={styles["reply-input"]}>
+                <textarea
+                  className={styles["textarea_reply"]}
+                  value={replyContents[index] || ""}
+                  onChange={(e) => handleReplyChange(index, e)}
+                  placeholder="대댓글을 입력하세요."
+                />
                 <div className={styles["button-container"]}>
                   <button onClick={() => handleAddReply(index)}>대댓글 달기</button>
                 </div>
               </div>
-              )}
+            )}
 
-              {/* 대댓글 목록도 안전하게 접근 (옵셔널 체이닝) */}
-              {comment.replies?.length > 0 && (
-                <div className={styles["replies-section"]}>
-                  {comment.replies.map((reply, replyIndex) => (
-                    <div key={replyIndex} className={styles["reply-item"]}>
-                      <strong>{reply.nickname}:</strong> {reply.content}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))
-        }
+            {comment.replies?.length > 0 && (
+              <div className={styles["replies-section"]}>
+                {comment.replies.map((reply, replyIndex) => (
+                  <div key={replyIndex} className={styles["reply-item"]}>
+                    <strong>{reply.nickname}:</strong> {reply.content}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
+
 };
 
 export default FreepostingPage;

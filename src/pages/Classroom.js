@@ -4,6 +4,22 @@ import styles from './Classroom.module.css';
 import Header from './_.js'; // 상단바 컴포넌트
 import arrow from '../images/arrow.png';
 import bar from '../images/bar.png';
+import { jwtDecode } from 'jwt-decode';
+
+
+const getAuthHeaders = () => {
+  const accessToken = localStorage.getItem('accessToken');
+  if (!accessToken) throw new Error('사용자 인증 정보가 없습니다.');
+
+  const decodedToken = jwtDecode(accessToken);
+  const userId = decodedToken.userId;
+
+  return {
+    'Authorization': `Bearer ${accessToken}`,
+    'X-USER-ID': userId,
+    'ngrok-skip-browser-warning': 1
+  };
+};
 
 const Classroom = () => {
     const navigate = useNavigate();
@@ -45,40 +61,43 @@ const Classroom = () => {
     useEffect(() => {
         const fetchRoomData = async () => {
             try {
-                const response = await fetch('https://bcefb2d9d162.ngrok.app/api/rooms/all2', {
+                // 인증 헤더 가져오기
+                const headers = getAuthHeaders();
+    
+                const response = await fetch('http://info-rmation.kro.kr/api/rooms/all', {
                     method: 'GET',
                     headers: {
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IjIwMjIwMTY1OSIsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzM1MTk1MjU3LCJleHAiOjE3Mzg0MzUyNTd9.swBkh1kaXDEzW04G04llXKt-hB2B8c1XvuXpjuQbv3o', // 실제 토큰으로 변경
+                        ...headers,
                         'Content-Type': 'application/json',
                     },
                 });
-
+    
                 if (!response.ok) {
                     throw new Error('데이터 요청 실패');
                 }
-
+    
                 const data = await response.json();
-
+    
                 // 선택된 층에 해당하는 방만 필터링
                 const filteredRooms = data.filter(room => {
                     const floor = Math.floor(parseInt(room.roomNumber, 10) / 100);
                     return floor === selectedFloor;
                 });
-
+    
                 // 새로운 3차원 배열을 "깊은 복사" (기존 초기값 true로 리셋)
                 const newAvailability = Array.from({ length: 5 }, () => 
                     Array.from({ length: 100 }, () => 
                         Array(20).fill(true)
                     )
                 );
-
+    
                 // 데이터 기반으로 newAvailability 갱신
                 filteredRooms.forEach(room => {
                     room.lectureTimes.forEach(lecture => {
                         const roomIndex = getRoomIndex(room.roomNumber);
                         const startIndex = timeToIndex(lecture.startTime);
                         const endIndex = timeToIndex(lecture.endTime);
-
+    
                         for (let i = startIndex; i < endIndex; i++) {
                             // 범위 확인
                             if (
@@ -94,14 +113,14 @@ const Classroom = () => {
                         }
                     });
                 });
-
+    
                 setRooms(filteredRooms);
                 setAvailability(newAvailability);
             } catch (error) {
                 console.error('Error fetching room data:', error);
             }
         };
-
+    
         fetchRoomData();
     }, [selectedFloor]); // selectedFloor 변경 시마다 재요청
 

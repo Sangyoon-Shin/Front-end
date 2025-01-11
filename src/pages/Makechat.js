@@ -14,7 +14,7 @@ import { jwtDecode } from 'jwt-decode';
 
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'http://info-rmation.kro.kr/api/board';
+const BASE_URL = 'rmation-chat.kro.kr';
 
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
@@ -30,7 +30,7 @@ const getAuthHeaders = () => {
   };
 };
 
-const ContestWrite = () => {
+const Makechat = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // 게시글 ID를 URL에서 가져옴 (수정 시 사용)
 
@@ -42,6 +42,9 @@ const ContestWrite = () => {
   const [images, setImages] = useState([]);  // 이미지 배열로 수정
 
 
+  const [Mode, setMode] = useState('');
+  const [IsTel, setIsTel] = useState('');
+
   // 특정 게시글 데이터 가져오기 (수정 모드일 경우)
   useEffect(() => {
     if (id) {
@@ -52,14 +55,15 @@ const ContestWrite = () => {
 
   const fetchPostData = async (postId) => {
     try {
-      const response = await axios.get(`${BASE_URL}/competition/update/${postId}`, {
+      const response = await axios.get(`${BASE_URL}/Room/${postId}`, {
         headers: { ...getAuthHeaders(), 'ngrok-skip-browser-warning': 1 },
       });
-      const { competitionTitle, competitionContents, competitionHashtag, competitionFile } = response.data;
-      setTitle(competitionTitle);
-      setContent(competitionContents);
-      setHashtag(competitionHashtag);
-      setFiles(competitionFile);
+      const { roomName, description, mode, isTel, hashTag } = response.data;
+      setTitle(roomName);
+      setContent(description);
+      setHashtag(hashTag);
+      setMode(mode);
+      setIsTel(isTel);
     } catch (error) {
       console.error('Error fetching post data:', error);
       alert('게시글 정보를 불러오는 데 실패했습니다.');
@@ -72,30 +76,27 @@ const ContestWrite = () => {
 
   const handleSubmit = async () => {
     const formData = new FormData();
-    formData.append('competitionTitle', title);
-    formData.append('competitionContents', content);
-    formData.append('competitionHashtag', hashtag);
+    formData.append('roomName', title);
+    formData.append('description', content);
+    formData.append('mode', 'Opened');
+    formData.append('isTel', 'True');
+    formData.append('hashTag', hashtag);
+
 
     // 파일이 있을 경우에만 추가
     if (files && files.length > 0) {
-      files.forEach((file) => formData.append('competitionFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
-    }
-
-    
-    // 수정모드일 때만 id 추가
-    if (isEditing) {
-      formData.append('id', id); // 수정 시에만 id 추가
+    //  files.forEach((file) => formData.append('freeFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
     }
 
     try {
-      const url = isEditing ? `${BASE_URL}/competition/update` : `${BASE_URL}/competition/save`;
+      const url = isEditing ? `${BASE_URL}/Room` : `${BASE_URL}/Room`;
       const headers = { ...getAuthHeaders(), 'Content-Type': 'multipart/form-data' };
 
       const response = await axios.post(url, formData, { headers });
 
       if (response.status === 200) {
         alert('게시글이 성공적으로 처리되었습니다.');
-        navigate('/InformationContest'); // 게시글 목록 페이지로 이동
+        navigate('/FreeboardPage'); // 게시글 목록 페이지로 이동
       } else {
         console.error('Failed to save or update data:', response.statusText);
         alert('게시글 처리 중 오류가 발생했습니다.');
@@ -112,12 +113,12 @@ const ContestWrite = () => {
       <Header />
 
       <img src={arrow} className={styles["app-arrow"]} alt="back_arrow" onClick={() => navigate(-1)} />
-      <h2 className={styles["title-text2"]}>{isEditing ? '게시글 수정' : '대회게시판 작성'}</h2>
+      <h2 className={styles["title-text2"]}>{isEditing ? '게시글 수정' : '소통채팅방 개설'}</h2>
 
       <img src={bar} className={styles["app-bar"]} alt="bar" />
 
       <div className={styles["input-group"]}>
-        <h2 className={styles["title-text3"]}>제목</h2>
+        <h2 className={styles["title-text3"]}>채팅방 이름</h2>
         <input
           className={styles["input"]}
           type="text"
@@ -139,7 +140,7 @@ const ContestWrite = () => {
       </div>
 
       <div className={styles["input-group"]}>
-        <h2 className={styles["title-text6"]}>내용</h2>
+        <h2 className={styles["title-text6"]}>채팅방 설명</h2>
         <textarea
           className={styles["textarea"]}
           value={content}
@@ -148,30 +149,14 @@ const ContestWrite = () => {
         />
       </div>
 
-      {/* 이미지 미리보기 */}
-      <div className={styles["image-preview-container"]}>
-        {images.map((imgSrc, index) => (
-          <img key={index} src={imgSrc} alt={`미리보기 ${index + 1}`} className={styles["image-preview"]} />
-        ))}
-      </div>
-
-      <div className={styles["input-group"]}>
-        <h2 className={styles["title-text4"]}>파일 첨부</h2>
-        <input
-          className={styles["input"]}
-          type="file"
-          multiple
-          onChange={handleFileChange}
-        />
-      </div>
 
       <div className={styles["submit-group"]}>
         <button className={styles["submit-button"]} onClick={handleSubmit}>
-          {isEditing ? '수정' : '작성'}
+          {isEditing ? '수정' : '채팅방 개설'}
         </button>
       </div>
     </div>
   );
 };
 
-export default ContestWrite;
+export default Makechat;

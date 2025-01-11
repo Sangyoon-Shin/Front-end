@@ -22,6 +22,11 @@ import G_questionwritePage from './pages/G_questionwritePage'; // G_ 질문게�
 import G_freeboardPage from './pages/G_freeboardPage'; // G_ 자유게시판 페이지
 import G_questionboardPage from './pages/G_questionboardPage'; // G_ 질문게시판 페이지
 
+import Makechat from './pages/Makechat';
+import Announcementwrite from './pages/Announcementwrite'; // 공지사항
+import Announcementposting from './pages/Announcementposting'; // 공지사항
+
+
 //상윤님
 // import BoardPage from './pages/BoardPage';// 게시판 메인 페이지
 import QuestionCode from './pages/QuestionCode';// 코드 질문방 본문
@@ -68,6 +73,8 @@ import Chat from './pages/Chat'
 import G_HomePage from './pages/G_HomePage'
 import HomePage from './pages/HomePage'; // 정확한 경로로 import 추가
 import G_Chat from './pages/G_Chat'
+import Home from './pages/Home'
+import _2 from './pages/_2';
 
 
 // 지민이가 만든 채팅방 페이지
@@ -104,6 +111,11 @@ function App() {
           <Route path="G_freeboardPage" element={<G_freeboardPage />} />
           <Route path="G_questionboardPage" element={<G_questionboardPage />} />
 
+          <Route path="/Makechat" element={<Makechat />} />
+          <Route path="/Announcementwrite" element={<Announcementwrite />} />
+          <Route path="/Announcementposting/:id" element={<Announcementposting />} />
+
+
 
           {/* 상윤님 */}
           {/* <Route path="/BoardPage" element={<BoardPage />} /> 게시판 메인 페이지 */}
@@ -139,9 +151,9 @@ function App() {
           <Route path="/Scrap" element={<Scrap />} />
           <Route path="/My_board" element={<My_board />} />
           <Route path="/My_message" element={<My_message />} />
-          <Route path="/StudyBoard" element={<StudyBoard />} />
-          <Route path="/BootBoard" element={<BootBoard />} />
-          <Route path="/IndustryBoard" element={<IndustryBoard />} />
+          <Route path="/StudyBoard/:id" element={<StudyBoard />} />
+          <Route path="/BootBoard/:id" element={<BootBoard />} />
+          <Route path="/IndustryBoard/:id" element={<IndustryBoard />} />
 
           {/* 영현 페이지*/}
           <Route path="/HomePage" element={<HomePage />} />
@@ -150,10 +162,17 @@ function App() {
           <Route path="/Profileedit" element={<Profileedit />} />
           <Route path="/Myprofile" element={<Myprofile />} />
           <Route path="/ChatPreview" element={<ChatPreview />} />
+          
+          <Route path="/ChatPreview/:roomId" element={<ChatPreview />} />
           <Route path="/Otherprofile" element={<Otherprofile />} />
+          
+          <Route path="/Otherprofile/:roomId/:userId" element={<Otherprofile />} />
           <Route path="/User_auth" element={<User_auth />} />
           <Route path="/G_HomePage" element={<G_HomePage />} />
 
+          <Route path="/Home" element={<Home />} />
+          
+          <Route path="/_2" element={<_2 />} />
 
         <Route path="/" element={<G_HomePage />} />
         <Route path="/G_questionpostingPage/:id" element={<G_questionpostingPage />} />

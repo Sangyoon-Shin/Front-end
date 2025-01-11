@@ -48,16 +48,6 @@
           transform: translateX(-50%);
           /* 제목을 정확히 중앙으로 이동 */
         }
-
-        .title-text10 {
-            font-size: 1.2rem ;
-            color: #000000;
-            margin-bottom: 10px;
-            margin-top: 0px;
-            /* 텍스트를 아래로 살짝 내림 */
-            margin-left: 10px;
-        }
-        
         
         .title-text3 {
           font-size: 1.2rem ;
@@ -232,49 +222,3 @@
         border: 1px solid #ddd;
         border-radius: 4px;
       }
-
-
-
-      
-      .languageSelectionContainer {
-        margin-top: 20px;
-        margin-bottom: 20px;
-        text-align: center;  /* 언어 선택 부분 중앙 정렬 */
-      }
-      
-      .languageSelectionLabel {
-        font-size: 1.2rem;
-        color: #000000;
-        margin-bottom: 10px; /* 레이블과 버튼 간격 */
-      }
-      
-      .languageSelection {
-        display: flex;
-        justify-content: space-evenly; /* 버튼 간격을 균등하게 배치 */
-        width: 100%;  /* 부모 컨테이너 너비에 맞게 */
-        gap: 10px; /* 버튼 간 간격 */
-        margin-top: px;
-      }
-      
-      .languageButton {
-        padding: 10px 20px;
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1rem;
-        text-align: center;
-        white-space: nowrap; /* 버튼 안 텍스트가 줄바꿈 되지 않도록 */
-      }
-      
-      .languageButton:hover {
-        background-color: #73B3E3;
-        color: white;
-      }
-      
-      .activeLanguageButton {
-        background-color: #73B3E3;
-        color: white;
-        border: none;
-      }
-      

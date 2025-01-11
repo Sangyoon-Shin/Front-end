@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import styles from "./QuestionpostingPage.module.css";
+import styles from "./Announcementposting.module.css";
 import main_mascot from '../images/대학 심볼 횃불이.png';
 import main_bell from '../images/bell.png';
 import main_message from '../images/message.png';
@@ -29,15 +29,13 @@ const getAuthHeaders = () => {
 
 
 
-const QuestionpostingPage = () => {
+const Announcementposting = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const [content, setContent] = useState('');
-  const [comments, setComments] = useState([]); // 기본값을 빈 배열로
   const [commentContent, setCommentContent] = useState('');
   const [replyContents, setReplyContents] = useState([]);
   const [nickname, setNickname] = useState('');
-  const [nicknameCount, setNicknameCount] = useState({ int: 0, short: 0, double: 0, char: 0 });
   const [isHeartFilled, setIsHeartFilled] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [replyVisible, setReplyVisible] = useState(''); // 신고 내용 저장
@@ -48,8 +46,6 @@ const QuestionpostingPage = () => {
   const handleBackClick = () => navigate(-1);
   const { id } = useParams();
   const [imageUrls, setImageUrls] = useState([]); // 이미지 URL 상태 추가
-  const [anonymousId, setAnonymousId] = useState('');
-
 
   // 게시판 데이터 불러오기 useEffect
   useEffect(() => {
@@ -58,7 +54,7 @@ const QuestionpostingPage = () => {
       console.log(id);
 
       try {
-        const response = await fetch(`${BASE_URL}/quest/${id}`, {
+        const response = await fetch(`${BASE_URL}/notice/${id}`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'ngrok-skip-browser-warning': 1,
@@ -69,8 +65,8 @@ const QuestionpostingPage = () => {
           const data = await response.json();
           console.log('게시글 데이터:', data);
 
-          // questCreatedTime 변환
-          const formattedDate = new Date(data.questCreatedTime).toLocaleString('ko-KR', {
+          // noticeCreatedTime 변환
+          const formattedDate = new Date(data.noticeCreatedTime).toLocaleString('ko-KR', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -79,8 +75,8 @@ const QuestionpostingPage = () => {
           });
 
           // 상태 업데이트
-          setContent(data.questContents);
-          setTitle(data.questTitle);
+          setContent(data.noticeContents);
+          setTitle(data.noticeTitle);
           setImageUrls(data.imageUrls || []); // imageUrls 상태 업데이트
           setCreatedTime(formattedDate); // 작성 시간 상태 업데이트
         } else {
@@ -122,7 +118,7 @@ const QuestionpostingPage = () => {
   useEffect(() => {
     const fetchHeartStatus = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/quest/${id}/like-status`, {
+        const response = await fetch(`${BASE_URL}/notice/${id}/like-status`, {
           method: 'GET',
           headers: getAuthHeaders(),
         });
@@ -156,189 +152,6 @@ useEffect(() => {
   }
 }, [nickname]);
 
-  // 댓글 및 대댓글을 계층 구조로 정리하는 함수
-const organizeComments = (comments) => {
-  const commentMap = {};  // 댓글을 id별로 매핑하기 위한 객체
-  const nicknameMap = {};  // anonymousId에 따른 닉네임 매핑 객체
-  const structuredComments = [];  // 최종적으로 계층 구조로 정리된 댓글 배열
-
-  // 댓글을 매핑 객체에 추가
-  comments.forEach((comment) => {
-    // anonymousId에 따른 닉네임 매핑
-    const { anonymousId } = comment;
-    if (!nicknameMap[anonymousId]) {
-      nicknameMap[anonymousId] = generateNickname(Object.keys(nicknameMap).length);
-    }
-    comment.nickname = nicknameMap[anonymousId];
-
-    // 댓글에 빈 replies 배열 추가
-    commentMap[comment.id] = { ...comment, replies: [] };
-  });
-
-  // 댓글 계층 구조 구성
-  comments.forEach((comment) => {
-    if (comment.parentCommentId) {
-      // 부모 댓글이 있는 경우, 해당 댓글의 replies에 대댓글 추가
-      if (commentMap[comment.parentCommentId]) {
-        commentMap[comment.parentCommentId].replies.push(commentMap[comment.id]);
-      }
-    } else {
-      // 부모 댓글이 없는 경우(즉, 댓글인 경우) 최상위 댓글 배열에 추가
-      structuredComments.push(commentMap[comment.id]);
-    }
-  });
-
-  return structuredComments;
-};
-
- // 댓글 불러오기 useEffect
-useEffect(() => {
-  const fetchComments = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/quest/${id}/comments`, {
-        method: "GET",
-        headers: getAuthHeaders(),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("댓글 API 응답:", data);
-
-        // 댓글과 대댓글을 계층 구조로 정리
-        const structuredComments = organizeComments(data.content);
-        setComments(structuredComments); // 댓글 및 대댓글 갱신
-      } else {
-        console.error("댓글 데이터를 가져오는데 실패했습니다.");
-      }
-    } catch (error) {
-      console.error("댓글 데이터 요청 중 오류:", error);
-    }
-  };
-
-  fetchComments();
-}, [id]);
-  
-
-  // 댓글 추가 핸들러
-const handleAddComment = async () => {
-  if (commentContent.trim() !== '') {
-    const newNicknameCount = { ...nicknameCount };
-    newNicknameCount[nickname] = (newNicknameCount[nickname] || 0) + 1;
-    setNicknameCount(newNicknameCount);
-
-    const localStorageKey = `anonymousId_${id}`;
-    let anonymousId = localStorage.getItem(localStorageKey);
-
-    if (!anonymousId) {
-      // 'char', 'int', 'short', 'double' 중 하나를 랜덤으로 선택
-      const idOptions = ['char', 'int', 'short', 'double'];
-      anonymousId = idOptions[Math.floor(Math.random() * idOptions.length)];
-
-      // 생성된 anonymousId를 localStorage에 저장
-      localStorage.setItem(localStorageKey, anonymousId);
-    }
-
-    const newComment = {
-      nickname: `${nickname}${newNicknameCount[nickname]}`,
-      content: commentContent,
-      replies: [],
-      anonymousId: anonymousId, // anonymousId를 추가하여 서버로 전송
-    };
-
-    try {
-      const response = await fetch(`${BASE_URL}/quest/${id}/comments/add?content=${encodeURIComponent(commentContent)}&anonymousId=${encodeURIComponent(anonymousId)}`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(newComment),
-      });
-
-      if (response.ok) {
-        const savedComment = await response.json(); // 서버에서 저장된 댓글 데이터 반환
-
-        // savedComment에 nickname 정보가 없으면 newComment에서 가져와 병합
-        const mergedComment = { ...savedComment, nickname: newComment.nickname };
-
-        setComments((prevComments) => [...prevComments, mergedComment]);
-        setNicknameCount((prev) => ({ ...prev, [nickname]: prev[nickname] }));
-        window.location.reload(); // 페이지 새로 고침
-        setCommentContent(''); // 입력 필드 초기화
-      } else {
-        console.error('댓글 추가에 실패했습니다.');
-      }
-    } catch (error) {
-      console.error('댓글 추가 중 오류 발생:', error);
-    }
-  }
-};
-
-// 대댓글 추가 핸들러
-const handleAddReply = async (index) => {
-  if (replyContents[index]?.trim() !== '') {
-    const updatedComments = [...comments];
-
-    const newNicknameCount = { ...nicknameCount };
-    newNicknameCount[nickname] = (newNicknameCount[nickname] || 0) + 1;
-    setNicknameCount(newNicknameCount);
-
-    const localStorageKey = `anonymousId_${id}`;
-    let anonymousId = localStorage.getItem(localStorageKey);
-
-    if (!anonymousId) {
-      const idOptions = ['char', 'int', 'short', 'double'];
-      anonymousId = idOptions[Math.floor(Math.random() * idOptions.length)];
-
-      localStorage.setItem(localStorageKey, anonymousId);
-    }
-
-    const parentCommentId = comments[index]?.id;
-    if (!parentCommentId) {
-      console.error('부모 댓글 ID가 없습니다.');
-      return;
-    }
-
-    const content = replyContents[index];
-    const replyNickname = `${nickname}${newNicknameCount[nickname]}`;
-
-    const newReply = {
-      nickname: replyNickname,
-      content,
-      anonymousId, // anonymousId 추가
-    };
-
-    try {
-      const response = await fetch(
-        `${BASE_URL}/quest/${id}/comments/add?parentCommentId=${parentCommentId}&content=${encodeURIComponent(content)}&anonymousId=${encodeURIComponent(anonymousId)}`,
-        {
-          method: 'POST',
-          headers: getAuthHeaders(),
-          body: JSON.stringify(newReply),
-        }
-      );
-
-      if (response.ok) {
-        const savedReply = await response.json();
-
-        if (!updatedComments[index].replies) {
-          updatedComments[index].replies = [];
-        }
-        updatedComments[index].replies.push(savedReply);
-        setComments(updatedComments);
-
-        const newReplyContents = [...replyContents];
-        newReplyContents[index] = '';
-        setReplyContents(newReplyContents);
-        setReplyVisible((prev) => ({ ...prev, [index]: false }));
-        window.location.reload(); // 페이지 새로 고침
-
-      } else {
-        console.error('대댓글 추가에 실패했습니다.');
-      }
-    } catch (error) {
-      console.error('대댓글 추가 중 오류 발생:', error);
-    }
-  }
-};
-
   
 
   const handleToggleReply = (index) => {
@@ -350,7 +163,7 @@ const handleAddReply = async (index) => {
     setIsHeartFilled(newHeartStatus);
 
     try {
-      const response = await fetch(`${BASE_URL}/quest/${id}/like`, {
+      const response = await fetch(`${BASE_URL}/notice/${id}/like`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ isHeartFilled: newHeartStatus }),
@@ -362,7 +175,7 @@ const handleAddReply = async (index) => {
       }
     } catch (error) {
       console.error('좋아요 요청 중 오류 발생:', error);
-      console.log(`${BASE_URL}/quest/${id}/like`);
+      console.log(`${BASE_URL}/notice/${id}/like`);
       setIsHeartFilled(!newHeartStatus); // 오류 발생 시 상태 되돌림
     }
   };
@@ -382,7 +195,7 @@ const handleAddReply = async (index) => {
       const reporterId = getCurrentUserId(); // 신고자 ID
 
       // URL에 파라미터로 reason과 reporterId 추가
-      const url = `${BASE_URL}/quest/${id}/report?reason=${encodeURIComponent(reason)}&reporterId=${encodeURIComponent(reporterId)}`;
+      const url = `${BASE_URL}/notice/${id}/report?reason=${encodeURIComponent(reason)}&reporterId=${encodeURIComponent(reporterId)}`;
 
       const response = await fetch(url, {
         method: 'POST',
@@ -412,7 +225,7 @@ const handleAddReply = async (index) => {
 
     try {
       const accessToken = localStorage.getItem('accessToken');
-      const response = await fetch(`${BASE_URL}/quest/delete/${id}`, {
+      const response = await fetch(`${BASE_URL}/notice/delete/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -423,12 +236,12 @@ const handleAddReply = async (index) => {
       if (response.ok) {
         alert("게시글이 삭제되었습니다.");
         // 삭제 후 원하는 동작 수행 (예: 목록 페이지로 이동)
-        window.location.href = "/questboardPage"; // 목록 페이지 경로로 이동
+        window.location.href = "/noticeboardPage"; // 목록 페이지 경로로 이동
       } else {
         const errorData = await response.json();
         console.error("삭제 실패:", errorData);
         alert("게시글 삭제에 실패했습니다.");
-        console.log(`${BASE_URL}/quest/delete/${id}`);
+        console.log(`${BASE_URL}/notice/delete/${id}`);
       }
     } catch (error) {
       console.error("삭제 요청 중 오류 발생:", error);
@@ -439,7 +252,7 @@ const handleAddReply = async (index) => {
     // handleScrap 함수 수정
 const handleScrap = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/quest/${id}/scrap`, {
+    const response = await fetch(`${BASE_URL}/notice/${id}/scrap`, {
       method: 'POST',
       headers: getAuthHeaders(), // getAuthHeaders()로 인증 헤더 포함
     });
@@ -459,7 +272,7 @@ const handleScrap = async () => {
 const handleEdit = async () => {
   try {
     // API 요청 보내기
-    const response = await fetch(`${BASE_URL}/quest/update/${id}`, {
+    const response = await fetch(`${BASE_URL}/notice/update/${id}`, {
       method: "GET",
       headers: getAuthHeaders(),
     });
@@ -489,7 +302,7 @@ const handleEdit = async () => {
           alt="back_arrow"
           onClick={handleBackClick}
         />
-        <h1 className={styles["title-text2"]}>질문 게시판</h1>
+        <h1 className={styles["title-text2"]}>공지사항</h1>
         <img src={bar} className={styles["app-bar"]} alt="bar" />
 
         <h1 className={styles["title-text3"]}>{title || "게시판 제목"}</h1>
@@ -580,7 +393,7 @@ const handleEdit = async () => {
         )}
       </div>
 
-      {/* 질문 게시판 내용(수정 가능 시) */}
+      {/* 산업연계게시판 내용(수정 가능 시) */}
       <div className={styles["content-input"]}>
         <textarea
           className={styles["textarea"]}
@@ -610,64 +423,10 @@ const handleEdit = async () => {
           alt="heart"
           onClick={handleHeartClick}
         />
-      </div>
-
-      {/* 댓글 입력 */}
-      <div className={styles["content-input2"]}>
-        <textarea
-          className={styles["textarea2"]}
-          value={commentContent}
-          onChange={handleCommentChange}
-          placeholder="댓글을 입력하세요."
-        />
-      </div>
-      <div className={styles["reply-button"]}>
-        <button onClick={handleAddComment}>댓글 달기</button>
-      </div>
-
-      {/* 댓글 목록 */}
-      <div className={styles["comments-section"]}>
-        {(comments || []).map((comment, index) => (
-          <div key={index} className={styles["comment-item"]}>
-            <strong>{comment.nickname}:</strong> {comment.content}
-            <div className={styles["reply-container"]}>
-              <button
-                className={styles["toggle-reply-button"]}
-                onClick={() => handleToggleReply(index)}
-              >
-                {replyVisible[index] ? "대댓글 숨기기" : "대댓글 달기"}
-              </button>
-            </div>
-
-            {replyVisible[index] && (
-              <div className={styles["reply-input"]}>
-                <textarea
-                  className={styles["textarea_reply"]}
-                  value={replyContents[index] || ""}
-                  onChange={(e) => handleReplyChange(index, e)}
-                  placeholder="대댓글을 입력하세요."
-                />
-                <div className={styles["button-container"]}>
-                  <button onClick={() => handleAddReply(index)}>대댓글 달기</button>
-                </div>
-              </div>
-            )}
-
-            {comment.replies?.length > 0 && (
-              <div className={styles["replies-section"]}>
-                {comment.replies.map((reply, replyIndex) => (
-                  <div key={replyIndex} className={styles["reply-item"]}>
-                    <strong>{reply.nickname}:</strong> {reply.content}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      </div>      
     </div>
   );
 
 };
 
-export default QuestionpostingPage;
+export default Announcementposting;

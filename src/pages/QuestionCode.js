@@ -8,7 +8,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'https://6387-2406-5900-10f0-c886-1516-1f0b-2678-cc12.ngrok-free.app/api/board';
+const BASE_URL = 'http://info-rmation.kro.kr/api/board';
 
 const getAuthHeaders = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -75,6 +75,11 @@ const QuestionCode = () => {
         if (files && files.length > 0) {
             files.forEach((file) => formData.append('codingFile', file)); // 'codingFile'은 서버에서 요구하는 키 이름
         }
+        
+    // 수정모드일 때만 id 추가
+    if (isEditing) {
+        formData.append('id', id); // 수정 시에만 id 추가
+      }
 
         try {
             const url = isEditing ? `${BASE_URL}/coding/update` : `${BASE_URL}/coding/save`;
@@ -84,7 +89,7 @@ const QuestionCode = () => {
 
             if (response.status === 200) {
                 alert('게시글이 성공적으로 처리되었습니다.');
-                navigate('/FreeboardPage'); // 게시글 목록 페이지로 이동
+                navigate('/InformationCode'); // 게시글 목록 페이지로 이동
             } else {
                 console.error('Failed to save or update data:', response.statusText);
                 alert('게시글 처리 중 오류가 발생했습니다.');

@@ -45,7 +45,7 @@ const BootBoardPage = () => {
             setIsLoading(true); // 로딩 시작
 
             try {
-                const response = await axiosInstance.get('https://3118-2406-5900-10f0-c886-6863-63ee-edf2-f4fe.ngrok-free.app/api/board/studies', {
+                const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/studies', {
                     params: {
                         page,
                         size,
@@ -94,7 +94,7 @@ const BootBoardPage = () => {
                     ? 'industry'
                     : 'study';
 
-            const response = await axiosInstance.post(`https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board/${categoryPath}/${id}/scrap`, {
+            const response = await axiosInstance.post(`http://info-rmation.kro.kr/api/board/${categoryPath}/${id}/scrap`, {
                 headers: {
                     'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
                 },
@@ -131,7 +131,7 @@ const BootBoardPage = () => {
                         ? 'industry'
                         : 'study';
 
-                const response = await axiosInstance.get(`https://3118-2406-5900-10f0-c886-6863-63ee-edf2-f4fe.ngrok-free.app/api/board/studies/${categoryPath}`, {
+                const response = await axiosInstance.get(`http://info-rmation.kro.kr/api/board/studies/${categoryPath}`, {
                     params: {
                         searchKeyword: searchTerm, // 검색어 전달
                         page: 0,
@@ -160,8 +160,16 @@ const BootBoardPage = () => {
     };
 
 
-    const handlePostClick = (postId) => {
-        navigate(`/post/${postId}`);  // 해당 게시물 상세 페이지로 이동
+    const handlePostClick = (postId) => { // 선택된 카테고리별로 네비게이트 다르게 하게 수정함.
+        if (selectedCategory === '부트캠프') {
+            navigate(`/BootBoard/${postId}`);  // 해당 게시물 상세 페이지로 이동
+        }
+        else if (selectedCategory === '스터디') {
+            navigate(`/StudyBoard/${postId}`);
+        }
+        else {
+            navigate(`/IndustryBoard/${postId}`);
+        }
     };
 
 
@@ -186,7 +194,7 @@ const BootBoardPage = () => {
                     ? 'industry'
                     : 'study';
 
-            const response = await axiosInstance.get(`https://3118-2406-5900-10f0-c886-6863-63ee-edf2-f4fe.ngrok-free.app/api/board/studies/${categoryPath}`, {
+            const response = await axiosInstance.get(`http://info-rmation.kro.kr/api/board/studies/${categoryPath}`, {
                 params: {
                     page: 0,
                     size: 10,
@@ -249,7 +257,15 @@ const BootBoardPage = () => {
                     {/* 글쓰기 버튼 */}
                     <button
                         className={`${styles.writeButton} ${isDesktop ? styles["desktopWriteButton"] : ''}`}
-                        onClick={() => navigate('/write')} // 글쓰기 페이지로 이동
+                        // 각 카테고리에 맞는 글쓰기 페이지로 이동하도록 변경함.
+                        onClick={() => {
+                            const path = selectedCategory === '부트캠프'
+                                ? '/bootcamp'
+                                : selectedCategory === '산업 연계'
+                                    ? '/industry'
+                                    : '/study';
+                            navigate(path); 
+                        }}
                     >
                         글쓰기
                     </button>

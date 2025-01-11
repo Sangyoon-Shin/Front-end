@@ -117,7 +117,7 @@ const BoardPage = () => {
   const toggleScrap = async (id) => {
     // 백엔드에 스크랩 상태를 업데이트하는 요청 보내기
     try {
-      const response = await fetch('https://your-backend-api.com/api/scrap', {
+      const response = await fetch('http://info-rmation.kro.kr/api/scrap', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -158,7 +158,7 @@ const BoardPage = () => {
     if (searchTerm.trim() !== '') {
       try {
         console.log(`검색어: ${searchTerm}`);
-        const response = await axiosInstance.get('https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board/free', {
+        const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/free', {
           params: {
             searchKeyword: searchTerm, // 검색어 전달
             page: 0,
@@ -232,7 +232,7 @@ const BoardPage = () => {
         typeKeyword: '', // 필요 시 값 설정
       };
 
-      const response = await axiosInstance.get('https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board/free/sort-by-likes', {
+      const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/free/sort-by-likes', {
         params,
         headers: {
           'ngrok-skip-browser-warning': 'true',
