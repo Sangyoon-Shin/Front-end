@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // useNavigate를 사용하여 페이지 이동
 import styles from "./StartPage.module.css";
 import ese_logo from '../images/임베디드시스템공학과 횃불이.png';
 import computer_logo_ from '../images/컴퓨터공학부 횃불이_반전.png';
 import computer_logo from '../images/컴퓨터공학부 횃불이.png';
 
 const StartPage = () => {
+  const navigate = useNavigate(); // useNavigate 훅 사용
+
+  useEffect(() => {
+    // 2초 후 /loginpage로 리디렉션
+    const timer = setTimeout(() => {
+      navigate('/loginpage');
+    }, 2000); // 2000ms = 2초
+
+    // 컴포넌트 언마운트 시 타이머 클리어
+    return () => clearTimeout(timer);
+  }, [navigate]);
+
   return (
     <div className={styles.app}>
       <div className={styles.container}>

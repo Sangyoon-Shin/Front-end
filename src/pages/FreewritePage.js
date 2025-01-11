@@ -11,8 +11,10 @@ import Header from './_.js'; // 상단바 컴포넌트
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
+
+
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'https://bcefb2d9d162.ngrok.app/api/board';
+const BASE_URL = 'http://info-rmation.kro.kr/api/board';
 
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
@@ -37,28 +39,8 @@ const FreewritePage = () => {
   const [hashtag, setHashtag] = useState('');
   const [files, setFiles] = useState(null);
   const [isEditing, setIsEditing] = useState(false); // 수정 모드 여부
-  const [serverStatus, setServerStatus] = useState(''); // 서버 상태 확인용
+  const [images, setImages] = useState([]);  // 이미지 배열로 수정
 
-  // 서버 연결 상태 확인
-  useEffect(() => {
-    const checkServerConnection = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/free/checkserver`, {
-          headers: { 'ngrok-skip-browser-warning': 1 },
-        });
-        if (response.status === 200) {
-          setServerStatus('서버와 연결되었습니다.');
-        } else {
-          setServerStatus('서버 상태를 확인할 수 없습니다.');
-        }
-      } catch (error) {
-        setServerStatus('서버와의 연결에 실패했습니다.');
-        console.error('Server connection error:', error);
-      }
-    };
-
-    checkServerConnection();
-  }, []);
 
   // 특정 게시글 데이터 가져오기 (수정 모드일 경우)
   useEffect(() => {
@@ -78,7 +60,6 @@ const FreewritePage = () => {
       setContent(freeContents);
       setHashtag(freeHashtag);
       setFiles(freeFile);
-
     } catch (error) {
       console.error('Error fetching post data:', error);
       alert('게시글 정보를 불러오는 데 실패했습니다.');
@@ -94,10 +75,12 @@ const FreewritePage = () => {
     formData.append('freeTitle', title);
     formData.append('freeContents', content);
     formData.append('freeHashtag', hashtag);
+
     // 파일이 있을 경우에만 추가
     if (files && files.length > 0) {
-      files.forEach((file) => formData.append('files', file)); // 'files'는 서버에서 요구하는 키 이름
+      files.forEach((file) => formData.append('freeFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
     }
+
     try {
       const url = isEditing ? `${BASE_URL}/free/update` : `${BASE_URL}/free/save`;
       const headers = { ...getAuthHeaders(), 'Content-Type': 'multipart/form-data' };
@@ -116,6 +99,7 @@ const FreewritePage = () => {
       alert('요청 처리 중 문제가 발생했습니다.');
     }
   };
+
 
   return (
     <div className={styles.app}>
@@ -156,6 +140,13 @@ const FreewritePage = () => {
           onChange={(e) => setContent(e.target.value)}
           placeholder="내용을 입력하세요."
         />
+      </div>
+
+      {/* 이미지 미리보기 */}
+      <div className={styles["image-preview-container"]}>
+        {images.map((imgSrc, index) => (
+          <img key={index} src={imgSrc} alt={`미리보기 ${index + 1}`} className={styles["image-preview"]} />
+        ))}
       </div>
 
       <div className={styles["input-group"]}>

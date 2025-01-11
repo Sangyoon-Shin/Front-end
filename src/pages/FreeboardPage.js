@@ -11,7 +11,7 @@ import IconScrap from '../images/횃불이스크랩.png';
 import IconUnscrap from '../images/횃불이스크랩X.png';
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'https://bcefb2d9d162.ngrok.app/';
+const BASE_URL = 'http://info-rmation.kro.kr/';
 // 실제 Bearer 토큰을 코드에 하드코딩해서 사용
 const getAuthHeaders = () => {
   // 실제 Bearer 토큰 값으로 수정
@@ -43,7 +43,7 @@ const FreeboardPage = () => {
     const fetchPosts = async () => {
       try {
         const accessToken = localStorage.getItem('accessToken'); 
-        const response = await fetch('https://bcefb2d9d162.ngrok.app/api/board/free', { headers: { 'ngrok-skip-browser-warning': 1,'Authorization': `Bearer ${accessToken}` } });
+        const response = await fetch('http://info-rmation.kro.kr/api/board/free', { headers: { 'ngrok-skip-browser-warning': 1,'Authorization': `Bearer ${accessToken}` } });
         if (!response.ok) {
           throw new Error('게시물 목록을 불러오는데 실패했습니다.');
         }
@@ -109,7 +109,7 @@ const FreeboardPage = () => {
     const accessToken = localStorage.getItem('accessToken'); 
     if (searchTerm.trim() !== '') {
       try {
-        const baseUrl = new URL('https://bcefb2d9d162.ngrok.app/api/board/free');
+        const baseUrl = new URL('http://info-rmation.kro.kr/api/board/free');
         baseUrl.searchParams.append('searchKeyword', searchTerm);
         baseUrl.searchParams.append('page', '0');
         baseUrl.searchParams.append('size', '10');

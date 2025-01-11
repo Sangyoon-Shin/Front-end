@@ -1,0 +1,827 @@
+/* 전체 화면 스타일 */
+.app {
+    text-align: center;
+    height: 250vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+  }
+  
+  /* 헤더 스타일
+    .app-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0px; /* 헤더와 대회 정보 섹션 사이에 여백 추가 
+    margin-top: 0px;  } */
+
+    .app-header {
+      /*position: fixed;  고정 위치 
+      top: 0; /* 페이지 상단에 위치 */
+      left: 0; /* 왼쪽 끝에 위치 */
+      right: 0; /* 오른쪽 끝까지 확장 */
+      height: 60px; /* 상단 바 높이 설정 */
+     
+      z-index: 1000; /* 다른 요소 위에 표시 */
+      display: flex; /* 플렉스 박스 사용 */
+      justify-content: space-between; /* 요소 간 간격 조정 */
+      align-items: center; /* 세로 가운데 정렬 */
+      padding: 0 20px; /* 좌우 여백 */
+  }
+  
+  
+  .title-group{
+    display: flex;
+    justify-content: center; /* 가로 중앙 정렬 */
+    gap: 10px;  
+    margin-bottom: 10px;
+  }
+
+  .right-section {
+    display: flex;
+    align-items: center; /* 가로로 나란히 정렬 */
+    margin-top: 40px; /* 아래로 30px 만큼 내림 (값은 조절 가능) */
+    gap: 10px; /* 아이콘 사이의 간격 */
+  }
+  
+  .mascot-logo {
+    width: 0px;
+    margin-right: 40px; /* 로고와 문구 사이의 간격 */
+  }
+  
+  /* 로고 이미지 크기 조절 */
+  .app-main_mascot {
+    height: 60px;
+    margin-bottom: 10px;
+    margin-top: 30px;
+    cursor: pointer;
+  }
+  
+  .app-main_bell {
+    height: 35px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  
+  .app-main_message {
+    height: 35px;
+    margin-bottom:10px;
+    cursor: pointer;
+  }
+  
+
+  .app-main_my {
+    height: 35px;
+    margin-bottom: 10px;
+    margin-left: 6px;
+
+  }
+
+  /* 공지사항 텍스트  width: 100%;
+    height: 30%;*/
+  .title-text {
+    font-size: 0.9rem ;
+  
+    color: #000000;
+    margin-bottom: 20px;  /* 텍스트 아래에 여백 */
+    margin-top: 10px;  /* 텍스트 위에 여백 */
+  }
+  
+  
+  /* INFO 텍스트 */
+  h2 {
+    font-size: 2.0rem ;
+    color: #0056A0;
+    margin-bottom: 0px;
+    margin-top: 43px;
+    margin-right: 5px;  /* 텍스트 오른쪽에 여백 */
+
+  }
+  
+
+
+
+
+  .app-main_my {
+    cursor: pointer;
+  
+  }
+
+  
+  .dropdown-menu {
+    position: absolute;
+    margin-top: 6%;
+    margin-right: 4%;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    overflow: hidden;
+  }
+  
+  .menu-item {
+    display: block;
+    padding: 12px 20px;
+    color: black;
+    text-decoration: none;
+    text-align: center;
+    font-size: 1.0rem;
+    font-weight: bold;
+  }
+  
+  .menu-item:not(:last-child) {
+    border-bottom: 1px solid #e0e0e0; /* 항목 구분선 */
+  }
+  /*
+  .menu-item:hover {
+    background-color: #f0f0f0;
+  }*/
+  
+/* "스크랩" 항목에 파란색 텍스트 적용 */
+.scrap {
+  color: #007bff;
+}
+
+/* "로그아웃" 항목에 노란색 텍스트 적용 */
+.logout {
+  color: #ff8c00;
+}
+  
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.modalButtons button {
+  margin: 10px;
+  
+  border: 10px;
+  
+  color: black;
+  text-decoration: none;
+  text-align: center;
+  font-size: 1.0rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 대회 정보 섹션 스타일 */
+  .competitions {
+    display: flex; 
+    justify-content: center; /* 대회 정보를 중앙 정렬 */
+
+    margin-bottom: 40px; /* 하단 여백 */
+    gap: 30px; /* 대회 이미지 사이의 간격 */
+    background-color: #73B3E3; /* 하늘색 배경 */
+    padding: 20px; /* 여백 추가 */
+    border-radius: 10px; /* 모서리 둥글게 */
+
+    width: 100%; 
+    height: 12%;
+
+  }
+
+ .competitionItem {
+    text-decoration: none; /* 링크 스타일 제거 */
+    color: #000000; /* 글자 색상 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+ }
+
+ .competitionImage {
+    width: 130px; /* 이미지 너비 조정 */
+    height: 180px;
+    border-radius: 8px; /* 모서리 둥글게 */
+    transition: transform 0.2s; /* 애니메이션 효과 */
+ }
+
+ .competitionImage:hover {
+    transform: scale(1.05); /* 마우스 오버 시 확대 */
+ }
+
+/* 대회정보 텍스트 및 버튼을 위한 스타일 */
+.comheader {
+  display: flex;
+  align-items: flex-end;  /* 버튼을 아래로 내림 */
+  justify-content: left; /* 왼쪽 정렬 */
+  width: 100%; 
+  cursor: default;
+  margin-left: 10px; /* 왼쪽 여백 */
+  margin-bottom: 3px; 
+  height: 6%;
+}
+
+.comtext {
+    font-size: 1.6rem; /* 텍스트 크기 */
+    color: #000000; /* 텍스트 색상 */
+    margin-bottom: 3px; 
+    margin-left: 18%;
+    cursor: default;
+}
+
+/* 플러스 버튼 스타일 */
+ .plusButton {
+  cursor: pointer;
+  /* 제목과 버튼 간격 조정 */
+  height: 100%;
+
+ }
+
+ .plusButton:hover {
+ 
+    cursor: pointer;
+
+  }
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ /* Tab Container Styles */
+.tabContainer {
+  width: 100%;
+  height: 2%;
+  display: flex;
+  justify-content: space-evenly;
+  
+}
+
+.activeTab {
+  color: #0056A0; /* 선택된 탭 텍스트 색상 */
+  background: none;
+  border: none;
+  border-bottom: 2px solid #0056A0; /* 선택된 탭 아래에 선 추가 */
+  font-size: 1.3rem;
+  font-weight: bold;
+  /*margin-right: 17px; /* 간격 조정 */
+  
+  /*margin-left: 20px; /* 간격 조정 */
+}
+
+.inactiveTab {
+  color: black; /* 비활성화된 탭 텍스트 색상 */
+  /*margin-right: 17px; /* 간격 조정 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+
+
+
+
+ /* 탭 메뉴 스타일 */
+.tabMenu {
+  display: flex;
+  justify-content: left;
+  margin-bottom: 20px;
+  
+}
+
+.tabItem {
+  font-size: 1.3rem;
+  color: #000000;
+  margin: 20px;
+  cursor: pointer;
+  padding-bottom: 5px;
+}
+
+
+
+.active {
+  color: #0056A0; /* 활성화된 탭의 글자 색 */
+  border-bottom: 2px solid #0056A0; /* 활성화된 탭 아래에 파란색 밑줄 */
+  
+}
+
+/* 미리보기 섹션 스타일 */
+.previewSection {
+  background-color: #F0F8FF; /* 콘텐츠 영역 배경색 */
+  padding: 10px;
+  border-radius: 20px;
+}
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+/*정보게시판!!! */
+
+
+
+.container {
+  width: 100%;
+  border: none;
+  
+  align-items: center;
+}
+
+/* 정보 게시판 내 텍스트 및 버튼을 위한 스타일 */
+.infoheader {
+  display: flex;
+  align-items: flex-end; 
+  
+  justify-content: center; /* 왼쪽 정렬 */
+  width: 100%; 
+
+  margin-bottom: 3px; 
+  margin-top: 30px; 
+  height: 6%;
+
+  border-bottom: 2px solid #000000; /* 선택된 탭 아래에 선 추가 */
+}
+
+
+.title {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.plusButton2 {
+  border-radius: 1px;
+  border: none;
+  cursor: pointer;
+
+}
+
+.postList {
+  width: 100%;
+  display: flex;
+  flex-direction: column; /* 세로로 정렬 */
+  align-items: center; /* 가운데 정렬 */
+}
+
+.postItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  border: none;
+  /*border-bottom: 2px solid black;
+  */
+  cursor: pointer;  /* 클릭 가능임을 나타내기 위해 커서 변경 */
+}
+
+.postItem span:nth-child(2) {
+  text-align: left; /* 텍스트 왼쪽 정렬 */
+  margin-right: 5px; /* 왼쪽 여백 추가 */
+  flex: 1; /* 텍스트 부분이 가로로 차지하는 공간 */
+}
+
+.index {
+  font-size: 1.0rem;
+  font-weight: bold;
+  color: #0066cc;  /* 파란색 */
+  margin-right: 10px;
+}
+
+.question {
+  font-size: 1.0rem;
+  flex: 1;
+  text-decoration: none; /* 기본 상태에서는 밑줄 없음 */
+  transition: text-decoration 0.2s ease;
+}
+
+.question:hover {
+  text-decoration: underline;
+}
+
+.date {
+  font-size: 1.0rem;
+  color: #888;
+  margin-right: 10px;
+}
+
+.S_cute {
+  width: 24px;
+  height: 24px;
+  /* 아이콘 크기에 맞는 스타일 지정 */
+}
+
+
+
+
+
+
+
+
+
+.index2 {
+  font-size: 1.0rem;
+  font-weight: bold;
+  color: red;  /* 파란색 */
+  margin-right: 10px;
+}
+
+
+
+
+
+
+
+/* 드롭다운 메뉴 스타일 */
+.dropdown-menu {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  padding: 10px;
+  z-index: 1000;
+}
+
+.dropdown-menu a {
+  text-decoration: none;
+  color: #333;
+  padding: 8px 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.dropdown-menu a:last-child {
+  border-bottom: none;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f1f1f1;
+}
+
+
+/* 로그아웃 링크 스타일 */
+.logout {
+  color: #d9534f;
+}
+
+
+
+
+
+
+
+
+/* 정보 게시판 섹션 */
+.infoSection {
+  width: 90%;
+  max-width: 1200px;
+  background-color: #f0f8ff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* 정보 게시판 포스트 리스트 스타일 */
+.postList {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.postItem {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+.plusButtonLink {
+  display: inline-flex; /* inline-flex로 설정하여 버튼처럼 보이게 함 */
+  border: none; /* 테두리 없음 */
+  text-decoration: none; /* 밑줄 제거 */
+  cursor: pointer; /* 클릭 가능 표시 */
+}
+
+
+
+
+/* 빈 강의실 현황 */
+.roomStatus {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.roomItem {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+.S_cute {
+  width: 1.0px;
+  
+ }
+
+
+
+
+/* 자기 개발 섹션 */
+.selfDevelopment {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.developmentItem {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/*하단바*/
+
+.footer {
+  display: flex;
+  width: 100%;
+  
+  justify-content: center;
+  align-items: center;
+  background-color: #73B3E3; /* 하늘색 배경 */
+  padding: 10px ;
+  border-top: 1px solid #ccc; /* 상단 경계선 */
+  
+  margin-top: 50px;
+
+  position: fixed;
+  bottom: 0;
+}
+
+.footer span {
+  white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+.footerItem {
+  display: flex;
+  align-items: center;
+  color: white;
+  
+  
+}
+
+.footerItem a {
+  
+  margin-right: 80px;
+  color: white;
+  text-decoration: underline;
+  
+  margin-right: 180px;
+}
+
+
+/*소통방*/
+
+.roomsList {
+    margin-top: 4%;
+    margin-bottom: 35%;
+    position: absolute;
+    left: 8%;
+    right : 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 75%;
+    padding: 20px; /* 내부 여백 제거 */
+    overflow-y: auto;
+    
+  overflow-x: hidden; /* 가로 스크롤 제거 */
+    
+  }
+  
+  .roomItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background-color: #B5DFFF; 
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /*
+  .roomItem:hover {
+    background-color: #f0f0f0;
+  }
+  */
+  
+  .selected {
+    background-color: #d0e6ff;
+  }
+  
+  .roomTitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .roomMessage {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .actionButton {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  
+  .actionButton:hover {
+    background-color: #0056b3;
+  }
+  
+  
+  .footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+
+ /* 참여하기 버튼 서식*/
+ .joinButton {
+    padding: 5px 10px;
+    background-color: #244A95;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+
+
+
+
+
+
+
+/* 반응형 스타일: 태블릿 및 모바일 화면 대응 */
+@media screen and (max-width: 1200px) {
+  .app {
+    height: auto;
+    padding: 10px;
+  }
+
+  .competitions {
+    flex-wrap: wrap; /* 여러 줄로 표시 */
+    gap: 10px;
+    height: auto;
+    padding: 10px;
+  }
+
+  .competitionImage {
+    width: 100px;
+    height: 140px;
+  }
+
+  h2 {
+    font-size: 1.2rem; /* 폰트 크기 조정 */
+    margin-left: 10px;
+  }
+
+  .comtext {
+    font-size: 1.6rem; /* 텍스트 크기 */
+    color: #000000; /* 텍스트 색상 */
+    margin-left: 40px; /* 왼쪽 여백 */
+    margin-bottom: 3px; 
+    cursor: default;
+}
+
+
+  .title-text, .menu-item {
+    font-size: 0.8rem; /* 텍스트 축소 */
+  }
+}
+
+
+
+@media screen and (max-width: 480px) {
+  .app {
+    padding: 5px;
+  }
+
+  .comtext {
+    font-size: 1rem; /* 더 작은 화면에서 글자 축소 */
+  }
+
+  .title-text {
+    font-size: 0.7rem;
+  }
+
+  .dropdown-menu {
+    right: 5px; /* 메뉴 오른쪽 위치 조정 */
+    top: 50px;
+  }
+
+  .postItem span, .index, .date {
+    font-size: 0.8rem; /* 게시판 텍스트 축소 */
+  }
+
+  .infoSection {
+    padding: 10px;
+  }
+
+    /*상단바*/
+    .app-main_mascot {
+      height: 55px;
+      margin-top: 30px;
+    }
+  
+    .app-main_bell,
+    .app-main_message,
+    .app-main_my {
+      height: 35px;
+      margin-bottom: 30px;
+    }
+  
+  
+    /* 공지사항 텍스트 */
+      .title-text {
+        font-size: 0.8rem ;
+        margin-bottom: 40px;
+      }
+      
+      
+      /* INFO 텍스트 */
+      h2 {
+        font-size: 1.8rem ;
+        
+      margin-bottom: 35px;
+      }
+  
+}
