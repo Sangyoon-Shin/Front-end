@@ -146,7 +146,7 @@ const InformationContest = () => {
   };
 
   const handlePostClick = (postId) => {
-    navigate(`/competiton/${postId}`); // 해당 게시물 상세 페이지로 이동
+    navigate(`/InformationContestBoard/${postId}`); // 해당 게시물 상세 페이지로 이동
 
   };
 

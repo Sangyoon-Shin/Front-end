@@ -132,9 +132,9 @@ function App() {
           <Route path="/ClassChatRoom" element={<ClassChatRoom />} />
           <Route path="/ClassChat" element={<ClassChat />} />
           <Route path="/BootBoardPage" element={<BootBoardPage />} />
-          <Route path="/BoardCode" element={<BoardCode />} />
+          <Route path="/BoardCode/:id" element={<BoardCode />} />
           <Route path="/InformationCodeBoard" element={<InformationCodeBoard />} />
-          <Route path="/InformationContestBoard" element={<InformationContestBoard />} />
+          <Route path="/InformationContestBoard/:id" element={<InformationContestBoard />} />
 
 
 
