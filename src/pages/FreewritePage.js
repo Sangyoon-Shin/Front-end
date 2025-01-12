@@ -78,7 +78,6 @@ const FreewritePage = () => {
     // 수정모드일 때만 id 추가
     if (isEditing) {
       formData.append('Id', id); // 수정 시에만 id 추가
-      console.log("들어가냐?")
     }
     formData.append('freeTitle', title);
     formData.append('freeContents', content);
@@ -87,12 +86,6 @@ const FreewritePage = () => {
     if (files && files.length > 0) {
       files.forEach((file) => formData.append('freeFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
     }
-
-    console.log(id);
-    console.log(title);
-    console.log(content);
-    console.log(hashtag);
-    console.log(files);
 
     try {
       const url = isEditing ? `${BASE_URL}/free/update` : `${BASE_URL}/free/save`;
