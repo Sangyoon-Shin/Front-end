@@ -41,7 +41,7 @@ const InformationCode = () => {
     const fetchPosts = async () => {
       setIsLoading(true); // 로딩 시작
       try {
-        const response = await axiosInstance.get('https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board/coding', {
+        const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/coding', {
           params: { page, size }, // 페이지와 사이즈를 쿼리 파라미터로 추가
           headers: {
             'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
@@ -70,7 +70,7 @@ const InformationCode = () => {
     // 좋아요 10개 이상 게시물 가져오기
     const fetchTopLikedPosts = async () => {
       try {
-        const response = await axiosInstance.get('https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board/coding/top-liked', {
+        const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/coding/top-liked', {
           headers: {
             'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
           },
@@ -95,7 +95,7 @@ const InformationCode = () => {
     setPage(pageNumber); // 페이지 번호 업데이트
 
     try {
-      const response = await axiosInstance.get('https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board/coding', {
+      const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/coding', {
         params: {
           page: pageNumber,
           size: 10,
@@ -123,7 +123,7 @@ const InformationCode = () => {
     setMenuOpen(false); // 메뉴 닫기
 
     try {
-      const response = await axiosInstance.get('https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board/coding', {
+      const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/coding', {
         params: {
           typeKeyword: language, // 선택된 언어 전달
           page: 0,
@@ -146,7 +146,7 @@ const InformationCode = () => {
     setMenuOpen(false); // 메뉴 닫기
 
     try {
-      const response = await axiosInstance.get('https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board/coding', {
+      const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/coding', {
         params: {
           page: 0,
           size: 10,
@@ -166,7 +166,7 @@ const InformationCode = () => {
 
   const toggleScrap = async (id) => {
     try {
-      const response = await axiosInstance.post(`https://bcefb2d9d162.ngrok.app/api/board/coding/${id}/scrap`, {
+      const response = await axiosInstance.post(`http://info-rmation.kro.kr/api/board/coding/${id}/scrap`, {
         headers: {
           'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
         },
@@ -194,7 +194,7 @@ const InformationCode = () => {
     if (searchTerm.trim() !== '') {
       try {
         console.log(`검색어: ${searchTerm}`);
-        const response = await axiosInstance.get('https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board/coding', {
+        const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/coding', {
           params: {
             searchKeyword: searchTerm, // 검색어 전달
             page: 0,
@@ -226,7 +226,7 @@ const InformationCode = () => {
   };
 
   const handlePostClick = (postId) => {
-    navigate(`/post/${postId}`);  // 해당 게시물 상세 페이지로 이동
+    navigate(`/BoardCode/${postId}`);  // 해당 게시물 상세 페이지로 이동
   };
 
   // 정렬 버튼 클릭 시 정렬 상태 업데이트
@@ -248,7 +248,7 @@ const InformationCode = () => {
         typeKeyword: '', // 필요 시 값 설정
       };
 
-      const response = await axiosInstance.get('https://cce1-2406-5900-10f0-c886-2035-dcac-532c-702.ngrok-free.app/api/board/coding/sort-by-likes', {
+      const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/coding/sort-by-likes', {
         params,
         headers: {
           'ngrok-skip-browser-warning': 'true', // 필요 시 유지
@@ -381,9 +381,9 @@ const InformationCode = () => {
                   className={styles.postTitle}
                   onClick={() => handlePostClick(post.id)} // 게시물 제목 클릭 시 상세 페이지로 이동
                 >
-                  {post.title}
+                  {post.codingTitle}
                 </span>
-                <span className={styles.postDate}>{post.date}</span>
+                <span className={styles.postDate}>{post.codingCreatedTime}</span>
               </div>
 
               {/* 스크랩 상태 아이콘 */}

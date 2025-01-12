@@ -23,6 +23,9 @@ import G_freeboardPage from './pages/G_freeboardPage'; // G_ 자유게시판 페
 import G_questionboardPage from './pages/G_questionboardPage'; // G_ 질문게시판 페이지
 
 import Makechat from './pages/Makechat';
+import Announcementwrite from './pages/Announcementwrite'; // 공지사항
+import Announcementposting from './pages/Announcementposting'; // 공지사항
+
 
 //상윤님
 // import BoardPage from './pages/BoardPage';// 게시판 메인 페이지
@@ -36,7 +39,7 @@ import AlarmPage from './pages/AlarmPage'; // 알림페이지
 import Announcement from './pages/Announcement'; // 공지사항
 import BootBoardPage from './pages/BootBoardPage'; // 부트갬프 게시판 목록
 
-import BoardCode from './pages/BoardCode'; 
+import BoardCode from './pages/BoardCode';
 import InformationCodeBoard from './pages/InformationCodeBoard'
 import InformationContestBoard from './pages/InformationContestBoard';
 
@@ -97,6 +100,8 @@ function App() {
           <Route path="FreepostingPage/:id" element={<FreepostingPage />} />
           <Route path="QuestionpostingPage" element={<QuestionpostingPage />} />
           <Route path="FreewritePage" element={<FreewritePage />} />
+          {/* 글 수정 페이지 (id가 있을 경우) */}
+          <Route path="/FreewritePage/:id" element={<FreewritePage />} />
           <Route path="QuestionwritePage" element={<QuestionwritePage />} />
           <Route path="FreeboardPage" element={<FreeboardPage />} />
           <Route path="QuestionboardPage" element={<QuestionboardPage />} />
@@ -109,6 +114,8 @@ function App() {
           <Route path="G_questionboardPage" element={<G_questionboardPage />} />
 
           <Route path="/Makechat" element={<Makechat />} />
+          <Route path="/Announcementwrite" element={<Announcementwrite />} />
+          <Route path="/Announcementposting/:id" element={<Announcementposting />} />
 
 
 
@@ -125,9 +132,9 @@ function App() {
           <Route path="/ClassChatRoom" element={<ClassChatRoom />} />
           <Route path="/ClassChat" element={<ClassChat />} />
           <Route path="/BootBoardPage" element={<BootBoardPage />} />
-          <Route path="/BoardCode" element={<BoardCode />} />
-          <Route path="/InformationCodeBoard" element={<InformationCodeBoard/>} />
-          <Route path="/InformationContestBoard" element={<InformationContestBoard/>} />
+          <Route path="/BoardCode/:id" element={<BoardCode />} />
+          <Route path="/InformationCodeBoard" element={<InformationCodeBoard />} />
+          <Route path="/InformationContestBoard/:id" element={<InformationContestBoard />} />
 
 
 
@@ -157,23 +164,23 @@ function App() {
           <Route path="/Profileedit" element={<Profileedit />} />
           <Route path="/Myprofile" element={<Myprofile />} />
           <Route path="/ChatPreview" element={<ChatPreview />} />
-          
+
           <Route path="/ChatPreview/:roomId" element={<ChatPreview />} />
           <Route path="/Otherprofile" element={<Otherprofile />} />
-          
+
           <Route path="/Otherprofile/:roomId/:userId" element={<Otherprofile />} />
           <Route path="/User_auth" element={<User_auth />} />
           <Route path="/G_HomePage" element={<G_HomePage />} />
 
           <Route path="/Home" element={<Home />} />
-          
+
           <Route path="/_2" element={<_2 />} />
 
-        <Route path="/" element={<G_HomePage />} />
-        <Route path="/G_questionpostingPage/:id" element={<G_questionpostingPage />} />
-        <Route path="/G_freepostingPage/:id" element={<G_freepostingPage />} />
-        <Route path="/QuestionpostingPage/:id" element={<QuestionpostingPage />} /> 
-        <Route path="/FreepostingPage/:id" element={<FreepostingPage />} />
+          <Route path="/" element={<G_HomePage />} />
+          <Route path="/G_questionpostingPage/:id" element={<G_questionpostingPage />} />
+          <Route path="/G_freepostingPage/:id" element={<G_freepostingPage />} />
+          <Route path="/QuestionpostingPage/:id" element={<QuestionpostingPage />} />
+          <Route path="/FreepostingPage/:id" element={<FreepostingPage />} />
           <Route path="/Chat/" element={<Chat />} />
           <Route path="/G_Chat/" element={<G_Chat />} />
         </Routes>

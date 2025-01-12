@@ -14,7 +14,7 @@ import { jwtDecode } from 'jwt-decode';
 
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'https://6387-2406-5900-10f0-c886-1516-1f0b-2678-cc12.ngrok-free.app/api/board';
+const BASE_URL = 'https://aa51-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board';
 
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
@@ -100,7 +100,7 @@ const G_questionwritePage = () => {
 
       if (response.status === 200) {
         alert('게시글이 성공적으로 처리되었습니다.');
-        navigate('/FreeboardPage'); // 게시글 목록 페이지로 이동
+        navigate('/G_questionboardPage'); // 게시글 목록 페이지로 이동
       } else {
         console.error('Failed to save or update data:', response.statusText);
         alert('게시글 처리 중 오류가 발생했습니다.');

@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const BASE_URL = "http://info-rmation.kro.kr"; // 실제 URL로 변경
+  const BASE_URL = "https://fd5ca3755e85.ngrok.app"; // 실제 URL로 변경
 
   // 페이지 이동을 위한 navigate 선언
   const navigate = useNavigate();
@@ -129,27 +129,31 @@ const LoginPage = () => {
 
         <form onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
-            <label htmlFor="username">학번</label>
-            <input
+            <label className={styles.l_label} htmlFor="username">학번</label>
+            <input 
               type="text"
               id="username"
               value={username}
+
+              className={styles["l_input"]}
               onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="password">비밀번호</label>
+            <label className={styles.l_label} htmlFor="password">비밀번호</label>
             <input
               type="password"
               id="password"
               value={password}
+              
+              className={styles["l_input"]}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          <button type="submit" className={styles.loginButton}>확인</button>
+          <button type="submit" className={styles.l_loginButton}>확인</button>
         </form>
 
         <div className={styles.footerLinks}>
