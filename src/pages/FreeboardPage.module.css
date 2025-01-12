@@ -74,8 +74,7 @@
   /* 마우스 오버 시 배경색 */
 }
 
-.menuItem {
- 
+.menuItem { 
   padding: 10px 20px;
   /* 각 항목의 크기를 적절히 조정 */
   cursor: pointer;
@@ -165,6 +164,10 @@
   margin-right: -5px;
 }
 
+<<<<<<< HEAD
+.activeSortButton {
+  color: #000;
+=======
 .sortButton {
   background: none;
   border: none;
@@ -178,6 +181,7 @@
 
 .latestSortButton:hover{
   background-color: red;
+>>>>>>> 02be623bf5556517d4c87989f7a5911eb1c3c601
 }
 
 /* 게시물 목록 */
