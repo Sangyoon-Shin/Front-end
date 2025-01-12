@@ -18,7 +18,7 @@ const BootBoardPage = () => {
     const [posts, setPosts] = useState([]); // 게시물 목록 상태 관리
     const [sortType, setSortType] = useState('latest'); // 초기 정렬 상태는 'latest'
     const [initialPosts, setInitialPosts] = useState([]); // 최초 데이터 로드한 거 저장시키기
-    const [selectedCategory, setSelectedCategory] = useState('부트 캠프'); // 선택된 항목 상태
+    const [selectedCategory, setSelectedCategory] = useState('부트캠프'); // 선택된 항목 상태
 
     // 페이징 및 추가 필터링 상태
     const [page, setPage] = useState(0); // 현재 페이지 번호
