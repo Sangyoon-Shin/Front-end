@@ -322,7 +322,7 @@ const [rooms, setRooms] = useState(roomsData);
          {/* 자유 게시판 */}
          <div className={styles.infoheader}>
            <h2 className={styles.comtext}>자유 게시판</h2>
-           <a href="/self-development" className={styles.plusButtonLink}>
+           <a href="/FreeboardPage" className={styles.plusButtonLink}>
              <PlusButton className={styles.plusButton} />
            </a>
          </div>
@@ -347,7 +347,7 @@ const [rooms, setRooms] = useState(roomsData);
          {/* 질문 게시판 */}
          <div className={styles.infoheader}>
            <h2 className={styles.comtext}>질문 게시판</h2>
-           <a href="/self-development" className={styles.plusButtonLink}>
+           <a href="/QuestionboardPage" className={styles.plusButtonLink}>
              <PlusButton className={styles.plusButton} />
            </a>
          </div>
