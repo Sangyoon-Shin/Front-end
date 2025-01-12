@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://info-rmation.kro.kr/', // Base URL 설정
+    baseURL: 'https://934ef54da7b8.ngrok.app/Room', // Base URL 설정
     withCredentials: true,
     headers: {
         'ngrok-skip-browser-warning': 1, // 헤더 추가

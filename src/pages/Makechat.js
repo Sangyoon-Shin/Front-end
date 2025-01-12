@@ -14,7 +14,7 @@ import { jwtDecode } from 'jwt-decode';
 
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'rmation-chat.kro.kr';
+const BASE_URL = 'https://934ef54da7b8.ngrok.app';
 
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
