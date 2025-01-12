@@ -37,7 +37,7 @@ const Announcement = () => {
       const fetchPosts = async () => {
         setIsLoading(true); // 로딩 시작
         try {
-          const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/notice', {
+          const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/notice', {
             params: { page, size }, // 페이지와 사이즈를 쿼리 파라미터로 추가
             headers: {
               'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
@@ -96,7 +96,7 @@ const Announcement = () => {
     if (searchTerm.trim() !== '') {
       try {
         console.log(`검색어: ${searchTerm}`);
-        const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/notice', {
+        const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/notice', {
           params: {
             searchKeyword: searchTerm, // 검색어 전달
             page: 0,
@@ -146,7 +146,7 @@ const Announcement = () => {
         typeKeyword: '', // 필요 시 값 설정
       };
 
-      const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/notice/sort-by-likes', {
+      const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/notice/sort-by-likes', {
         params,
         headers: {
           'ngrok-skip-browser-warning': 'true', // 필요 시 유지
@@ -217,27 +217,7 @@ const Announcement = () => {
               onClick={handleSearch} // 돋보기 아이콘 클릭 시 검색
             />
           </div>
-
-          {/* 정렬 버튼들 */}
-          <div className={`${styles.sortButtons} ${isDesktop ? styles.desktopSortButtons : ''}`}>
-            <button
-              className={`${styles.latestSortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''} ${sortType === 'latest' ? styles.activeSortButton : ''}`}
-              onClick={() => handleSort('latest')} // handleSort 함수 호출
-            >
-              최신순
-            </button>
-
-            {/* 추천순 정렬 버튼 */}
-            <button
-              className={`${styles.recommendSortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''} ${sortType === 'recommend' ? styles.activeSortButton : ''}`}
-              onClick={() => handleSort('recommend')} // handleSort 함수 호출
-            >
-              추천순
-            </button>
-          </div>
         </div>
-
-
 
         {/* 게시물 목록 */}
         <div className={styles.postList}>
