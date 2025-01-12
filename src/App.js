@@ -69,7 +69,8 @@ import ChatPreview from './pages/ChatPreview'
 import Otherprofile from './pages/Otherprofile'
 import { UserProvider } from './pages/UserContext'; //유저 프로필
 import User_auth from './pages/User_auth'
-import Chat from './pages/Chat'
+import FreeChat from './pages/FreeChat'
+import RoomChat from './pages/RoomChat'
 import G_HomePage from './pages/G_HomePage'
 import HomePage from './pages/HomePage'; // 정확한 경로로 import 추가
 import G_Chat from './pages/G_Chat'
@@ -181,7 +182,8 @@ function App() {
           <Route path="/G_freepostingPage/:id" element={<G_freepostingPage />} />
           <Route path="/QuestionpostingPage/:id" element={<QuestionpostingPage />} />
           <Route path="/FreepostingPage/:id" element={<FreepostingPage />} />
-          <Route path="/Chat/" element={<Chat />} />
+          <Route path="/FreeChat/" element={<FreeChat />} />
+          <Route path="/RoomChat/" element={<RoomChat />} />
           <Route path="/G_Chat/" element={<G_Chat />} />
         </Routes>
       </BrowserRouter>
