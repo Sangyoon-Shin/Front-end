@@ -810,6 +810,21 @@ width: 100%;
 
 }
 
+
+/* 플러스 버튼 스타일 */
+.plusButton3 {
+  cursor: pointer;
+  height: 100%;
+
+ }
+
+ .plusButton3:hover {
+ 
+    cursor: pointer;
+
+  }
+
+
 .activeTab:hover {
   background: none; /* 호버 시 배경색 변화 없음 */
   border-bottom: 2px solid #0056A0; /* 호버 시 아래 선 유지 */

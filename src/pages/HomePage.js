@@ -379,10 +379,14 @@ const [rooms, setRooms] = useState(roomsData);
  
                   
  <>
-  <div className={styles.Roomcontainer}>
 
+  <div className={styles.Roomcontainer}>
+ 
     {/* 방 목록 */}
     <div className={styles.roomsList}>
+    <a href="/Chat_" className={styles.plusButtonLink}>
+      <PlusButton className={styles.plusButton3} />
+    </a>
       {rooms.map((room) => (
         <div
           key={room.roomId}
@@ -483,7 +487,7 @@ const [rooms, setRooms] = useState(roomsData);
       {/* 대회 정보 부분 */}
       <div className={`${styles.comheader} ${isDesktop ? styles.desktopComHeader : ''}`}>
             <h2 className={styles.comtext}>대회 정보</h2>
-            <a href="/com" className={styles.plusButtonLink}>
+            <a href="/InformationContest" className={styles.plusButtonLink}>
                   <PlusButton className={styles.plusButton} />
             </a>
       </div>
