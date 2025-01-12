@@ -13,7 +13,7 @@ import bar from '../images/bar.png';
 import Header from './_.js';  // 상단바 컴포넌트
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'https://3e319465b029.ngrok.app/api/board';
+const BASE_URL = 'https://aa51-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board';
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
   const userId = localStorage.getItem('userId'); // 이 부분이 사용자 ID를 가져옵니다.
@@ -479,6 +479,40 @@ const handleEdit = async () => {
   }
 };
 
+// 신청버튼 위한 로직 추가함
+const handleApply = async () => {
+  const accessToken = localStorage.getItem('accessToken');
+  console.log(id);
+
+  try {
+    const response = await fetch(`${BASE_URL}/studies/${id}/apply`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`, // 인증 헤더
+        'Content-Type': 'application/json', // 요청 본문 형식 명시
+        'ngrok-skip-browser-warning': 'true', // 추가 헤더
+      },
+      body: JSON.stringify({
+        applyUserId: id
+      }),
+    });
+
+    if (response.ok) {
+      console.log('지원 요청 성공');
+      alert('지원 요청이 완료되었습니다.'); // 성공 팝업
+      navigate("/scrap"); // 요청 성공 후 스크랩 페이지로 이동
+    } else {
+      const errorData = await response.json();
+      console.error('지원 요청 실패:', errorData);
+      alert(`지원 요청 실패: ${errorData.message || '알 수 없는 오류'}`);
+    }
+  } catch (error) {
+    console.error('지원 요청 중 오류 발생:', error);
+    alert('지원 요청 중 오류가 발생했습니다. 다시 시도해주세요.');
+  }
+};
+
+
   return (
     <div>
       <Header />
@@ -522,6 +556,10 @@ const handleEdit = async () => {
 
         <h2 className={styles["title-text4"]}>작성일 : {createdTime}</h2>
         <div className={styles["report"]}>
+          <button onClick={handleApply} className={styles["edit-button"]}>
+          신청하기
+          </button>
+
           <button onClick={handleEdit} className={styles["edit-button"]}>
           수정하기
           </button>
