@@ -101,21 +101,24 @@ function App() {
           <Route path="FreepostingPage/:id" element={<FreepostingPage />} />
           <Route path="QuestionpostingPage" element={<QuestionpostingPage />} />
           <Route path="FreewritePage" element={<FreewritePage />} />
-          {/* 글 수정 페이지 (id가 있을 경우) */}
           <Route path="/FreewritePage/:id" element={<FreewritePage />} />
           <Route path="QuestionwritePage" element={<QuestionwritePage />} />
+          <Route path="QuestionwritePage/:id" element={<QuestionwritePage />} />
           <Route path="FreeboardPage" element={<FreeboardPage />} />
           <Route path="QuestionboardPage" element={<QuestionboardPage />} />
 
           <Route path="G_freepostingPage" element={<G_freepostingPage />} />
           <Route path="G_questionpostingPage" element={<G_questionpostingPage />} />
           <Route path="G_freewritePage" element={<G_freewritePage />} />
+          <Route path="G_freewritePage/:id" element={<G_freewritePage />} />
           <Route path="G_questionwritePage" element={<G_questionwritePage />} />
+          <Route path="G_questionwritePage/:id" element={<G_questionwritePage />} />
           <Route path="G_freeboardPage" element={<G_freeboardPage />} />
           <Route path="G_questionboardPage" element={<G_questionboardPage />} />
 
           <Route path="/Makechat" element={<Makechat />} />
           <Route path="/Announcementwrite" element={<Announcementwrite />} />
+          <Route path="/Announcementwrite/:id" element={<Announcementwrite />} />
           <Route path="/Announcementposting/:id" element={<Announcementposting />} />
 
 
@@ -123,11 +126,13 @@ function App() {
           {/* 상윤님 */}
           {/* <Route path="/BoardPage" element={<BoardPage />} /> 게시판 메인 페이지 */}
           <Route path="/QuestionCode" element={<QuestionCode />} /> {/* 코드 질문방 본문 */}
+          <Route path="/QuestionCode/:id" element={<QuestionCode />} /> {/* 코드 질문방 본문 */}
           <Route path="/RoomPage" element={<RoomPage />} />
           <Route path="/Message" element={<Message />} />
           <Route path="/InformationCode" element={<InformationCode />} /> {/* InformationCode 라우트 추가 */}
           <Route path="/InformationContest" element={<InformationContest />} />
           <Route path="/ContestWrite" element={<ContestWrite />} />
+          <Route path="/ContestWrite/:id" element={<ContestWrite />} />
           <Route path="/AlarmPage" element={<AlarmPage />} />
           <Route path="/Announcement" element={<Announcement />} />
           <Route path="/ClassChatRoom" element={<ClassChatRoom />} />
@@ -148,8 +153,11 @@ function App() {
           <Route path="/Write" element={<WritePage />} />
           <Route path="/Classroom" element={<Classroom />} />
           <Route path="/Bootcamp" element={<BootCamp />} />
+          <Route path="/Bootcamp/:id" element={<BootCamp />} />
           <Route path="/Industry" element={<Industry />} />
+          <Route path="/Industry/:id" element={<Industry />} />
           <Route path="/Study" element={<Study />} />
+          <Route path="/Study/:id" element={<Study />} />
           <Route path="/NoticeBoot" element={<NoticeBoot />} />
           <Route path="/Scrap" element={<Scrap />} />
           <Route path="/My_board" element={<My_board />} />
