@@ -483,7 +483,7 @@ const [rooms, setRooms] = useState(roomsData);
       {/* 대회 정보 부분 */}
       <div className={`${styles.comheader} ${isDesktop ? styles.desktopComHeader : ''}`}>
             <h2 className={styles.comtext}>대회 정보</h2>
-            <a href="/com" className={styles.plusButtonLink}>
+            <a href="/InformationContest" className={styles.plusButtonLink}>
                   <PlusButton className={styles.plusButton} />
             </a>
       </div>
