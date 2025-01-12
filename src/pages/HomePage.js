@@ -215,8 +215,8 @@ const [rooms, setRooms] = useState(roomsData);
     <div
       key={post.id}
       className={styles.postItem}
-      onClick={() => handleQuestionClick(post.id)} // 게시물 클릭 시 상세 페이지로 이동
-    >
+      onClick={() => navigate(`/BoardCode/${post.id}`)} // 바로 navigate 호출
+      >
       <span className={styles.index}>{codingBoardData.indexOf(post) + 1}</span>
       <span className={styles.question}>{post.codingTitle || '제목 없음'}</span>
       <span className={styles.date}>
@@ -242,13 +242,13 @@ const [rooms, setRooms] = useState(roomsData);
       
 
       <div className={styles.postList}>
-        <div className={styles.postItem} onClick={() => handleQuestionClick(1)}>
+        <div className={styles.postItem}onClick={() => navigate(`/ClassRoom`)} >
           <span className={styles.index}>1</span>
           <span className={styles.question}>A동 210호</span>
           <S_cute className={styles.S_cute} />
         </div>
 
-        <div className={styles.postItem} onClick={() => handleQuestionClick(2)}>
+        <div className={styles.postItem} onClick={() => navigate(`/ClassRoom`)} >
           <span className={styles.index}>2</span>
           <span className={styles.question}>B동 530호</span>
           
@@ -271,7 +271,7 @@ const [rooms, setRooms] = useState(roomsData);
 
           {/* 스터디 게시판 각 카테고리별 상위 1개 게시물 */}
           <div className={styles.postList}>
-               <div className={styles.postItem} onClick={() => handleQuestionClick(studyBoardData.bootcampStudies[0]?.id)}>
+               <div className={styles.postItem} onClick={() => navigate((`/BootBoard/${studyBoardData.bootcampStudies[0]?.id}`))}>
                     <span className={styles.index}>1</span>
                     <span className={styles.question}>
                          {studyBoardData.bootcampStudies[0]?.studyTitle || '제목 없음'}
@@ -284,7 +284,7 @@ const [rooms, setRooms] = useState(roomsData);
                     <S_cute className={styles.S_cute} />
                </div>
 
-               <div className={styles.postItem} onClick={() => handleQuestionClick(studyBoardData.industryStudies[0]?.id)}>
+               <div className={styles.postItem} onClick={() => navigate(`/IndustryBoard/${studyBoardData.industryStudies[0]?.id}`)}>
                     <span className={styles.index}>2</span>
                     <span className={styles.question}>
                          {studyBoardData.industryStudies[0]?.studyTitle || '제목 없음'}
@@ -297,7 +297,7 @@ const [rooms, setRooms] = useState(roomsData);
                     <S_cute className={styles.S_cute} />
                </div>
 
-               <div className={styles.postItem} onClick={() => handleQuestionClick(studyBoardData.regularStudies[0]?.id)}>
+               <div className={styles.postItem} onClick={() => navigate(`/StudyBoard/${studyBoardData.regularStudies[0]?.id}`)}>
                     <span className={styles.index}>3</span>
                     <span className={styles.question}>
                          {studyBoardData.regularStudies[0]?.studyTitle || '제목 없음'}
@@ -322,7 +322,7 @@ const [rooms, setRooms] = useState(roomsData);
          {/* 자유 게시판 */}
          <div className={styles.infoheader}>
            <h2 className={styles.comtext}>자유 게시판</h2>
-           <a href="/self-development" className={styles.plusButtonLink}>
+           <a href="/FreeboardPage" className={styles.plusButtonLink}>
              <PlusButton className={styles.plusButton} />
            </a>
          </div>
@@ -347,7 +347,7 @@ const [rooms, setRooms] = useState(roomsData);
          {/* 질문 게시판 */}
          <div className={styles.infoheader}>
            <h2 className={styles.comtext}>질문 게시판</h2>
-           <a href="/self-development" className={styles.plusButtonLink}>
+           <a href="/QuestionboardPage" className={styles.plusButtonLink}>
              <PlusButton className={styles.plusButton} />
            </a>
          </div>
@@ -379,10 +379,14 @@ const [rooms, setRooms] = useState(roomsData);
  
                   
  <>
-  <div className={styles.Roomcontainer}>
 
+  <div className={styles.Roomcontainer}>
+ 
     {/* 방 목록 */}
     <div className={styles.roomsList}>
+    <a href="/Chat_" className={styles.plusButtonLink}>
+      <PlusButton className={styles.plusButton3} />
+    </a>
       {rooms.map((room) => (
         <div
           key={room.roomId}
@@ -483,7 +487,7 @@ const [rooms, setRooms] = useState(roomsData);
       {/* 대회 정보 부분 */}
       <div className={`${styles.comheader} ${isDesktop ? styles.desktopComHeader : ''}`}>
             <h2 className={styles.comtext}>대회 정보</h2>
-            <a href="/com" className={styles.plusButtonLink}>
+            <a href="/InformationContest" className={styles.plusButtonLink}>
                   <PlusButton className={styles.plusButton} />
             </a>
       </div>
