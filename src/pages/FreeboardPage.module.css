@@ -74,8 +74,7 @@
   /* 마우스 오버 시 배경색 */
 }
 
-.menuItem {
- 
+.menuItem { 
   padding: 10px 20px;
   /* 각 항목의 크기를 적절히 조정 */
   cursor: pointer;

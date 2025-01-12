@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import styles from './ClassChatRoom.module.css';
+import styles from './FreeChat.module.css';
 import CommunicationRoom_goBack from '../images/chatback.png';
 import sendIcon from '../images/메시지전송버튼.png';
 import heartIcon from '../images/하트횃불이.png';
@@ -14,7 +14,7 @@ import Header from './_2.js'; // 상단바 컴포넌트
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
 import axios from 'axios'; // API 요청을 위한 axios
 
-const ClassChatRoom = () => {
+const FreeChat = () => {
     const websocketRef = useRef(null); // 웹소켓 참조
     const reconnectIntervalRef = useRef(null); // 재연결 타이머
     const { classId } = useParams();
@@ -199,7 +199,7 @@ const ClassChatRoom = () => {
                         className={`${styles.goBackButton} ${isDesktop ? styles.desktopGoBackButton : styles.mobileGoBackButton}`}
                         onClick={() => navigate(-1)}
                     />
-                    <h2 className={`${styles.sectionTitle} ${isDesktop ? styles.desktopSectionTitle : styles.mobileSectionTitle}`}>수업 소통방</h2>
+                    <h2 className={`${styles.sectionTitle} ${isDesktop ? styles.desktopSectionTitle : styles.mobileSectionTitle}`}>자유 소통방</h2>
                 </div>
 
                 <div className={`${styles.classInfo} ${isDesktop ? styles.desktopClassInfo : styles.mobileClassInfo}`}>
@@ -236,4 +236,4 @@ const ClassChatRoom = () => {
     );
 };
 
-export default ClassChatRoom;
+export default FreeChat;

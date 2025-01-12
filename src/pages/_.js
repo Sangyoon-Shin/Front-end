@@ -47,7 +47,7 @@ const _2 = () => {
         <div className={styles["right-section"]}>
           <h2 
             className={styles["title-text"]}
-            onClick={() => navigate("/notice")}
+            onClick={() => navigate("/Announcement")}
             style={{ cursor: "pointer" }}
           >공지사항</h2>
 
@@ -55,7 +55,7 @@ const _2 = () => {
             src={mainBell} 
             className={styles["app-main_bell"]} 
             alt="main_bell"
-            onClick={() => navigate("/notification")}
+            onClick={() => navigate("/AlarmPage")}
             style={{ cursor: 'pointer' }}
           />
 

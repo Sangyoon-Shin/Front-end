@@ -70,7 +70,7 @@ const BootBoard = () => {
           console.log('게시글 데이터:', data);
 
           // studiesCreatedTime 변환
-          const formattedDate = new Date(data.studiesCreatedTime).toLocaleString('ko-KR', {
+          const formattedDate = new Date(data.studyCreatedTime).toLocaleString('ko-KR', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
