@@ -276,13 +276,13 @@ const G_freeboardPage = () => {
 
           <div className={`${styles.sortButtons} ${isDesktop ? styles.desktopSortButtons : ''}`}>
             <button
-              className={`${styles.sortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''}`}
+              className={`${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''}`}
               onClick={() => handleSort('latest')}
             >
               최신순
             </button>
             <button
-              className={`${styles.sortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''}`}
+              className={`${styles.latestSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''}`}
               onClick={() => handleSort('recommend')}
             >
               추천순

@@ -25,7 +25,7 @@
 }
 
 .pageTitle {
-  margin-top: px;
+  margin-top: 0px;
   font-size: 1.2rem;
   text-align: center;
   flex-grow: 1;
@@ -162,17 +162,6 @@
   white-space: nowrap; /* 텍스트 줄바꿈 방지 */
   margin-left: 5px;
   margin-right: -5px;
-}
-
-.sortButton {
-  background: none;
-  border: none;
-  color: #555;
-  font-weight: bold;
-  cursor: pointer;
-  width: 60px;
-  /* 너비를 줄여 균형 잡기 */
-  margin-left: -10px;
 }
 
 .latestSortButton:hover{

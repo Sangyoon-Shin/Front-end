@@ -37,7 +37,7 @@ const InformationContest = () => {
     const fetchPosts = async () => {
       setIsLoading(true); // 로딩 시작
       try {
-        const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/competition', {// page와 size 추가
+        const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/competition', {// page와 size 추가
           params: { page, size }, // 페이지와 사이즈를 쿼리 파라미터로 추가
           headers: {
             'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
@@ -67,7 +67,7 @@ const InformationContest = () => {
     // 좋아요 10개 이상 게시물 가져오기
     const fetchTopLikedPosts = async () => {
       try {
-        const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/competition/top-liked', {
+        const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/competition/top-liked', {
           headers: {
             'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
           },
@@ -114,7 +114,7 @@ const InformationContest = () => {
     if (searchTerm.trim() !== '') {
       try {
         console.log(`검색어: ${searchTerm}`);
-        const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/competiton', {
+        const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/competiton', {
           params: {
             searchKeyword: searchTerm, // 검색어 전달
             page: 0,
@@ -169,7 +169,7 @@ const InformationContest = () => {
         typeKeyword: '', // 필요 시 값 설정
       };
 
-      const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/competiton/sort-by-likes', {
+      const response = await axiosInstance.get('https://3e319465b029.ngrok.app/api/board/competition/sort-by-likes', {
         params,
         headers: {
           'ngrok-skip-browser-warning': 'true', // 필요 시 유지
@@ -236,7 +236,7 @@ const InformationContest = () => {
           {/* 정렬 버튼들 */}
           <div className={`${styles.sortButtons} ${isDesktop ? styles.desktopSortButtons : ''}`}>
             <button
-              className={`${styles.latestSortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''} ${sortType === 'latest' ? styles.activeSortButton : ''}`}
+              className={`${styles.latestSortButton}  ${isDesktop ? styles.desktopLatestSortButton : ''} `}
               onClick={() => handleSort('latest')} // handleSort 함수 호출
             >
               최신순
@@ -244,7 +244,7 @@ const InformationContest = () => {
 
             {/* 추천순 정렬 버튼 */}
             <button
-              className={`${styles.recommendSortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''} ${sortType === 'recommend' ? styles.activeSortButton : ''}`}
+              className={`${styles.latestSortButton}  ${isDesktop ? styles.desktopRecommendSortButton : ''} `}
               onClick={() => handleSort('recommend')} // handleSort 함수 호출
             >
               추천순
