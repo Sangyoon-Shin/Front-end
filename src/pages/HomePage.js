@@ -204,7 +204,7 @@ const [rooms, setRooms] = useState(roomsData);
           <div className={styles.container}>
           <div className={styles.infoheader}>
                <h2 className={styles.comtext}>코드 질문</h2>
-               <a href="/new-link" className={styles.plusButtonLink}>
+               <a href="/InformationCode" className={styles.plusButtonLink}>
                     <PlusButton className={styles.plusButton} />
                </a>
           </div>
@@ -235,7 +235,7 @@ const [rooms, setRooms] = useState(roomsData);
     <div className={styles.container}>
       <div className={styles.infoheader}>
       <h2 className={styles.comtext}>빈 강의실 현황</h2>
-        <a href="/room-status" className={styles.plusButtonLink}>
+        <a href="ClassRoom" className={styles.plusButtonLink}>
           <PlusButton className={styles.plusButton} />
         </a>
       </div>
@@ -264,7 +264,7 @@ const [rooms, setRooms] = useState(roomsData);
     <div className={styles.container}>
           <div className={styles.infoheader}>
                <h2 className={styles.comtext}>자기 개발</h2>
-               <a href="/self-development" className={styles.plusButtonLink}>
+               <a href="/BootBoardPage" className={styles.plusButtonLink}>
                     <PlusButton className={styles.plusButton} />
                </a>
           </div>
@@ -435,7 +435,7 @@ const [rooms, setRooms] = useState(roomsData);
           <div className={`${styles["right-section"]} ${isDesktop ? styles.desktopRightSection : ''}`}>
             <h2
               className={styles["title-text"]}
-              onClick={() => navigate("/notice")}
+              onClick={() => navigate("/Announcement")}
               style={{ cursor: "pointer" }}
             >
               공지사항
@@ -445,7 +445,7 @@ const [rooms, setRooms] = useState(roomsData);
               src={main_bell}
               className={`${styles["app-main_bell"]} ${isDesktop ? styles.desktopMainBell : ''}`}
               alt="main_bell"
-              onClick={() => navigate("/notification")}
+              onClick={() => navigate("/AlarmPage")}
             />
             <img
               src={main_message}
