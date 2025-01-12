@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강의 시간 수정</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+
+        .prev {
+            display: block;
+            padding: 10px 0px;
+            background-color: #cbe1f9;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 16px;
+            max-width: 100px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .day-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .day-selector button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .day-selector button.active {
+            background-color: #0056b3;
+        }
+
+        .schedule {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto auto;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .schedule input {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .schedule button {
+            padding: 8px;
+            font-size: 14px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .add-schedule {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .add-schedule button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .save-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .save-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/edit_lecture" class="prev">prev</a>
+        <h1 id="room-title">강의 시간 수정</h1>
+
+
+        <div class="day-selector">
+            <button onclick="selectDay('월')" id="day-월" class="active">월</button>
+            <button onclick="selectDay('화')" id="day-화">화</button>
+            <button onclick="selectDay('수')" id="day-수">수</button>
+            <button onclick="selectDay('목')" id="day-목">목</button>
+            <button onclick="selectDay('금')" id="day-금">금</button>
+        </div>
+
+        <div id="schedule-list">
+            <!-- 강의 일정이 여기에 동적으로 추가됩니다 -->
+        </div>
+
+        <div class="add-schedule">
+            <button class="add-button" onclick="addLectureTime()">+ 강의 시간 추가</button>
+        </div>
+
+        <button class="save-button" onclick="saveSchedule()">저장하기</button>
+    </div>
+
+    <script>
+        const API_URL = "https://3e319465b029.ngrok.app/api/admin/rooms";
+        const token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IjIwMDIwNDI2MyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczNjMxMTg3NSwiZXhwIjoxOTMwNzExODc1fQ.Y3AmNndn9aBA8I5Z2QluCXxR96iWF3gFn1RZYKhaKI8";
+
+        // URL에서 강의실 번호 추출
+        const pathname = window.location.pathname; // 현재 경로 가져오기
+        const roomNumber = pathname.split("/").pop().slice(0, 3); // 맨 앞 세 글자 추출
+
+        // 서버에서 특정 roomNumber의 lectureTimes 가져오기
+        // 서버에서 특정 roomNumber의 lectureTimes 가져오기
+        async function fetchLectureTimes() {
+            try {
+                const response = await fetch(`https://3e319465b029.ngrok.app/api/rooms/${roomNumber}`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "ngrok-skip-browser-warning": "1",
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("서버에서 가져온 데이터:", data);
+
+                // schedules 초기화
+                schedules = {
+                    월: [],
+                    화: [],
+                    수: [],
+                    목: [],
+                    금: [],
+                };
+
+                // 서버 데이터를 schedules에 반영
+                data.forEach((lecture) => {
+                    const day = convertEnglishToKorean(lecture.dayOfWeek);
+                    if (schedules[day]) {
+                        schedules[day].push({
+                            number: schedules[day].length + 1,
+                            name: lecture.lectureName,
+                            start: lecture.startTime,
+                            end: lecture.endTime,
+                        });
+                    }
+                });
+
+                console.log("스케줄 업데이트 완료:", schedules);
+
+                // 현재 요일 데이터 렌더링
+                renderLectureTimes();
+            } catch (error) {
+                console.error("Failed to fetch lecture times:", error);
+                alert(`강의 시간 불러오기 중 오류가 발생했습니다: ${error.message}`);
+            }
+        }
+        // 요일을 영어에서 한글로 변환
+        function convertEnglishToKorean(day) {
+            const days = {
+                MONDAY: "월",
+                TUESDAY: "화",
+                WEDNESDAY: "수",
+                THURSDAY: "목",
+                FRIDAY: "금"
+            };
+            return days[day] || "";
+        }
+
+        // 요일 선택
+        let currentDay = "월";
+        function selectDay(day) {
+            currentDay = day;
+
+            // 버튼 활성화
+            document.querySelectorAll(".day-selector button").forEach((button) =>
+                button.classList.remove("active")
+            );
+            document.getElementById(`day-${day}`).classList.add("active");
+
+            // 선택된 요일 데이터 렌더링
+            renderLectureTimes();
+        }
+        async function addLectureTime() {
+            const lectureName = prompt("추가할 강의명을 입력하세요:");
+            const startTime = prompt("강의 시작 시간을 HH:mm 형식으로 입력하세요 (예: 09:00):");
+            const endTime = prompt("강의 종료 시간을 HH:mm 형식으로 입력하세요 (예: 10:00):");
+
+            if (!lectureName || !startTime || !endTime) {
+                alert("모든 필드를 입력해야 합니다.");
+                return;
+            }
+
+            try {
+                const dayOfWeek = convertDayToEnglish(currentDay); // 현재 선택된 요일을 영어로 변환
+
+                // Query Parameters 생성
+                const queryString = new URLSearchParams({
+                    startTime: startTime,
+                    endTime: endTime,
+                    lectureName: lectureName,
+                    dayOfWeek: dayOfWeek,
+                }).toString();
+
+                // POST 요청으로 강의 시간 추가
+                const response = await fetch(`${API_URL}/${roomNumber}/lectures/add?${queryString}`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "ngrok-skip-browser-warning": "1", // ngrok 경고 무시
+                    },
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error(`Failed to add lecture: ${response.status}`, errorText);
+                    alert(`강의 추가에 실패했습니다: ${response.status}`);
+                    return;
+                }
+
+                const result = await response.json();
+                console.log("추가된 강의:", result);
+
+                // 로컬 데이터에도 추가
+                schedules[currentDay].push({
+                    number: schedules[currentDay].length + 1,
+                    name: lectureName,
+                    start: startTime,
+                    end: endTime,
+                });
+
+                // 화면 업데이트
+                renderLectureTimes();
+
+                alert("강의가 성공적으로 추가되었습니다.");
+            } catch (error) {
+                console.error("Failed to add lecture:", error);
+                alert("강의 추가 중 오류가 발생했습니다.");
+            }
+        }
+        async function removeLectureTime(index) {
+            const lectureName = schedules[currentDay][index].name; // 삭제할 강의 이름
+
+            try {
+                // DELETE 요청 보내기
+                const response = await fetch(
+                    `https://3e319465b029.ngrok.app/api/admin/lectures/delete-by-name?lectureName=${encodeURIComponent(lectureName)}`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            "Authorization": `Bearer ${token}`,
+                            "ngrok-skip-browser-warning": "1", // ngrok 경고 무시
+                        },
+                    }
+                );
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log("삭제 성공:", result);
+
+                    // 성공적으로 삭제되었으면 로컬 데이터에서도 제거
+                    schedules[currentDay].splice(index, 1);
+                    renderLectureTimes(); // 화면 업데이트
+
+                    alert(`강의가 성공적으로 삭제되었습니다: ${lectureName}`);
+                } else if (response.status === 404) {
+                    const errorText = await response.text();
+                    console.error("강의 삭제 실패 (404):", errorText);
+                    alert(`삭제할 강의를 찾을 수 없습니다: ${lectureName}`);
+                } else {
+                    const errorText = await response.text();
+                    console.error("강의 삭제 실패:", errorText);
+                    alert(`강의 삭제에 실패했습니다: ${response.status}`);
+                }
+            } catch (error) {
+                console.error("강의 삭제 중 오류 발생:", error);
+                alert("강의 삭제 중 오류가 발생했습니다.");
+            }
+        }
+
+
+        // 강의 시간 렌더링
+        function renderLectureTimes() {
+            const scheduleList = document.getElementById("schedule-list");
+            scheduleList.innerHTML = ""; // 기존 내용 초기화
+
+            const lectures = schedules[currentDay] || [];
+            if (lectures.length === 0) {
+                scheduleList.innerHTML = "<p>현재 요일에 강의가 없습니다.</p>";
+                return;
+            }
+
+            // 강의 시간 목록 생성
+            lectures.forEach((lecture, index) => {
+                const lectureRow = document.createElement("div");
+                lectureRow.className = "schedule";
+                lectureRow.innerHTML = `
+            <input type="number" value="${lecture.number}" onchange="updateLectureNumber(${index}, this.value)" placeholder="번호">
+            <input type="text" value="${lecture.name}" onchange="updateLectureName(${index}, this.value)" placeholder="강의명">
+            <input type="time" value="${lecture.start}" onchange="updateLectureStart(${index}, this.value)">
+            <input type="time" value="${lecture.end}" onchange="updateLectureEnd(${index}, this.value)">
+            <button onclick="removeLectureTime(${index})">삭제</button>
+        `;
+                scheduleList.appendChild(lectureRow);
+            });
+        }
+
+
+        // 요일을 영어로 변환
+        function convertDayToEnglish(day) {
+            const days = {
+                월: "MONDAY",
+                화: "TUESDAY",
+                수: "WEDNESDAY",
+                목: "THURSDAY",
+                금: "FRIDAY"
+            };
+            return days[day] || "";
+        }
+        // 초기 렌더링
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                await fetchLectureTimes(); // 서버에서 강의 시간 가져오기
+                document.getElementById(
+                    "room-title"
+                ).textContent = `강의 시간 수정 - ${roomNumber}호`;
+                selectDay("월"); // 기본으로 월요일 데이터 렌더링
+            } catch (error) {
+                console.error("초기 로드 중 오류 발생:", error);
+            }
+        });
+
+    </script>

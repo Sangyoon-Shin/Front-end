@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>댓글 신고 목록 조회</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .home-button {
+            display: block;
+            padding: 10px 0px;
+            background-color: #cbe1f9;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 16px;
+            max-width: 100px;
+        }
+
+        .add-button {
+            margin-bottom: 20px;
+            display: block;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .report-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        .report-item:last-child {
+            border-bottom: none;
+        }
+
+        .report-title {
+            font-weight: bold;
+        }
+
+        .report-reason {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .actions .delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .actions .review {
+            background-color: #007BFF;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/" class="home-button">HOME</a>
+        <h1>댓글 신고 목록 조회</h1>
+
+
+        <div id="report-list">
+            <!-- 신고 항목이 여기에 추가됩니다 -->
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://3e319465b029.ngrok.app/api/admin";
+        const token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IjIwMDIwNDI2MyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczNjMxMTg3NSwiZXhwIjoxOTMwNzExODc1fQ.Y3AmNndn9aBA8I5Z2QluCXxR96iWF3gFn1RZYKhaKI8";
+
+        // 댓글 신고 목록 불러오기
+        async function fetchReports() {
+            try {
+                const response = await fetch(`${API_URL}/comment-reports`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                        "ngrok-skip-browser-warning": "1"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                renderReports(data);
+            } catch (error) {
+                console.error("Failed to fetch reports:", error);
+            }
+        }
+
+
+
+        // 댓글 삭제
+        async function deleteComment(commentId, boardType, postId) {
+            try {
+                const response = await fetch(`${API_URL}/${boardType}/${postId}/comments/${commentId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                        "ngrok-skip-browser-warning": "1"
+                    }
+                });
+
+                if (response.ok) {
+                    alert("댓글이 삭제되었습니다.");
+                    fetchReports(); // 목록 갱신
+                } else {
+                    const errorText = await response.text();
+                    console.error(`Failed to delete comment: ${response.status} ${errorText}`);
+                    alert(`댓글 삭제에 실패했습니다. 상태 코드: ${response.status}`);
+                }
+            } catch (error) {
+                console.error("Failed to delete comment:", error);
+            }
+        }
+
+
+        // 신고 반려
+        async function removeReport(commentId) {
+            try {
+                const response = await fetch(`${API_URL}/comment-reports/comment/${commentId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                        "ngrok-skip-browser-warning": "1"
+                    }
+                });
+
+                if (response.ok) {
+                    alert("신고가 반려되었습니다.");
+                    fetchReports(); // 목록 갱신
+                } else {
+                    const errorText = await response.text();
+                    console.error(`Failed to remove report: ${response.status} ${errorText}`);
+                    alert(`신고 반려에 실패했습니다. 상태 코드: ${response.status}`);
+                }
+            } catch (error) {
+                console.error("Failed to remove report:", error);
+            }
+        }
+        function renderReports(data) {
+            const reportList = document.getElementById("report-list");
+            reportList.innerHTML = ""; // 기존 리스트 초기화
+
+            data.forEach(report => {
+                const reportItem = document.createElement("div");
+                reportItem.className = "report-item";
+                reportItem.innerHTML = `
+            <div class="report-title">댓글 ID: ${report.commentId}</div>
+            <div class="report-reason">신고 사유: ${report.reason}</div>
+            <div class="report-reporter"> reporter : : ${report.reporter}</div>
+            <div class="report-boardType">게시판 유형: ${report.boardType || "알 수 없음"}</div>
+            <div class="report-count">신고 횟수: ${report.reportCount || 0}</div>
+            <div class="actions">
+                <button class="delete" onclick="deleteComment(${report.commentId}, '${report.boardType}', '${report.postId}')">댓글 삭제하기</button>
+                <button class="review" onclick="removeReport(${report.commentId})">신고 반려하기</button>
+            </div>
+        `;
+                reportList.appendChild(reportItem);
+            });
+        }
+
+
+        // 페이지 로드 시 신고 목록 불러오기
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchReports();
+        });
+    </script>
+</body>
+
+</html>
