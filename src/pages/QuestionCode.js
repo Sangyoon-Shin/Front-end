@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import styles from "./QuestionwritePage.module.css";
+import styles from "./QuestionCode.module.css";
 import arrow from '../images/arrow.png';
 import bar from '../images/bar.png';
 import Header from './_.js'; // 상단바 컴포넌트
@@ -34,7 +34,6 @@ const QuestionCode = () => {
     const [hashtag, setHashtag] = useState('');
     const [files, setFiles] = useState(null);
     const [isEditing, setIsEditing] = useState(false); // 수정 모드 여부
-    const [images, setImages] = useState([]);  // 이미지 배열로 수정
 
     // 특정 게시글 데이터 가져오기 (수정 모드일 경우)
     useEffect(() => {
@@ -49,7 +48,8 @@ const QuestionCode = () => {
             const response = await axios.get(`${BASE_URL}/coding/update/${postId}`, {
                 headers: { ...getAuthHeaders(), 'ngrok-skip-browser-warning': 1 },
             });
-            const { codingTitle, codingContents, codingHashtag, codingFile } = response.data;
+            const { codingType, codingTitle, codingContents, codingHashtag, codingFile } = response.data;
+            setSelectedLanguage(codingType);
             setTitle(codingTitle);
             setContent(codingContents);
             setHashtag(codingHashtag);
@@ -66,20 +66,22 @@ const QuestionCode = () => {
 
     const handleSubmit = async () => {
         const formData = new FormData();
-        formData.append('codingTitle', title);
+        const normalizedLanguage = selectedLanguage === 'C/C++' ? 'C' : selectedLanguage;
+
+        formData.append('codingType', normalizedLanguage); // 선택된 언어 추가
+        formData.append('codingTitle', title); // [선택된 언어] 포함 제목 추가
         formData.append('codingContents', content);
         formData.append('codingHashtag', hashtag);
-        formData.append('selectedLanguage', selectedLanguage); // 선택된 언어 추가
 
         // 파일이 있을 경우에만 추가
         if (files && files.length > 0) {
             files.forEach((file) => formData.append('codingFile', file)); // 'codingFile'은 서버에서 요구하는 키 이름
         }
-        
-    // 수정모드일 때만 id 추가
-    if (isEditing) {
-        formData.append('id', id); // 수정 시에만 id 추가
-      }
+
+        // 수정모드일 때만 id 추가
+        if (isEditing) {
+            formData.append('id', id); // 수정 시에만 id 추가
+        }
 
         try {
             const url = isEditing ? `${BASE_URL}/coding/update` : `${BASE_URL}/coding/save`;
@@ -101,9 +103,19 @@ const QuestionCode = () => {
     };
 
     const handleLanguageChange = (language) => {
-        // 'C/C++'인 경우 'C'로 변환
-        const safeLanguage = language === 'C/C++' ? 'C' : language; // C/C++인 경우 C로 변경
-        setSelectedLanguage(safeLanguage);
+        setSelectedLanguage(language);
+        if (!title.startsWith(`[${language}]`)) {
+            setTitle(`[${language}] `); // 제목에 언어를 추가
+        }
+    };
+
+    const handleTitleChange = (e) => {
+        const input = e.target.value;
+        if (input.startsWith(`[${selectedLanguage}]`)) {
+            setTitle(input); // 사용자가 언어 태그를 유지하면서 입력
+        } else {
+            setTitle(`[${selectedLanguage}] ${input.replace(/^\[.*?\]\s*/, '')}`); // 기존 언어 태그 제거 후 새로 추가
+        }
     };
 
     return (
@@ -114,7 +126,6 @@ const QuestionCode = () => {
             <h2 className={styles["title-text2"]}>{isEditing ? '게시글 수정' : '코드질문 작성'}</h2>
 
             <img src={bar} className={styles["app-bar"]} alt="bar" />
-
 
             <div className={styles["input-group"]}>
                 <h2 className={styles["title-text3"]}>언어 선택</h2>
@@ -131,14 +142,13 @@ const QuestionCode = () => {
                 </div>
             </div>
 
-
             <div className={styles["input-group"]}>
                 <h2 className={styles["title-text3"]}><br />제목</h2>
                 <input
                     className={styles["input"]}
                     type="text"
                     value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    onChange={handleTitleChange}
                     placeholder="제목을 입력하세요."
                 />
             </div>
@@ -163,7 +173,6 @@ const QuestionCode = () => {
                     placeholder="내용을 입력하세요."
                 />
             </div>
-
 
             <div className={styles["input-group"]}>
                 <h2 className={styles["title-text4"]}>파일 첨부</h2>

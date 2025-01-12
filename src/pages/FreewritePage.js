@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import styles from "./QuestionwritePage.module.css";
+import styles from "./FreewritePage.module.css";
 import main_mascot from '../images/대학 심볼 횃불이.png';
 import main_bell from '../images/bell.png';
 import main_message from '../images/message.png';
@@ -14,7 +14,7 @@ import { jwtDecode } from 'jwt-decode';
 
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'http://info-rmation.kro.kr/api/board';
+const BASE_URL = 'https://3e319465b029.ngrok.app/api/board';
 
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
@@ -30,7 +30,7 @@ const getAuthHeaders = () => {
   };
 };
 
-const QuestionwritePage = () => {
+const FreewritePage = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // 게시글 ID를 URL에서 가져옴 (수정 시 사용)
 
@@ -48,18 +48,20 @@ const QuestionwritePage = () => {
       setIsEditing(true);
       fetchPostData(id);
     }
+
   }, [id]);
 
   const fetchPostData = async (postId) => {
     try {
-      const response = await axios.get(`${BASE_URL}/quest/update/${postId}`, {
+      const response = await axios.get(`${BASE_URL}/free/update/${postId}`, {
         headers: { ...getAuthHeaders(), 'ngrok-skip-browser-warning': 1 },
       });
-      const { questTitle, questContents, questHashtag, questFile } = response.data;
-      setTitle(questTitle);
-      setContent(questContents);
-      setHashtag(questHashtag);
-      setFiles(questFile);
+      const { freeTitle, freeContents, freeHashtag, freeFile } = response.data;
+      setTitle(freeTitle);
+      setContent(freeContents);
+      setHashtag(freeHashtag);
+      setFiles(freeFile); // 파일을 불러오는 부분
+
     } catch (error) {
       console.error('Error fetching post data:', error);
       alert('게시글 정보를 불러오는 데 실패했습니다.');
@@ -72,30 +74,35 @@ const QuestionwritePage = () => {
 
   const handleSubmit = async () => {
     const formData = new FormData();
-    formData.append('questTitle', title);
-    formData.append('questContents', content);
-    formData.append('questHashtag', hashtag);
 
-    // 파일이 있을 경우에만 추가
-    if (files && files.length > 0) {
-      files.forEach((file) => formData.append('questFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
-    }
-
-    
     // 수정모드일 때만 id 추가
     if (isEditing) {
-      formData.append('id', id); // 수정 시에만 id 추가
+      formData.append('Id', id); // 수정 시에만 id 추가
+      console.log("들어가냐?")
+    }
+    formData.append('freeTitle', title);
+    formData.append('freeContents', content);
+    formData.append('freeHashtag', hashtag);
+
+    if (files && files.length > 0) {
+      files.forEach((file) => formData.append('freeFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
     }
 
+    console.log(id);
+    console.log(title);
+    console.log(content);
+    console.log(hashtag);
+    console.log(files);
+
     try {
-      const url = isEditing ? `${BASE_URL}/quest/update` : `${BASE_URL}/quest/save`;
+      const url = isEditing ? `${BASE_URL}/free/update` : `${BASE_URL}/free/save`;
       const headers = { ...getAuthHeaders(), 'Content-Type': 'multipart/form-data' };
 
       const response = await axios.post(url, formData, { headers });
 
       if (response.status === 200) {
         alert('게시글이 성공적으로 처리되었습니다.');
-        navigate('/QuestionboardPage'); // 게시글 목록 페이지로 이동
+        navigate('/freeboardPage'); // 게시글 목록 페이지로 이동
       } else {
         console.error('Failed to save or update data:', response.statusText);
         alert('게시글 처리 중 오류가 발생했습니다.');
@@ -174,4 +181,4 @@ const QuestionwritePage = () => {
   );
 };
 
-export default QuestionwritePage;
+export default FreewritePage;

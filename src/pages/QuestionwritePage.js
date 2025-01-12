@@ -72,6 +72,9 @@ const QuestionwritePage = () => {
 
   const handleSubmit = async () => {
     const formData = new FormData();
+    if (isEditing) {
+      formData.append('Id', id); // 수정 시에만 id 추가
+    }
     formData.append('questTitle', title);
     formData.append('questContents', content);
     formData.append('questHashtag', hashtag);

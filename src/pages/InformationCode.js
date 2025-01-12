@@ -166,7 +166,7 @@ const InformationCode = () => {
 
   const toggleScrap = async (id) => {
     try {
-      const response = await axiosInstance.post(`https://3e319465b029.ngrok.app/api/board/coding/${id}/scrap`, {
+      const response = await axiosInstance.post(`http://info-rmation.kro.kr/api/board/coding/${id}/scrap`, {
         headers: {
           'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
         },

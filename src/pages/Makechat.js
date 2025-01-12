@@ -14,7 +14,7 @@ import { jwtDecode } from 'jwt-decode';
 
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = 'rmation-chat.kro.kr';
+const BASE_URL = 'https://934ef54da7b8.ngrok.app';
 
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
@@ -75,37 +75,45 @@ const Makechat = () => {
   };
 
   const handleSubmit = async () => {
-    const formData = new FormData();
-    formData.append('roomName', title);
-    formData.append('description', content);
-    formData.append('mode', 'Opened');
-    formData.append('isTel', 'True');
-    formData.append('hashTag', hashtag);
-
-
-    // 파일이 있을 경우에만 추가
+    // 요청 데이터를 객체 형태로 준비
+    const payload = {
+      roomName: title,
+      description: content,
+      mode: 'Opened',
+      isTel: 'True',
+      hashTag: hashtag,
+    };
+  
+    // 파일이 있을 경우 처리 (일반적으로 JSON 요청에서 파일을 포함하지 않습니다. 파일 처리 방식이 따로 필요할 수 있음)
     if (files && files.length > 0) {
-    //  files.forEach((file) => formData.append('freeFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
+      // 백엔드에서 파일을 필요로 하는 경우 파일 처리 로직 추가 (다른 API를 사용하거나 별도로 처리 필요)
+      console.log('파일이 있지만 JSON에 포함되지 않습니다.');
     }
-
+  
     try {
+      // URL 설정 (수정일 경우와 작성일 경우 동일한 URL이라 가정)
       const url = isEditing ? `${BASE_URL}/Room` : `${BASE_URL}/Room`;
-      const headers = { ...getAuthHeaders(), 'Content-Type': 'multipart/form-data' };
-
-      const response = await axios.post(url, formData, { headers });
-
+      const headers = {
+        ...getAuthHeaders(),
+        'Content-Type': 'application/json', // JSON 형식으로 전송
+      };
+  
+      // JSON 형태로 데이터를 전송
+      const response = await axios.post(url, payload, { headers });
+  
       if (response.status === 200) {
-        alert('게시글이 성공적으로 처리되었습니다.');
+        alert('소토방 개설이 성공적으로 처리되었습니다.');
         navigate('/FreeboardPage'); // 게시글 목록 페이지로 이동
       } else {
         console.error('Failed to save or update data:', response.statusText);
-        alert('게시글 처리 중 오류가 발생했습니다.');
+        alert('소통방 개설 처리 중 오류가 발생했습니다.');
       }
     } catch (error) {
       console.error('Error saving or updating data:', error);
       alert('요청 처리 중 문제가 발생했습니다.');
     }
   };
+  
 
 
   return (

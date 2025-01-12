@@ -166,7 +166,7 @@ const RoomPage = () => {
 
     try {
       // fetch API 호출
-      const response = await fetch('https://0deb-61-84-64-212.ngrok-free.app/Room/TelList/reports', {
+      const response = await fetch('https://934ef54da7b8.ngrok.app/Room/TelList/reports', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -207,7 +207,7 @@ const RoomPage = () => {
       try {
         // 각 선택된 방에 대해 DELETE 요청을 보냄
         for (const roomId of selectedRooms) {
-          const response = await fetch(`https://0deb-61-84-64-212.ngrok-free.app/Room/TelList/rooms/${roomId}`, {
+          const response = await fetch(`https://934ef54da7b8.ngrok.app/Room/TelList/rooms/${roomId}`, {
             method: 'DELETE',
           });
 

@@ -4,7 +4,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
   background-color: white;
   padding: 0 20px;  /* 작은 화면에서 여백 추가 */
 }
@@ -22,10 +21,10 @@
 
 .group-info {
   display: flex;
-  justify-content: center;
+  width: 100%;
   margin-left: 0px;
+  
   gap: 0px;
-  margin-top: -100px;
 }
 
 /* 두 번째 경우에 대한 추가 스타일 */
@@ -45,7 +44,7 @@
   text-align: center;
   width: 100%;
   max-width: 350px;  /* 입력 칸을 로그인 박스 크기에 맞게 조정 */
-  margin-bottom: -50px;
+  margin-bottom: -40px;
 }
 
 h1 {
@@ -68,28 +67,38 @@ h3 {
 }
 
 .inputGroup {
-  margin-bottom: 15px;
+  margin-bottom: 8%;
 }
 
-input {
-  width: 100%;  /* 입력칸을 박스 너비에 맞게 조정 */
+.l_label{
+  margin-left: 0%;
+font-size: 1.2rem;
+margin-top: 7%;
+}
+
+.l_input {
+  width: 95%;  /* 입력칸을 박스 너비에 맞게 조정 */
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  
+  background-color: white;
+  border: 1px solid #ffffff;
+  border-radius: 7px;
   font-size: 14px;  /* 폰트 크기 줄이기 */
   margin-top: 5px;
 }
 
-.loginButton {
+.l_loginButton {
   background-color: #0056a0;
   color: white;
   border: none;
   padding: 10px;
-  border-radius: 5px;
-  width: 100%;
+  border-radius: 7px;
+  width: 102%;
   font-size: 16px;
   cursor: pointer;
   margin-top: 10px;
+  margin-left: 0%;
+  
 }
 
 .footerLinks {
@@ -111,8 +120,8 @@ input {
 h2 {
   font-size: 2rem;  /* 제목 크기 조정 */
   color: #0056A0;
-  margin-top: 30px;
-  margin-left: 0px;
+  margin-left: -5%;
+  margin-right: 10%;
 }
 
 /* 로고 이미지 크기 조절 */
@@ -122,24 +131,24 @@ h2 {
 }
 
 .app-back_logo {
-  height: 100px;
-  margin-top: 18px;
-  margin-right: px;
+  height: 70px;
+  margin-top: 9%;
+  margin-left: -20%;
 }
 
 .app-Q_logo {
-  height: 60px;
-  margin-top: 30px;
-  margin-right: 0px;
+  height: 50px;
+  margin-top: 13%;
+  margin-right: -18%;
 }
 
 .footer-text {
   font-size: 0.7rem;
   color: rgb(60, 55, 55);
-  margin-top: 45px;
+  margin-top: 16%;
   font-family: 'Arial', sans-serif;
-  margin-right: 10px;
-  margin-left: 100px;
+  margin-right: 3%;
+  margin-left: 38%;
 }
 
 /* 팝업 스타일 */
@@ -249,4 +258,43 @@ h4 {
 
 .changeBtn:hover {
   background-color: #004080;
+}
+
+
+
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+
+  h2 {
+    font-size: 0.8rem;  /* 제목 크기 조정 */
+    color: #0056A0;
+    margin-left: -5%;
+    margin-right: 10%;
+  }
+  
+  .app-back_logo {
+    height: 70px;
+    margin-top: 9%;
+    margin-right: -8%;
+    margin-left: -16%;
+  }
+  
+  .app-Q_logo {
+    height: 50px;
+    margin-top: 13%;
+    margin-right: -18%;
+  }
+  
+  .footer-text {
+    font-size: 0.7rem;
+    color: rgb(60, 55, 55);
+    margin-top: 16%;
+    font-family: 'Arial', sans-serif;
+    margin-right: 3%;
+    margin-left: 34%;
+  }
+  
+
+
 }
