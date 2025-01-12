@@ -14,7 +14,7 @@ import { jwtDecode } from 'jwt-decode';
 
 
 // API에서 사용할 기본 URL과 헤더 설정
-const BASE_URL = ' https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board';
+const BASE_URL = 'https://3e319465b029.ngrok.app/api/board';
 
 const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('accessToken');
@@ -78,6 +78,7 @@ const FreewritePage = () => {
     // 수정모드일 때만 id 추가
     if (isEditing) {
       formData.append('Id', id); // 수정 시에만 id 추가
+      console.log("들어가냐?")
     }
     formData.append('freeTitle', title);
     formData.append('freeContents', content);
@@ -86,6 +87,12 @@ const FreewritePage = () => {
     if (files && files.length > 0) {
       files.forEach((file) => formData.append('freeFile', file)); // 'freeFile'은 서버에서 요구하는 키 이름
     }
+
+    console.log(id);
+    console.log(title);
+    console.log(content);
+    console.log(hashtag);
+    console.log(files);
 
     try {
       const url = isEditing ? `${BASE_URL}/free/update` : `${BASE_URL}/free/save`;
