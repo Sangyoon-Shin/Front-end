@@ -45,7 +45,7 @@ const BootBoardPage = () => {
             setIsLoading(true); // 로딩 시작
 
             try {
-                const response = await axiosInstance.get('https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board/studies', {
+                const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/studies', {
                     params: {
                         page,
                         size,
@@ -131,7 +131,7 @@ const BootBoardPage = () => {
                         ? 'industry'
                         : 'study';
 
-                const response = await axiosInstance.get(`https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board/studies/${categoryPath}`, {
+                const response = await axiosInstance.get(`http://info-rmation.kro.kr/api/board/studies/${categoryPath}`, {
                     params: {
                         searchKeyword: searchTerm, // 검색어 전달
                         page: 0,
@@ -194,7 +194,7 @@ const BootBoardPage = () => {
                     ? 'industry'
                     : 'study';
 
-            const response = await axiosInstance.get(`https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board/studies/sort-by-deadline`, {
+            const response = await axiosInstance.get(`http://info-rmation.kro.kr/api/board/studies/sort-by-deadline`, {
                 params: {
                     page: 0,
                     size: 10,
