@@ -74,8 +74,7 @@
   /* 마우스 오버 시 배경색 */
 }
 
-.menuItem {
- 
+.menuItem { 
   padding: 10px 20px;
   /* 각 항목의 크기를 적절히 조정 */
   cursor: pointer;
@@ -152,17 +151,6 @@
   color: #555;
   font-weight: bold;
   cursor: pointer;
-}
-
-.sortButton {
-  background: none;
-  border: none;
-  color: #555;
-  font-weight: bold;
-  cursor: pointer;
-  width: 60px;
-  /* 너비를 줄여 균형 잡기 */
-  margin-left: -10px;
 }
 
 .activeSortButton {

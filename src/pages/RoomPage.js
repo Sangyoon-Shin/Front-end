@@ -40,7 +40,7 @@ const RoomPage = () => {
   // 방 목록을 백엔드에서 가져오기 위한 useEffect
   useEffect(() => {
     const fetchRooms = async () => {
-      const userResponse = await axiosInstance.get('https://934ef54da7b8.ngrok.app/api/auth/get-username');
+      const userResponse = await axiosInstance.get('http://info-rmation.kro.kr/api/auth/get-username');
       setUserId(userResponse.data.userId); // 올바른 데이터 추출
 
       console.log(UserId);
