@@ -164,10 +164,6 @@
   margin-right: -5px;
 }
 
-<<<<<<< HEAD
-.activeSortButton {
-  color: #000;
-=======
 .sortButton {
   background: none;
   border: none;
@@ -181,7 +177,6 @@
 
 .latestSortButton:hover{
   background-color: red;
->>>>>>> 02be623bf5556517d4c87989f7a5911eb1c3c601
 }
 
 /* 게시물 목록 */
