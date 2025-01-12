@@ -379,10 +379,14 @@ const [rooms, setRooms] = useState(roomsData);
  
                   
  <>
-  <div className={styles.Roomcontainer}>
 
+  <div className={styles.Roomcontainer}>
+ 
     {/* 방 목록 */}
     <div className={styles.roomsList}>
+    <a href="/Chat_" className={styles.plusButtonLink}>
+      <PlusButton className={styles.plusButton3} />
+    </a>
       {rooms.map((room) => (
         <div
           key={room.roomId}
