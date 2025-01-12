@@ -438,23 +438,46 @@ const handleAddReply = async (index) => {
 
     // handleScrap 함수 수정
 const handleScrap = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/coding/${id}/scrap`, {
-        method: 'POST',
-        headers: getAuthHeaders(), // getAuthHeaders()로 인증 헤더 포함
-      });
-  
-      if (response.ok) {
-        console.log('스크랩 요청 성공');
-        alert('스크랩이 완료되었습니다.'); // 스크랩 완료 팝업
-        navigate("/scrap"); // 요청 성공 후 스크랩 페이지로 이동
-      } else {
-        console.error('스크랩 요청 실패');
-      }
-    } catch (error) {
-      console.error('스크랩 요청 중 오류 발생:', error);
+  try {
+    const response = await fetch(`${BASE_URL}/coding/${id}/scrap`, {
+      method: 'POST',
+      headers: getAuthHeaders(), // getAuthHeaders()로 인증 헤더 포함
+    });
+
+    if (response.ok) {
+      console.log('스크랩 요청 성공');
+      alert('스크랩이 완료되었습니다.'); // 스크랩 완료 팝업
+      navigate("/scrap"); // 요청 성공 후 스크랩 페이지로 이동
+    } else {
+      console.error('스크랩 요청 실패');
     }
-  };
+  } catch (error) {
+    console.error('스크랩 요청 중 오류 발생:', error);
+  }
+};
+
+const handleEdit = async () => {
+  try {
+    // API 요청 보내기
+    const response = await fetch(`${BASE_URL}/coding/update/${id}`, {
+      method: "GET",
+      headers: getAuthHeaders(),
+    });
+
+    // 응답 처리
+    if (response.ok) {
+      const data = await response.json();
+      console.log("수정 가능한 데이터를 가져왔습니다:", data);
+
+      // 데이터를 활용해 수정 화면으로 이동하거나 상태 업데이트
+      // 예: navigate(`/edit/${id}`) 또는 수정 데이터 상태 업데이트
+    } else {
+      console.error("수정 데이터를 가져오지 못했습니다:", response.status);
+    }
+  } catch (error) {
+    console.error("수정 요청 중 오류가 발생했습니다:", error);
+  }
+};
 
   return (
     <div>
@@ -466,7 +489,7 @@ const handleScrap = async () => {
           alt="back_arrow"
           onClick={handleBackClick}
         />
-        <h1 className={styles["title-text2"]}>코딩 게시판</h1>
+        <h1 className={styles["title-text2"]}>정보 게시판</h1>
         <img src={bar} className={styles["app-bar"]} alt="bar" />
 
         <h1 className={styles["title-text3"]}>{title || "게시판 제목"}</h1>
@@ -499,9 +522,9 @@ const handleScrap = async () => {
 
         <h2 className={styles["title-text4"]}>작성일 : {createdTime}</h2>
         <div className={styles["report"]}>
-          {/* <button onClick={handleEdit} className={styles["edit-button"]}>
+          <button onClick={handleEdit} className={styles["edit-button"]}>
           수정하기
-          </button> */}
+          </button>
           <button onClick={handleDelete} className={styles["delete-button"]}>
             삭제하기
           </button>
@@ -557,7 +580,7 @@ const handleScrap = async () => {
         )}
       </div>
 
-      {/* 코딩게시판 내용(수정 가능 시) */}
+      {/* 산업연계게시판 내용(수정 가능 시) */}
       <div className={styles["content-input"]}>
         <textarea
           className={styles["textarea"]}
