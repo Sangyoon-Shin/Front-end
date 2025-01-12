@@ -40,7 +40,7 @@ const RoomPage = () => {
   // 방 목록을 백엔드에서 가져오기 위한 useEffect
   useEffect(() => {
     const fetchRooms = async () => {
-      const userResponse = await axiosInstance.get('https://18a5fe61dbb7.ngrok.app/api/auth/get-username');
+      const userResponse = await axiosInstance.get('https://934ef54da7b8.ngrok.app/api/auth/get-username');
       setUserId(userResponse.data.userId); // 올바른 데이터 추출
 
       console.log(UserId);
@@ -53,7 +53,7 @@ const RoomPage = () => {
         }
 
         // 백엔드 API 호출
-        const response = await axiosInstance.get(`https://0deb-61-84-64-212.ngrok-free.app/Tel/202201659`, {
+        const response = await axiosInstance.get(`https://934ef54da7b8.ngrok.app/Tel/202201659`, {
 
           headers: {
             'ngrok-skip-browser-warning': 'true', // 필요 시 유지
@@ -85,7 +85,7 @@ const RoomPage = () => {
         const userName = '신상윤';
 
         // 방 입장 API 호출
-        await axiosInstance.post('https://0deb-61-84-64-212.ngrok-free.app/JoinRoom', {
+        await axiosInstance.post('https://934ef54da7b8.ngrok.app/JoinRoom', {
             headers: {
                 'ngrok-skip-browser-warning': 'true', // 필요 시 유지
             },
@@ -166,7 +166,7 @@ const RoomPage = () => {
 
     try {
       // fetch API 호출
-      const response = await fetch('https://0deb-61-84-64-212.ngrok-free.app/Room/TelList/reports', {
+      const response = await fetch('https://934ef54da7b8.ngrok.app/Room/TelList/reports', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -207,7 +207,7 @@ const RoomPage = () => {
       try {
         // 각 선택된 방에 대해 DELETE 요청을 보냄
         for (const roomId of selectedRooms) {
-          const response = await fetch(`https://0deb-61-84-64-212.ngrok-free.app/Room/TelList/rooms/${roomId}`, {
+          const response = await fetch(`https://934ef54da7b8.ngrok.app/Room/TelList/rooms/${roomId}`, {
             method: 'DELETE',
           });
 

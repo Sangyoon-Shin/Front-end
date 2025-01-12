@@ -103,6 +103,8 @@
   width: 90%;                  /* 전체화면 기준 너비 */
   justify-content: flex-end;
   display: flex;
+  margin-top:30px;
+
 }
 
 /* 쪽지 */
