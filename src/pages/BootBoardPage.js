@@ -45,7 +45,7 @@ const BootBoardPage = () => {
             setIsLoading(true); // 로딩 시작
 
             try {
-                const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/studies', {
+                const response = await axiosInstance.get('https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board/studies', {
                     params: {
                         page,
                         size,
@@ -131,7 +131,7 @@ const BootBoardPage = () => {
                         ? 'industry'
                         : 'study';
 
-                const response = await axiosInstance.get(`http://info-rmation.kro.kr/api/board/studies/${categoryPath}`, {
+                const response = await axiosInstance.get(`https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board/studies/${categoryPath}`, {
                     params: {
                         searchKeyword: searchTerm, // 검색어 전달
                         page: 0,
@@ -194,7 +194,7 @@ const BootBoardPage = () => {
                     ? 'industry'
                     : 'study';
 
-            const response = await axiosInstance.get(`http://info-rmation.kro.kr/api/board/studies/${categoryPath}`, {
+            const response = await axiosInstance.get(`https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board/studies/sort-by-deadline`, {
                 params: {
                     page: 0,
                     size: 10,
@@ -290,7 +290,7 @@ const BootBoardPage = () => {
                     {/* 정렬 버튼들 */}
                     <div className={`${styles.sortButtons} ${isDesktop ? styles.desktopSortButtons : ''}`}>
                         <button
-                            className={`${styles.latestSortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''} ${sortType === 'latest' ? styles.activeSortButton : ''}`}
+                            className={`${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''} ${sortType === 'latest' ? styles.activeSortButton : ''}`}
                             onClick={() => {
                                 setSortType('latest');
                                 handleSort('latest');
@@ -301,13 +301,13 @@ const BootBoardPage = () => {
 
                         {/* 추천순 정렬 버튼 */}
                         <button
-                            className={`${styles.recommendSortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''} ${sortType === 'recommend' ? styles.activeSortButton : ''}`}
+                            className={`${styles.latestSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''} ${sortType === 'recommend' ? styles.activeSortButton : ''}`}
                             onClick={() => {
                                 setSortType('daysleft');
                                 handleSort('daysleft');
                             }}
                         >
-                            마감 임박순
+                            마감순
                         </button>
                     </div>
                 </div>
