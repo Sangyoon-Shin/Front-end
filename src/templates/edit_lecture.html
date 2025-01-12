@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강의 시간 수정</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .home-button {
+            display: block;
+            padding: 10px 0px;
+            background-color: #cbe1f9;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 16px;
+            max-width: 100px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .floor-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .floor-selector button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .floor-selector button.active {
+            background-color: #0056b3;
+        }
+
+        .room-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .room-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+        .room-list li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .room-list li button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .add-room {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .add-room button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/" class="home-button">HOME</a>
+        <h1>강의 시간 수정</h1>
+
+        <div class="floor-selector">
+            <button onclick="loadFloor(1)" id="floor-1" class="active">1층</button>
+            <button onclick="loadFloor(2)" id="floor-2">2층</button>
+            <button onclick="loadFloor(3)" id="floor-3">3층</button>
+            <button onclick="loadFloor(4)" id="floor-4">4층</button>
+            <button onclick="loadFloor(5)" id="floor-5">5층</button>
+        </div>
+
+        <ul id="room-list" class="room-list">
+            <!-- 동적으로 강의실 목록이 추가됩니다 -->
+        </ul>
+
+        <div class="add-room">
+            <button onclick="addRoom()">+ 강의실 추가</button>
+        </div>
+    </div>
+
+    <script>
+        const floors = { 1: [], 2: [], 3: [], 4: [], 5: [] }; // 층별 강의실 데이터
+        let currentFloor = 1; // 초기 선택된 층
+        const API_URL = "https://3e319465b029.ngrok.app/api/admin/rooms";
+        const token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IjIwMDIwNDI2MyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczNjMxMTg3NSwiZXhwIjoxOTMwNzExODc1fQ.Y3AmNndn9aBA8I5Z2QluCXxR96iWF3gFn1RZYKhaKI8";
+
+        // 층 로드
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchRooms(); // 서버에서 강의실 데이터를 가져옵니다.
+            loadFloor(1); // 기본적으로 1층 데이터를 렌더링합니다.
+        });
+
+
+        function loadFloor(floor) {
+            currentFloor = floor;
+
+            // 버튼 활성화
+            document.querySelectorAll('.floor-selector button').forEach(button => button.classList.remove('active'));
+            document.getElementById(`floor-${floor}`).classList.add('active');
+
+            // 강의실 목록 업데이트
+            renderRoomList();
+        }
+
+        // 서버에서 강의실 목록 가져오기
+        async function fetchRooms() {
+            try {
+                const response = await fetch('https://3e319465b029.ngrok.app/api/rooms/all', {
+                    method: 'GET',
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                        "ngrok-skip-browser-warning": "1"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // floors 객체 초기화
+                for (const floor in floors) {
+                    floors[floor] = [];
+                }
+
+                // roomNumber에 따라 층을 추정하여 floors 객체에 데이터 추가
+                data.forEach(room => {
+                    if (room.roomNumber) {
+                        // 예시: roomNumber가 "101"이라면 1층에 해당
+                        const floor = parseInt(room.roomNumber[0], 10); // 첫 번째 숫자를 층으로 추정
+                        if (floors[floor]) {
+                            floors[floor].push(room.roomNumber);
+                        }
+                    }
+                });
+
+                renderRoomList(); // 가져온 데이터를 화면에 렌더링
+            } catch (error) {
+                console.error('Failed to fetch rooms:', error);
+                alert('강의실 목록을 불러오는 데 실패했습니다.');
+            }
+        }
+
+
+        function renderRoomList() {
+            const roomList = document.getElementById('room-list');
+            if (!roomList) {
+                console.error("Element with ID 'room-list' not found!");
+                return;
+            }
+
+            roomList.innerHTML = ''; // 기존 목록 초기화
+
+            // 현재 층의 강의실 목록을 순회하며 추가
+            floors[currentFloor].forEach(room => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+            <span>${room}</span>
+            <button onclick="deleteRoom('${room}')">삭제</button>
+        `;
+                listItem.onclick = () => {
+                    window.location.href = `/edit_room/${room}`;
+                };
+                roomList.appendChild(listItem);
+            });
+
+            if (floors[currentFloor].length === 0) {
+                const emptyMessage = document.createElement('p');
+                emptyMessage.textContent = "현재 층에 강의실이 없습니다.";
+                roomList.appendChild(emptyMessage);
+            }
+        }
+
+        async function addRoom() {
+            const roomNumber = prompt("추가할 강의실 번호를 입력하세요:");
+
+            if (!roomNumber) {
+                alert("강의실 번호를 입력해야 합니다.");
+                return;
+            }
+
+            if (floors[currentFloor].includes(roomNumber)) {
+                alert("이미 존재하는 강의실 번호입니다.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/add?roomNumber=${roomNumber}`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                        "ngrok-skip-browser-warning": "1"
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP error! status: ${response.status} ${errorText}`);
+                }
+
+                const data = await response.json();
+                console.log("서버 응답 데이터:", data);
+
+                // 서버 응답 데이터에서 floor 정보가 없는 경우 기본값으로 currentFloor 사용
+                const floor = data.floor || currentFloor;
+
+                // floors에 새 강의실 추가
+                if (!floors[floor]) {
+                    floors[floor] = [];
+                }
+                floors[floor].push(data.roomNumber);
+
+                alert(`강의실이 성공적으로 추가되었습니다: ${data.roomNumber}`);
+                renderRoomList(); // 즉시 렌더링
+            } catch (error) {
+                console.error("Failed to add room:", error);
+                alert(`강의실 추가 중 오류가 발생했습니다. ${error.message}`);
+            }
+        }
+
+        async function deleteRoom(roomNumber) {
+            try {
+                const response = await fetch(`${API_URL}/delete?roomNumber=${roomNumber}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                alert("강의실이 성공적으로 삭제되었습니다.");
+                fetchRooms(); // 삭제 후 동기화
+            } catch (error) {
+                console.error("강의실 삭제 실패:", error);
+                alert(`강의실 삭제 중 오류가 발생했습니다. ${error.message}`);
+            }
+        }
+
+        // 초기 1층 로드
+        loadFloor(1);
+    </script>
+</body>
+
+</html>

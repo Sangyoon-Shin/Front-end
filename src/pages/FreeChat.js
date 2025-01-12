@@ -1,19 +1,20 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import styles from './Chat.module.css';
-import CommunicationRoom_goBack from '../images/왼쪽 나가기 버튼.png';
+import styles from './FreeChat.module.css';
+import CommunicationRoom_goBack from '../images/chatback.png';
 import sendIcon from '../images/메시지전송버튼.png';
 import heartIcon from '../images/하트횃불이.png';
 
-import main_mascot from '../images/졸업생횃불이.png';
+import main_mascot from '../images/대학 심볼 횃불이.png';
 import main_bell from '../images/bell.png';
 import main_message from '../images/message.png';
 import main_my from '../images/my.png';
 
+import Header from './_2.js'; // 상단바 컴포넌트
 import { useMediaQuery } from 'react-responsive'; // 반응형 페이지 만들기 위함
 import axios from 'axios'; // API 요청을 위한 axios
 
-const Chat = () => {
+const FreeChat = () => {
     const websocketRef = useRef(null); // 웹소켓 참조
     const reconnectIntervalRef = useRef(null); // 재연결 타이머
     const { classId } = useParams();
@@ -188,19 +189,7 @@ const Chat = () => {
 
     return (
         <div className={styles.container}>
-            {/* 상단바 */}
-            <header className={styles["app-header"]}>
-                <div className={styles["title-group"]}>
-                    <img src={main_mascot} className={styles["app-main_mascot"]} alt="main_mascot" />
-                    <h2>INFO!</h2>
-                    <div className={styles["right-section"]}>
-                        <h2 className={styles["title-text"]}>공지사항</h2>
-                        <img src={main_bell} className={styles["app-main_bell"]} alt="main_bell" />
-                        <img src={main_message} className={styles["app-main_message"]} alt="main_message" />
-                        <img src={main_my} className={styles["app-main_my"]} alt="main_my" />
-                    </div>
-                </div>
-            </header>
+          <Header />
 
             <div className={styles.content}>
                 <div className={`${styles.headerRow} ${isDesktop ? styles.desktopHeaderRow : styles.mobileHeaderRow}`}>
@@ -210,7 +199,7 @@ const Chat = () => {
                         className={`${styles.goBackButton} ${isDesktop ? styles.desktopGoBackButton : styles.mobileGoBackButton}`}
                         onClick={() => navigate(-1)}
                     />
-                    <h2 className={`${styles.sectionTitle} ${isDesktop ? styles.desktopSectionTitle : styles.mobileSectionTitle}`}>수업 소통방</h2>
+                    <h2 className={`${styles.sectionTitle} ${isDesktop ? styles.desktopSectionTitle : styles.mobileSectionTitle}`}>자유 소통방</h2>
                 </div>
 
                 <div className={`${styles.classInfo} ${isDesktop ? styles.desktopClassInfo : styles.mobileClassInfo}`}>
@@ -227,17 +216,18 @@ const Chat = () => {
                     ))}
                 </div>
 
-                <div className={`${styles.inputContainer} ${isDesktop ? styles.desktopInputContainer : styles.mobileInputContainer}`}>
-                    <img src={heartIcon} alt="Icon" className={`${styles.heartIcon} ${isDesktop ? styles.desktopHeartIcon : styles.mobileHeartIcon}`} />
+                {/* 채팅 입력창*/}
+                <div className={styles.inputContainer}>
+                    <img src={heartIcon} alt="Icon" className={styles.heartIcon} />
                     <input
                         type="text"
                         value={inputMessage}
                         onChange={(e) => setInputMessage(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        placeholder="입력하세요…"
-                        className={`${styles.inputField} ${isDesktop ? styles.desktopInputField : styles.mobileInputField}`}
+                        onKeyDown={handleKeyDown} // 엔터키로 메시지 전송
+                        placeholder="입력하세요..."
+                        className={styles.inputField}
                     />
-                    <button onClick={handleSendMessage} className={`${styles.sendButton} ${isDesktop ? styles.desktopSendButton : styles.mobileSendButton}`}>
+                    <button className={styles.sendButton} onClick={handleSendMessage}>
                         <img src={sendIcon} alt="전송" className={styles.sendIcon} />
                     </button>
                 </div>
@@ -246,4 +236,4 @@ const Chat = () => {
     );
 };
 
-export default Chat;
+export default FreeChat;

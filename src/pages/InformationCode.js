@@ -41,7 +41,7 @@ const InformationCode = () => {
     const fetchPosts = async () => {
       setIsLoading(true); // 로딩 시작
       try {
-        const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/coding', {
+        const response = await axiosInstance.get('https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board/coding', {
           params: { page, size }, // 페이지와 사이즈를 쿼리 파라미터로 추가
           headers: {
             'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
@@ -70,7 +70,7 @@ const InformationCode = () => {
     // 좋아요 10개 이상 게시물 가져오기
     const fetchTopLikedPosts = async () => {
       try {
-        const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/coding/top-liked', {
+        const response = await axiosInstance.get('https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board/coding/top-liked', {
           headers: {
             'ngrok-skip-browser-warning': 'true', // 경고 페이지를 우회하는 헤더 추가
           },
@@ -95,7 +95,7 @@ const InformationCode = () => {
     setPage(pageNumber); // 페이지 번호 업데이트
 
     try {
-      const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/coding', {
+      const response = await axiosInstance.get('https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board/coding', {
         params: {
           page: pageNumber,
           size: 10,
@@ -123,7 +123,7 @@ const InformationCode = () => {
     setMenuOpen(false); // 메뉴 닫기
 
     try {
-      const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/coding', {
+      const response = await axiosInstance.get('https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board/coding', {
         params: {
           typeKeyword: language, // 선택된 언어 전달
           page: 0,
@@ -146,7 +146,7 @@ const InformationCode = () => {
     setMenuOpen(false); // 메뉴 닫기
 
     try {
-      const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/coding', {
+      const response = await axiosInstance.get('https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board/coding', {
         params: {
           page: 0,
           size: 10,
@@ -194,7 +194,7 @@ const InformationCode = () => {
     if (searchTerm.trim() !== '') {
       try {
         console.log(`검색어: ${searchTerm}`);
-        const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/coding', {
+        const response = await axiosInstance.get('https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board/coding', {
           params: {
             searchKeyword: searchTerm, // 검색어 전달
             page: 0,
@@ -226,7 +226,7 @@ const InformationCode = () => {
   };
 
   const handlePostClick = (postId) => {
-    navigate(`/BoardCode/${postId}`);  // 해당 게시물 상세 페이지로 이동
+    navigate(`/InformationCodeBoard/${postId}`);  // 해당 게시물 상세 페이지로 이동
   };
 
   // 정렬 버튼 클릭 시 정렬 상태 업데이트
@@ -248,7 +248,7 @@ const InformationCode = () => {
         typeKeyword: '', // 필요 시 값 설정
       };
 
-      const response = await axiosInstance.get('http://info-rmation.kro.kr/api/board/coding/sort-by-likes', {
+      const response = await axiosInstance.get('https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board/coding/sort-by-likes', {
         params,
         headers: {
           'ngrok-skip-browser-warning': 'true', // 필요 시 유지
@@ -298,7 +298,7 @@ const InformationCode = () => {
         {/* 드롭다운 메뉴 */}
         {menuOpen && (
           <div className={`${styles.dropdownMenu} ${isDesktop ? styles.desktopDropdownMenu : ''}`} >
-            {['전체', 'C/C++', 'Python', 'JAVA', 'C#', '기타'].map((language) => (
+            {['전체', 'C', 'Python', 'JAVA', 'C#', '기타'].map((language) => (
               <div
                 key={language}
                 className={`${styles.menuItem} ${isDesktop ? styles.desktopMenuItem : ''} ${selectedLanguage === language ? styles.activeMenuItem : '' // 선택된 언어 강조
@@ -306,6 +306,7 @@ const InformationCode = () => {
                 onClick={() => {
                   if (language === '전체') {
                     handleFixedLanguageChange(); // '전체'를 선택했을 때 즉시 함수 실행
+                    handleLanguageChange('전체');
                     console.log("바뀌었습니다");
                   } else if (selectedLanguage !== language) {
                     handleLanguageChange(language); // 선택된 언어가 달라질 때만 함수 호출
@@ -350,7 +351,7 @@ const InformationCode = () => {
           {/* 정렬 버튼들 */}
           <div className={`${styles.sortButtons} ${isDesktop ? styles.desktopSortButtons : ''}`}>
             <button
-              className={`${styles.latestSortButton} ${styles.latestSortButton} ${isDesktop ? styles.desktopLatestSortButton : ''} ${sortType === 'latest' ? styles.activeSortButton : ''}`}
+              className={`${styles.latestSortButton}  ${isDesktop ? styles.desktopLatestSortButton : ''} ${sortType === 'latest' ? styles.activeSortButton : ''}`}
               onClick={() => handleSort('latest')} // handleSort 함수 호출
             >
               최신순
@@ -358,7 +359,7 @@ const InformationCode = () => {
 
             {/* 추천순 정렬 버튼 */}
             <button
-              className={`${styles.recommendSortButton} ${styles.recommendSortButton} ${isDesktop ? styles.desktopRecommendSortButton : ''} ${sortType === 'recommend' ? styles.activeSortButton : ''}`}
+              className={`${styles.latestSortButton}  ${isDesktop ? styles.desktopRecommendSortButton : ''} ${sortType === 'recommend' ? styles.activeSortButton : ''}`}
               onClick={() => handleSort('recommend')} // handleSort 함수 호출
             >
               추천순

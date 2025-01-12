@@ -29,6 +29,7 @@ const HomePage = () => {
   const navigate = useNavigate(); // useNavigate 훅 선언-> 최상단에 호출
   //Api..
 
+
   
   const [freeBoardData, setFreeBoardData] = useState([]);//자유게시판
   //const [mainPageData, setMainPageData] = useState([]);
@@ -52,6 +53,8 @@ const [error, setError] = useState(null);
   useEffect(() => {
     const loadData = async () => {
       try {
+
+
         const [freeData, questData, ComData, codingData, studyData,] = await Promise.all([//mainData, 
          // fetchMainPageData(),
           fetchFreeBoardData(),
@@ -81,7 +84,7 @@ const [error, setError] = useState(null);
   loadData();
   const fetchRooms = async () => {
     const userId = '202301641'; // 추후 삭제제
-    const baseUrl = 'rmation-chat.kro.kr';
+    const baseUrl = 'https://934ef54da7b8.ngrok.app';
     fetch(`${baseUrl}/Room/userId/${userId}`, {
         headers: {
             contentType: 'application/json',
@@ -201,7 +204,7 @@ const [rooms, setRooms] = useState(roomsData);
           <div className={styles.container}>
           <div className={styles.infoheader}>
                <h2 className={styles.comtext}>코드 질문</h2>
-               <a href="/new-link" className={styles.plusButtonLink}>
+               <a href="/InformationCode" className={styles.plusButtonLink}>
                     <PlusButton className={styles.plusButton} />
                </a>
           </div>
@@ -232,7 +235,7 @@ const [rooms, setRooms] = useState(roomsData);
     <div className={styles.container}>
       <div className={styles.infoheader}>
       <h2 className={styles.comtext}>빈 강의실 현황</h2>
-        <a href="/room-status" className={styles.plusButtonLink}>
+        <a href="ClassRoom" className={styles.plusButtonLink}>
           <PlusButton className={styles.plusButton} />
         </a>
       </div>
@@ -261,7 +264,7 @@ const [rooms, setRooms] = useState(roomsData);
     <div className={styles.container}>
           <div className={styles.infoheader}>
                <h2 className={styles.comtext}>자기 개발</h2>
-               <a href="/self-development" className={styles.plusButtonLink}>
+               <a href="/BootBoardPage" className={styles.plusButtonLink}>
                     <PlusButton className={styles.plusButton} />
                </a>
           </div>
@@ -432,7 +435,7 @@ const [rooms, setRooms] = useState(roomsData);
           <div className={`${styles["right-section"]} ${isDesktop ? styles.desktopRightSection : ''}`}>
             <h2
               className={styles["title-text"]}
-              onClick={() => navigate("/notice")}
+              onClick={() => navigate("/Announcement")}
               style={{ cursor: "pointer" }}
             >
               공지사항
@@ -442,7 +445,7 @@ const [rooms, setRooms] = useState(roomsData);
               src={main_bell}
               className={`${styles["app-main_bell"]} ${isDesktop ? styles.desktopMainBell : ''}`}
               alt="main_bell"
-              onClick={() => navigate("/notification")}
+              onClick={() => navigate("/AlarmPage")}
             />
             <img
               src={main_message}

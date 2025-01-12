@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid black;
+            padding-bottom: 5px;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-align: center;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .modal button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .confirm {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .cancel {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>관리자 페이지</h1>
+
+        <div class="section">
+            <h2>신고 조회</h2>
+            <a href="/post_report" class="button">게시물 신고 목록 조회</a>
+            <a href="/comment_report" class="button">댓글 신고 목록 조회</a>
+        </div>
+
+        <div class="section">
+            <h2>강의실 관리</h2>
+            <a href="/edit_lecture" class="button">강의 시간 수정</a>
+            <a href="#" class="button" onclick="deleteLectureTime()">강의 시간 일괄 삭제</a>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <p>모든 강의를 삭제하시겠습니까?</p>
+            <button class="confirm" onclick="confirmDelete()">확인</button>
+            <button class="cancel" onclick="closeModal()">취소</button>
+        </div>
+    </div>
+
+    <script>
+        const lectures = {};
+
+        // 초기 데이터 생성: 1층~5층, 각 층 30개 강의실
+        for (let floor = 1; floor <= 5; floor++) {
+            for (let room = 1; room <= 30; room++) {
+                const roomNumber = `${floor}${room.toString().padStart(2, '0')}호`;
+                lectures[roomNumber] = []; // 초기 빈 배열
+            }
+        }
+
+
+        function showReportList(type) {
+            const url = type === 'post' ? 'post_report.html' : 'comment_report.html';
+            window.location.href = url;
+        }
+
+        function editLectureTime() {
+            window.location.href = 'edit_lecture.html';
+        }
+
+        function deleteLectureTime() {
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function confirmDelete() {
+            closeModal(); // 모달 닫기
+
+            const API_URL = "https://3e319465b029.ngrok.app/api/admin/lectures/delete-all";
+            const token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IjIwMDIwNDI2MyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczNjMxMTg3NSwiZXhwIjoxOTMwNzExODc1fQ.Y3AmNndn9aBA8I5Z2QluCXxR96iWF3gFn1RZYKhaKI8"; // JWT 토큰
+
+            // 서버 데이터 삭제 요청
+            fetch(API_URL, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                    "ngrok-skip-browser-warning": "1" // ngrok 경고 무시
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(error => {
+                            throw new Error(`${response.status}: ${error.message}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // 서버 응답 처리
+                    alert(`모든 강의가 삭제되었습니다.\n삭제된 강의 수: ${data.deletedCount}`);
+                    console.log("삭제 결과:", data);
+
+                    // 로컬 데이터 초기화
+                    for (const room in lectures) {
+                        lectures[room] = []; // 모든 강의실 데이터 초기화
+                    }
+                    console.log("로컬 강의 데이터 초기화 완료:", lectures); // 초기화 확인 로그
+                })
+                .catch(error => {
+                    console.error("강의 삭제 실패:", error);
+                    alert(`강의 삭제 중 오류가 발생했습니다.\n오류 메시지: ${error.message}`);
+                });
+        }
+
+    </script>
+</body>
+
+</html>
