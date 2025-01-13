@@ -15,7 +15,7 @@ import Header from './_.js';  // 상단바 컴포넌트
 // API에서 사용할 기본 URL과 헤더 설정
 const BASE_URL = 'https://1c9e-2406-5900-10f0-c886-dc6f-be50-3736-d1bc.ngrok-free.app/api/board';
 const getAuthHeaders = () => {
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem('authToken');
   const userId = localStorage.getItem('userId'); // 이 부분이 사용자 ID를 가져옵니다.
   console.log(localStorage.getItem('userId'));
 
@@ -54,7 +54,7 @@ const StudyBoard = () => {
   // 게시판 데이터 불러오기 useEffect
   useEffect(() => {
     const getBoard = async () => {
-      const accessToken = localStorage.getItem('accessToken');
+      const accessToken = localStorage.getItem('authToken');
       console.log(id);
 
       try {
@@ -79,8 +79,8 @@ const StudyBoard = () => {
           });
 
           // 상태 업데이트
-          setContent(data.studyContents);
-          setTitle(data.studyTitle);
+          setContent(data.studiesContents);
+          setTitle(data.studiesTitle);
           setImageUrls(data.imageUrls || []); // imageUrls 상태 업데이트
           setCreatedTime(formattedDate); // 작성 시간 상태 업데이트
         } else {
@@ -411,7 +411,7 @@ const handleAddReply = async (index) => {
     }
 
     try {
-      const accessToken = localStorage.getItem('accessToken');
+      const accessToken = localStorage.getItem('authToken');
       const response = await fetch(`${BASE_URL}/studies/delete/${id}`, {
         method: 'DELETE',
         headers: {
@@ -470,7 +470,7 @@ const handleEdit = async () => {
       console.log("수정 가능한 데이터를 가져왔습니다:", data);
 
       // 데이터를 활용해 수정 화면으로 이동하거나 상태 업데이트
-      navigate(`/Study/${id}`) 
+      // 예: navigate(`/edit/${id}`) 또는 수정 데이터 상태 업데이트
     } else {
       console.error("수정 데이터를 가져오지 못했습니다:", response.status);
     }
@@ -497,7 +497,7 @@ const handleApply = async () => {
     if (response.ok) {
       console.log('지원 요청 성공');
       alert('지원 요청이 완료되었습니다.'); // 성공 팝업
-      navigate("/scrap"); // 요청 성공 후 스크랩 페이지로 이동
+      navigate("/scrap"); // 요청 성공 후 신청 관리 페이지로 이동하게 해야함.
     } else {
       const errorData = await response.json();
       console.error('지원 요청 실패:', errorData);
